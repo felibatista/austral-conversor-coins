@@ -7,5 +7,6 @@ public class User
     public String Email {get; set;}
     public String Password {get; set;}
     public int coins { get; set; }
-    public Subscription subscription { get; set; }
+    
+    public int subscriptionId { get; set; }
 }

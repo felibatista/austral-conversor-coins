@@ -1,4 +1,5 @@
 using conversor_coin.Data;
+using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
 
 namespace conversor_coin.Models.Repository.Implementations;
@@ -27,11 +28,35 @@ public class UserRepository : IUserRepository
         return _context.Users.FirstOrDefault((user) => user.Email == email);
     }
     
-    public void AddUser(User user)
+    public void AddUser(UserForCreationDTO userForCreationDto)
     {
+        User user = new()
+        {
+            Name = userForCreationDto.Name,
+            Email = userForCreationDto.Email,
+            Password = userForCreationDto.Password,
+            coins = 0,
+            subscriptionId = TypesExtensions.toInt(TypesSubscription.Free)
+        };
+        
         _context.Users.Add(user);
+        _context.SaveChanges();
     }
 
+    public void UpdateSubscriptionUser(int userId, TypesSubscription types)
+    {
+        User? toChange = GetUser(userId);
+        
+        if (toChange == null)
+        {
+            return;
+        }
+
+        toChange.subscriptionId = TypesExtensions.toInt(types);
+        
+        _context.Users.Update(toChange);
+        _context.SaveChanges();
+    }
     public void UpdateUser(int id, User user)
     {
         User? toChange = GetUser(id);
@@ -45,9 +70,10 @@ public class UserRepository : IUserRepository
         toChange.Email = user.Email;
         toChange.Password = user.Password;
         toChange.coins = user.coins;
-        toChange.subscription = user.subscription;
+        toChange.subscriptionId = user.subscriptionId;
 
         _context.Users.Update(toChange);
+        _context.SaveChanges(); 
     }
 
     public void DeleteUser(User user)

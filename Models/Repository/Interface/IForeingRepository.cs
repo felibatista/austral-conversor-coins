@@ -4,7 +4,7 @@ public interface IForeingRepository
 {
     public List<Foreing> GetForeings();
     public Foreing GetForeing(int id);
-    public Foreing AddForeing(Foreing foreing);
-    public Foreing UpdateForeing(Foreing foreing);
+    public void AddForeing(Foreing foreing);
+    public void UpdateForeing(int id, Foreing foreing);
     public void DeleteForeing(Foreing foreing);
 }

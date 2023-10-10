@@ -4,7 +4,7 @@ public interface ISubscriptionRepository
 {
     public List<Subscription> GetSubscriptions();
     public Subscription GetSubscription(int id);
-    public Subscription AddSubscription(Subscription subscription);
-    public Subscription UpdateSubscription(Subscription subscription);
+    public void AddSubscription(Subscription subscription);
+    public void UpdateSubscription(Subscription subscription);
     public void DeleteSubscription(Subscription subscription);
 }

@@ -1,4 +1,5 @@
 using conversor_coin.Data;
+using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Implementations;
 using conversor_coin.Models.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,31 @@ public class UserController : ControllerBase
             return NotFound();
         }
         
+        TypesSubscription subTypes = TypesExtensions.fromInt(user.subscriptionId);
+        
         return user;
     }
+    
+    [HttpGet("/subscription/{id}")]
+    public ActionResult<User> GetUserSubscription(int id)
+    {
+        User? user = _context.GetUser(id);
+        
+        if (user == null)
+        {
+            return NotFound();
+        }
+        
+        TypesSubscription subTypes = TypesExtensions.fromInt(user.subscriptionId);
+        
+        return Ok(TypesExtensions.ToFriendlyString(subTypes));
+    }
+    
+    [HttpPost]
+    public ActionResult<User> PostUser(UserForCreationDTO userForCreationDto)
+    {
+        _context.AddUser(userForCreationDto);
+        return Ok("User created successfully");
+    }
+    
 }
