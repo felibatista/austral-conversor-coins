@@ -12,6 +12,6 @@ public class ConversorContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=conversor.sqlite");
+        optionsBuilder.UseSqlite("Data Source=final_conversor.sqlite");
     }
 }

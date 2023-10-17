@@ -1,4 +1,5 @@
 using conversor_coin.Data;
+using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
 
 namespace conversor_coin.Models.Repository.Implementations;
@@ -22,8 +23,15 @@ public class ForeingRepository : IForeingRepository
         return _context.Foreings.FirstOrDefault((foreing) => foreing.Id == id); 
     }
 
-    public void AddForeing(Foreing foreing)
+    public void AddForeing(ForeingForCreationDTO foreingForCreationDto)
     {
+        Foreing foreing = new()
+        {
+            Name = foreingForCreationDto.Name,
+            Value = foreingForCreationDto.Value,
+            Code = foreingForCreationDto.Code
+        };
+        
         _context.Foreings.Add(foreing);
         _context.SaveChanges();
     }
