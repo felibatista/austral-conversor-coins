@@ -1,4 +1,5 @@
 using conversor_coin.Data;
+using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
 
 namespace conversor_coin.Models.Repository.Implementations;
@@ -22,8 +23,14 @@ public class SubscriptionRepository : ISubscriptionRepository
         return _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == id);
     }
 
-    public void AddSubscription(Subscription subscription)
+    public void AddSubscription(SubscriptionForCreationDTO subscriptionForCreationDto)
     {
+        Subscription subscription = new()
+        {
+            Name = subscriptionForCreationDto.Name,
+            Limit = subscriptionForCreationDto.Limit
+        };
+        
         _context.Subscriptions.Add(subscription);
         _context.SaveChanges();
     }

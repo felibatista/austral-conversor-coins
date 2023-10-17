@@ -10,7 +10,7 @@ public interface IUserRepository
     public void AddUser(UserForCreationDTO userForCreationDto);
     public void UpdateUser(int id, User user);
     
-    public void UpdateSubscriptionUser(int userId, TypesSubscription types);
+    public void UpdateSubscriptionUser(SubscriptionUpdateDTO subscriptionUpdateDto);
     
     public void DeleteUser(User user);
 }

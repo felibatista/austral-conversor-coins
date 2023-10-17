@@ -36,27 +36,33 @@ public class UserRepository : IUserRepository
             Email = userForCreationDto.Email,
             Password = userForCreationDto.Password,
             coins = 0,
-            subscriptionId = TypesExtensions.toInt(TypesSubscription.Free)
+            subscriptionId = 0
         };
         
         _context.Users.Add(user);
         _context.SaveChanges();
     }
 
-    public void UpdateSubscriptionUser(int userId, TypesSubscription types)
+    public void UpdateSubscriptionUser(SubscriptionUpdateDTO subscriptionUpdateDto)
     {
-        User? toChange = GetUser(userId);
-        
-        if (toChange == null)
+        User? toChange = GetUser(subscriptionUpdateDto.userId);
+
+        if (toChange.subscriptionId == subscriptionUpdateDto.subscriptionId)
         {
             return;
         }
 
-        toChange.subscriptionId = TypesExtensions.toInt(types);
+        if (_context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUpdateDto.subscriptionId) == null)
+        {
+            return;
+        }
+
+        toChange.subscriptionId = subscriptionUpdateDto.subscriptionId;
         
         _context.Users.Update(toChange);
         _context.SaveChanges();
     }
+
     public void UpdateUser(int id, User user)
     {
         User? toChange = GetUser(id);
