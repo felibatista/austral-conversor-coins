@@ -1,6 +1,7 @@
 using conversor_coin.Data;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.VisualBasic;
 
 namespace conversor_coin.Models.Repository.Implementations;
@@ -13,8 +14,7 @@ public class ConversionRepository : IConversionRepository
     {
         _context = context;
     }
-
-
+    
     public List<ForeingCoversion> GetConversions()
     {
         return _context.ForeingCoversion.ToList();
@@ -27,16 +27,27 @@ public class ConversionRepository : IConversionRepository
 
     public void addConversion(ConversionForCreationDTO conversionForCreationDto)
     {
-        User user = _context.Users.FirstOrDefault((user) => user.Id == conversionForCreationDto.UserId);
+        User? user = _context.Users.FirstOrDefault((user) => user.Id == conversionForCreationDto.UserId);
+        
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        
+        List<ForeingCoversion> temporalUserForeingList = _context.ForeingCoversion.ToList();
         
         ForeingCoversion conversion = new()
         {
             FromForeingId = conversionForCreationDto.FromForeingId,
             ToForeingId = conversionForCreationDto.ToForeingId,
-            Amount = conversionForCreationDto.Amount
+            Amount = conversionForCreationDto.Amount,
+            Date = DateTime.Now
         };
         
-        user.Conversions.Add(conversion);
+        EntityEntry<ForeingCoversion> conversionCreated = _context.ForeingCoversion.Add(conversion);
+        temporalUserForeingList.Add(conversionCreated.Entity);
+
+        user.Conversions = temporalUserForeingList;
         
         _context.SaveChanges();
     }

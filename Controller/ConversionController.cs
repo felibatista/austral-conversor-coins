@@ -49,8 +49,14 @@ public class ConversionController : ControllerBase
         {
             return NotFound("From Foreing not found");
         }
-        
-        _conversionContext.addConversion(conversionForCreationDto);
+
+        try
+        {
+            _conversionContext.addConversion(conversionForCreationDto);
+        }catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
         
         return Ok("Conversion created successfully");
     }

@@ -17,7 +17,6 @@ public class ForeingController : ControllerBase
     }
     
     [Route("all")]
-    [Authorize]
     [HttpGet]
     public IActionResult GetAll()
     {
