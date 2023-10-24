@@ -1,3 +1,4 @@
+using conversor_coin.Models;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,13 @@ public class ConversionController : ControllerBase
 {
     private readonly IConversionRepository _conversionContext;
     private readonly IForeingRepository _foreingContext;
+    private readonly APIException _apiException;
     
-    public ConversionController(IConversionRepository conversionContext, IForeingRepository foreingContext)
+    public ConversionController(IConversionRepository conversionContext, IForeingRepository foreingContext, APIException apiException)
     {
         _conversionContext = conversionContext;
         _foreingContext = foreingContext;
+        _apiException = apiException;
     }
     
     [Route("all")]
@@ -27,35 +30,28 @@ public class ConversionController : ControllerBase
     [HttpGet("{userId}")]
     public ActionResult GetConversions(int userId, int limit)
     {
-        List<ForeingCoversion> conversion = _conversionContext.GetConversionsFromUser(userId, limit);
-        
-        if (conversion == null)
+        try
         {
-            return NotFound();
-        }
+            List<ForeingCoversion> conversion = _conversionContext.GetConversionsFromUser(userId, limit);
+            
+            return Ok(conversion);
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-        return Ok(conversion);
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
     
     [HttpPost]
     public ActionResult<ForeingCoversion> PostConversion(ConversionForCreationDTO conversionForCreationDto)
     {
-        if (_foreingContext.GetForeing(conversionForCreationDto.ToForeingId) == null)
-        {
-            return NotFound("To Foreing not found");
-        }
-        
-        if (_foreingContext.GetForeing(conversionForCreationDto.FromForeingId) == null)
-        {
-            return NotFound("From Foreing not found");
-        }
-
         try
         {
             _conversionContext.addConversion(conversionForCreationDto);
-        }catch (Exception e)
-        {
-            return BadRequest(e.Message);
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
         }
         
         return Ok("Conversion created successfully");

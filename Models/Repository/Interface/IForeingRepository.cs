@@ -8,5 +8,5 @@ public interface IForeingRepository
     public Foreing GetForeing(int id);
     public void AddForeing(ForeingForCreationDTO foreingForCreationDto);
     public void UpdateForeing(int id, Foreing foreing);
-    public void DeleteForeing(Foreing foreing);
+    public void DeleteForeing(int foreingId);
 }

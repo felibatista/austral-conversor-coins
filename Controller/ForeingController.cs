@@ -1,3 +1,4 @@
+using conversor_coin.Models;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +11,12 @@ namespace conversor_coin.Controller;
 public class ForeingController : ControllerBase
 {
     private readonly IForeingRepository _context;
+    private readonly APIException _apiException;
     
-    public ForeingController(IForeingRepository context)
+    public ForeingController(IForeingRepository context, APIException apiException)
     {
         _context = context;
+        _apiException = apiException;
     }
     
     [Route("all")]
@@ -26,50 +29,63 @@ public class ForeingController : ControllerBase
     [HttpGet("{foreingId}")]
     public ActionResult<Foreing> GetForeing(int foreingId)
     {
-        Foreing? foreing = _context.GetForeing(foreingId);
-        
-        if (foreing == null)
+        try
         {
-            return NotFound();
+            Foreing foreing = _context.GetForeing(foreingId);
+            
+            return Ok(foreing);
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
         }
-        
-        return foreing;
     }
     
     [HttpPost]
     public ActionResult<Foreing> PostForeing(ForeingForCreationDTO foreingForCreationDto)
     {
-        _context.AddForeing(foreingForCreationDto);
-        return Ok("Foreing created successfully");
+        try
+        {
+            _context.AddForeing(foreingForCreationDto);
+            return Ok("Foreing created successfully");
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
     
+    //TODO: Cambiar esto por un dto
     [HttpPut("{foreingId}")]
     public ActionResult<Foreing> PutForeing(int foreingId, Foreing foreing)
     {
-        if (foreingId != foreing.Id)
-        {
-            return BadRequest();
+        try
+        { 
+            if (foreingId != foreing.Id)
+            {
+                return BadRequest(); 
+            }
+            
+            _context.UpdateForeing(foreingId, foreing);
+            return Ok("Foreing updated successfully");
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
         }
-        
-        _context.UpdateForeing(foreingId, foreing);
-        return Ok("Foreing updated successfully");
     }
     
     [HttpDelete("{foreingId}")]
     public ActionResult<Foreing> DeleteForeing(int foreingId)
     {
-        Foreing? foreing = _context.GetForeing(foreingId);
-        
-        if (foreing == null)
+        try
         {
-            return NotFound();
-        }
-        
-        _context.DeleteForeing(foreing);
+          _context.DeleteForeing(foreingId);
         return Ok("Foreing deleted successfully");
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
-    
-    
-    
-    
 }

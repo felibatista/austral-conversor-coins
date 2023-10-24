@@ -1,4 +1,5 @@
 using conversor_coin.Data;
+using conversor_coin.Models;
 using conversor_coin.Models.Repository.Implementations;
 using conversor_coin.Models.Repository.Interface;
 using Microsoft.AspNetCore.Authentication;
@@ -18,6 +19,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<IForeingRepository, ForeingRepository>();
 builder.Services.AddScoped<IConversionRepository, ConversionRepository>();
+builder.Services.AddScoped<APIException>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -78,7 +78,7 @@ public class ConversorContext : DbContext
                 Id = 3,
                 Name = "Premium",
                 Price = 20,
-                Limit = 1000
+                Limit = -1
             });
     }
     

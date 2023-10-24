@@ -20,11 +20,29 @@ public class ForeingRepository : IForeingRepository
 
     public Foreing GetForeing(int id)
     {
-        return _context.Foreings.FirstOrDefault((foreing) => foreing.Id == id); 
+        Foreing? foreing = _context.Foreings.FirstOrDefault((foreing) => foreing.Id == id);
+        
+        if (foreing == null)
+        {
+            throw APIException.CreateException(
+                APIException.Code.FG_01, 
+                "Foreing not found", 
+                APIException.Type.NOT_FOUND);
+        }
+
+        return foreing;
     }
 
     public void AddForeing(ForeingForCreationDTO foreingForCreationDto)
     {
+        if (_context.Foreings.FirstOrDefault((foreing) => foreing.Code == foreingForCreationDto.Code) != null)
+        {
+            throw APIException.CreateException(
+                APIException.Code.FG_02, 
+                "Foreing code already exists", 
+                APIException.Type.BAD_REQUEST);
+        }
+        
         Foreing foreing = new()
         {
             Name = foreingForCreationDto.Name,
@@ -32,8 +50,28 @@ public class ForeingRepository : IForeingRepository
             Code = foreingForCreationDto.Code
         };
         
-        _context.Foreings.Add(foreing);
-        _context.SaveChanges();
+        try
+        {
+            _context.Foreings.Add(foreing);
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_01, 
+                "An error occurred while setting the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
+
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception e){
+            throw APIException.CreateException(
+                APIException.Code.DB_02,
+                "An error occurred while saving the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public void UpdateForeing(int id, Foreing foreing)
@@ -49,13 +87,54 @@ public class ForeingRepository : IForeingRepository
         toChange.Value = foreing.Value;
         toChange.Code = foreing.Code;
         
-        _context.Foreings.Update(toChange);
-        _context.SaveChanges();
+        try
+        { 
+            _context.Foreings.Update(toChange);
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_01, 
+                "An error occurred while setting the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception e){
+            throw APIException.CreateException(
+                APIException.Code.DB_02,
+                "An error occurred while saving the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
         
     }
 
-    public void DeleteForeing(Foreing foreing)
+    public void DeleteForeing(int foreingId)
     {
-        _context.Foreings.Remove(foreing);
+        Foreing? toRemove = GetForeing(foreingId);
+ 
+        try
+        { 
+            _context.Foreings.Remove(toRemove);
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_01, 
+                "An error occurred while setting the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception e){
+            throw APIException.CreateException(
+                APIException.Code.DB_02,
+                "An error occurred while saving the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
     }
 }
