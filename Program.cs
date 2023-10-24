@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ConversorContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<IForeingRepository, ForeingRepository>();
+builder.Services.AddScoped<IConversionRepository, ConversionRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
