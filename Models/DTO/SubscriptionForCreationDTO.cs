@@ -4,5 +4,5 @@ public class SubscriptionForCreationDTO
 {
     public String Name { get; set; }
     public int Limit { get; set; }
-    
+    public int Price { get; set; }
 }

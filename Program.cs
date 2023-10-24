@@ -34,6 +34,7 @@ if (app.Environment.IsDevelopment())
 
 using (var context = new ConversorContext())
 {
+    context.Database.EnsureDeleted();   
     context.Database.EnsureCreated();
 }
 

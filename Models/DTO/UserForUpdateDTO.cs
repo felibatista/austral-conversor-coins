@@ -1,10 +1,12 @@
 namespace conversor_coin.Models.DTO;
 
-public class UserForCreationDTO
+public class UserForUpdateDTO
 {
+    public int UserToChangeID { get; set; }
     public String UserName { get; set; }
     public String FirstName { get; set; }
     public String LastName { get; set; }
     public String Email { get; set; }
     public String Password { get; set; }
+    public int Coins { get; set; }
 }

@@ -32,11 +32,13 @@ public class UserRepository : IUserRepository
     {
         User user = new()
         {
-            Name = userForCreationDto.Name,
+            UserName = userForCreationDto.UserName,
+            FirstName = userForCreationDto.FirstName,
+            LastName = userForCreationDto.LastName,
             Email = userForCreationDto.Email,
             Password = userForCreationDto.Password,
-            coins = 0,
-            subscriptionId = 0
+            Coins = 0,
+            SubscriptionId = 0
         };
         
         _context.Users.Add(user);
@@ -45,38 +47,38 @@ public class UserRepository : IUserRepository
 
     public void UpdateSubscriptionUser(SubscriptionUpdateDTO subscriptionUpdateDto)
     {
-        User? toChange = GetUser(subscriptionUpdateDto.userId);
+        User? toChange = GetUser(subscriptionUpdateDto.UserId);
 
-        if (toChange.subscriptionId == subscriptionUpdateDto.subscriptionId)
+        if (toChange.SubscriptionId == subscriptionUpdateDto.SubscriptionId)
         {
             return;
         }
 
-        if (_context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUpdateDto.subscriptionId) == null)
+        if (_context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUpdateDto.SubscriptionId) == null)
         {
             return;
         }
 
-        toChange.subscriptionId = subscriptionUpdateDto.subscriptionId;
+        toChange.SubscriptionId = subscriptionUpdateDto.SubscriptionId;
         
         _context.Users.Update(toChange);
         _context.SaveChanges();
     }
 
-    public void UpdateUser(int id, User user)
+    public void UpdateUser(UserForUpdateDTO userForUpdateDto)
     {
-        User? toChange = GetUser(id);
+        User? toChange = GetUser(userForUpdateDto.UserToChangeID);
         
         if (toChange == null)
         {
             return;
         }
         
-        toChange.Name = user.Name;
-        toChange.Email = user.Email;
-        toChange.Password = user.Password;
-        toChange.coins = user.coins;
-        toChange.subscriptionId = user.subscriptionId;
+        toChange.FirstName = userForUpdateDto.FirstName;
+        toChange.LastName = userForUpdateDto.LastName;
+        toChange.Email = userForUpdateDto.Email;
+        toChange.Password = userForUpdateDto.Password;
+        toChange.Coins = userForUpdateDto.Coins;
 
         _context.Users.Update(toChange);
         _context.SaveChanges(); 

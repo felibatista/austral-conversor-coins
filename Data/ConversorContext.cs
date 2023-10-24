@@ -1,3 +1,4 @@
+using conversor_coin.Controller;
 using Microsoft.EntityFrameworkCore;
 using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
@@ -9,6 +10,7 @@ public class ConversorContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<Foreing> Foreings { get; set; }
+    public DbSet<ForeingCoversion> ForeingCoversion { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

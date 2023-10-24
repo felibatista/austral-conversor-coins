@@ -9,4 +9,5 @@ public class Foreing
     [MaxLength(5)]
     public String Code { get; set; }
     public double Value { get; set; }
+    public String ImageUrl { get; set; }
 }

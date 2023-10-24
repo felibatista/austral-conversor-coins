@@ -48,14 +48,14 @@ public class UserController : ControllerBase
     }
     
     [HttpPut("{userId}")]
-    public ActionResult<User> PutUser(int id, User user)
+    public ActionResult<User> PutUser(UserForUpdateDTO userForUpdateDto)
     {
-        if (id != user.Id)
+        if (_userContext.GetUser(userForUpdateDto.UserToChangeID) == null)
         {
-            return BadRequest();
+            return NotFound("Invalid user");
         }
         
-        _userContext.UpdateUser(id, user);
+        _userContext.UpdateUser(userForUpdateDto);
         return Ok("User updated successfully");
     }
     
@@ -64,17 +64,17 @@ public class UserController : ControllerBase
     {
         if (_userContext.GetUser(userId) == null)
         {
-            return BadRequest("Invalid user");
+            return NotFound("Invalid user");
         }
         if (_subscriptionContext.GetSubscription(subscriptionId) == null)
         {
-            return BadRequest("Invalid subscription");
+            return NotFound("Invalid subscription");
         }
 
         SubscriptionUpdateDTO subscriptionUpdateDto = new()
         {
-            userId = userId,
-            subscriptionId = subscriptionId
+            UserId = userId,
+            SubscriptionId = subscriptionId
         };
         
         _userContext.UpdateSubscriptionUser(subscriptionUpdateDto);
