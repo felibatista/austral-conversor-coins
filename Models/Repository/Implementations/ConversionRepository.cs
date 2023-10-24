@@ -22,7 +22,18 @@ public class ConversionRepository : IConversionRepository
 
     public List<ForeingCoversion> GetConversionsFromUser(int userId, int limit)
     {
-        return _context.Users.FirstOrDefault((user) => user.Id == userId).Conversions.Take(limit).ToList();
+        List<ForeingCoversion> conversions = _context.ForeingCoversion.Where((conversions) => conversions.UserId == userId).ToList();
+        if (conversions == null)
+        {
+            throw new Exception("Conversions not found");
+        }
+        
+        if (limit > 0)
+        {
+            return conversions.Take(limit).ToList();
+        }
+        
+        return conversions;
     }
 
     public void addConversion(ConversionForCreationDTO conversionForCreationDto)

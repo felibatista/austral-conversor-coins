@@ -25,16 +25,16 @@ public class ConversionController : ControllerBase
     }
     
     [HttpGet("{userId}")]
-    public ActionResult<List<ForeingCoversion>> GetConversions(int userId, int? limit)
+    public ActionResult GetConversions(int userId, int limit)
     {
-        List<ForeingCoversion> conversion = _conversionContext.GetConversionsFromUser(userId, limit ?? 10);
+        List<ForeingCoversion> conversion = _conversionContext.GetConversionsFromUser(userId, limit);
         
         if (conversion == null)
         {
             return NotFound();
         }
-        
-        return conversion;
+
+        return Ok(conversion);
     }
     
     [HttpPost]

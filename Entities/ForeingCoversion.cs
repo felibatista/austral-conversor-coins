@@ -15,4 +15,6 @@ public class ForeingCoversion
     public int ToForeingId { get; set; }
     public DateTime Date { get; set; }
     public double Amount { get; set; }
+    [ForeignKey(typeof(User))]
+    public int UserId { get; set;}
 }
