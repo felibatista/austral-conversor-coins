@@ -74,18 +74,26 @@ public class ForeingRepository : IForeingRepository
         }
     }
 
-    public void UpdateForeing(int id, Foreing foreing)
+    public void UpdateForeing(ForeingForUpdateDTO foreingForUpdateDto)
     {
-        Foreing? toChange = GetForeing(id);
+        Foreing? toChange = GetForeing(foreingForUpdateDto.Id);
         
         if (toChange == null)
         {
             return;
         }   
         
-        toChange.Name = foreing.Name;
-        toChange.Value = foreing.Value;
-        toChange.Code = foreing.Code;
+        if (_context.Foreings.FirstOrDefault((foreing) => foreing.Code == foreingForUpdateDto.Code) != null)
+        {
+            throw APIException.CreateException(
+                APIException.Code.FG_02, 
+                "Foreing code already exists", 
+                APIException.Type.BAD_REQUEST);
+        }
+        
+        toChange.Name = foreingForUpdateDto.Name;
+        toChange.Value = foreingForUpdateDto.Value;
+        toChange.Code = foreingForUpdateDto.Code;
         
         try
         { 

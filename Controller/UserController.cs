@@ -71,13 +71,13 @@ public class UserController : ControllerBase
             return NotFound("Invalid subscription");
         }
 
-        SubscriptionUpdateDTO subscriptionUpdateDto = new()
+        SubscriptionUserUpdateDTO subscriptionUserUpdateDto = new()
         {
             UserId = userId,
             SubscriptionId = subscriptionId
         };
         
-        _userContext.UpdateSubscriptionUser(subscriptionUpdateDto);
+        _userContext.UpdateSubscriptionUser(subscriptionUserUpdateDto);
         return Ok("User subscription updated successfully");
     }
 

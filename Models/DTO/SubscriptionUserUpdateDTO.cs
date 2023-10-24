@@ -1,6 +1,6 @@
 namespace conversor_coin.Models.DTO;
 
-public class SubscriptionUpdateDTO
+public class SubscriptionUserUpdateDTO
 {
     public int UserId { get; set; }
     public int SubscriptionId { get; set; }

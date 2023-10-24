@@ -9,6 +9,6 @@ public interface IUserRepository
     public User GetUser(String email);
     public void AddUser(UserForCreationDTO userForCreationDto);
     public void UpdateUser(UserForUpdateDTO userForUpdateDto);
-    public void UpdateSubscriptionUser(SubscriptionUpdateDTO subscriptionUpdateDto);
+    public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto);
     public void DeleteUser(User user);
 }

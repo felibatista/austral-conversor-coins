@@ -45,21 +45,21 @@ public class UserRepository : IUserRepository
         _context.SaveChanges();
     }
 
-    public void UpdateSubscriptionUser(SubscriptionUpdateDTO subscriptionUpdateDto)
+    public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto)
     {
-        User? toChange = GetUser(subscriptionUpdateDto.UserId);
+        User? toChange = GetUser(subscriptionUserUpdateDto.UserId);
 
-        if (toChange.SubscriptionId == subscriptionUpdateDto.SubscriptionId)
+        if (toChange.SubscriptionId == subscriptionUserUpdateDto.SubscriptionId)
         {
             return;
         }
 
-        if (_context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUpdateDto.SubscriptionId) == null)
+        if (_context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUserUpdateDto.SubscriptionId) == null)
         {
             return;
         }
 
-        toChange.SubscriptionId = subscriptionUpdateDto.SubscriptionId;
+        toChange.SubscriptionId = subscriptionUserUpdateDto.SubscriptionId;
         
         _context.Users.Update(toChange);
         _context.SaveChanges();

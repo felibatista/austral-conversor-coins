@@ -55,18 +55,12 @@ public class ForeingController : ControllerBase
         }
     }
     
-    //TODO: Cambiar esto por un dto
-    [HttpPut("{foreingId}")]
-    public ActionResult<Foreing> PutForeing(int foreingId, Foreing foreing)
+    [HttpPut]
+    public ActionResult<Foreing> PutForeing(ForeingForUpdateDTO foreingForUpdateDto)
     {
         try
         { 
-            if (foreingId != foreing.Id)
-            {
-                return BadRequest(); 
-            }
-            
-            _context.UpdateForeing(foreingId, foreing);
+            _context.UpdateForeing(foreingForUpdateDto);
             return Ok("Foreing updated successfully");
         }catch (Exception e) {
             Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
