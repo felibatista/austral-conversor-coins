@@ -1,5 +1,6 @@
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace conversor_coin.Controller;
@@ -16,6 +17,7 @@ public class ForeingController : ControllerBase
     }
     
     [Route("all")]
+    [Authorize]
     [HttpGet]
     public IActionResult GetAll()
     {
