@@ -15,3 +15,6 @@ API ERRORS:
     FOREING:
     - FG-01: Foreing currency not found
     - FG-02: Foreing code already exists
+    SUBSCRIPTION:
+    - SB-01: Subscription not found
+    - SB-02: Subscription name already exist

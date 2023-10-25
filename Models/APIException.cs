@@ -32,7 +32,10 @@ public class APIException : ControllerBase
         DB_02,
         
         FG_01,
-        FG_02
+        FG_02,
+        
+        SB_01,
+        SB_02
     }
     public static Exception CreateException(Code code, String message, Type type)
     {

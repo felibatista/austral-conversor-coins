@@ -7,6 +7,6 @@ public interface ISubscriptionRepository
     public List<Subscription> GetSubscriptions();
     public Subscription GetSubscription(int id);
     public void AddSubscription(SubscriptionForCreationDTO subscriptionForCreationDto);
-    public void UpdateSubscription(Subscription subscription);
-    public void DeleteSubscription(Subscription subscription);
+    public void UpdateSubscription(SubscriptionForUpdateDTO subscriptionForUpdateDto);
+    public void DeleteSubscription(int subscriptionId);
 }

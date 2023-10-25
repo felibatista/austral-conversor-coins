@@ -1,3 +1,4 @@
+using conversor_coin.Models;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -9,64 +10,82 @@ namespace conversor_coin.Controller;
 public class SubscriptionController : ControllerBase
 {
     private readonly ISubscriptionRepository _context;
-    
-    public SubscriptionController(ISubscriptionRepository context)
+    private readonly APIException _apiException;
+
+    public SubscriptionController(ISubscriptionRepository context, APIException apiException)
     {
         _context = context;
+        _apiException = apiException;
     }
-    
+
     [Route("all")]
     [HttpGet]
     public IActionResult GetAll()
     {
         return Ok(_context.GetSubscriptions());
     }
-    
-    [HttpGet("{id}")]
-    public ActionResult<Subscription> GetSubscription(int id)
+
+    [HttpGet("{subscriptionId}")]
+    public ActionResult<Subscription> GetSubscription(int subscriptionId)
     {
-        Subscription? subscription = _context.GetSubscription(id);
-        
-        if (subscription == null)
+        try
         {
-            return NotFound();
+            Subscription? subscription = _context.GetSubscription(subscriptionId);
+            return subscription;
         }
-        
-        return subscription;
+        catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
-    
+
     [HttpPost]
     public ActionResult<Subscription> PostSubscription(SubscriptionForCreationDTO subscriptionForCreationDto)
     {
-        _context.AddSubscription(subscriptionForCreationDto);
-        return Ok("Subscription created successfully");
+        try
+        {
+            _context.AddSubscription(subscriptionForCreationDto);
+            return Ok("Subscription created successfully");
+        }
+        catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
 
-    [HttpPut("{id}")]
-    public ActionResult<Subscription> PutSubscription(int id, Subscription subscription)
+    [HttpPut]
+    public ActionResult<Subscription> PutSubscription(SubscriptionForUpdateDTO subscriptionForUpdateDto)
     {
-        if (id != subscription.Id)
+        try
         {
-            return BadRequest();
+            _context.UpdateSubscription(subscriptionForUpdateDto);
+            return Ok("Subscription updated successfully");
         }
-        
-        _context.UpdateSubscription(subscription);
-        return Ok("Subscription updated successfully");
+        catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
 
-    [HttpDelete("{id}")]
-    public ActionResult<Subscription> DeleteSubscription(int id)
+    [HttpDelete("{subscriptionId}")]
+    public ActionResult<Subscription> DeleteSubscription(int subscriptionId)
     {
-        Subscription? subscription = _context.GetSubscription(id);
-        
-        if (subscription == null)
+        try
         {
-            return NotFound();
+            _context.DeleteSubscription(subscriptionId);
+            return Ok("Subscription deleted successfully");
         }
-        
-        _context.DeleteSubscription(subscription);
-        return Ok("Subscription deleted successfully");
+        catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
-        
-    
 }
