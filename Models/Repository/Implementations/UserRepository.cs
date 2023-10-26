@@ -1,3 +1,4 @@
+using System.Linq;
 using conversor_coin.Data;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
@@ -20,16 +21,44 @@ public class UserRepository : IUserRepository
 
     public User GetUser(int id)
     {
-        return _context.Users.FirstOrDefault((user) => user.Id == id);
+        User? user = _context.Users.FirstOrDefault(users) => users.Id == id);
+
+        if (user == null)
+        {
+           throw APIException.CreateException(
+                           APIException.Code.US_01,
+                           "User not found",
+                           APIException.Type.NOT_FOUND);
+        }
+
+        return user;
     }
 
     public User GetUser(string email)
     {
-        return _context.Users.FirstOrDefault((user) => user.Email == email);
+        User? user = _context.Users.FirstOrDefault((users) => users.Email == email);
+        if (user == null)
+        {
+            throw APIException.CreateException(
+                APIException.Code.US_01,
+                "User not found",
+                APIException.Type.NOT_FOUND);
+        }
+
+        return user;
     }
     
     public void AddUser(UserForCreationDTO userForCreationDto)
     {
+        User? userExist = _context.Users.FirstOrDefault((users) => users.Email == userForCreationDto.Email);
+        if (userExist != null)
+        {
+            throw APIException.CreateException(
+                APIException.Code.US_02,
+                "User email already exists",
+                APIException.Type.BAD_REQUEST);
+        }
+        
         User user = new()
         {
             UserName = userForCreationDto.UserName,
@@ -37,12 +66,32 @@ public class UserRepository : IUserRepository
             LastName = userForCreationDto.LastName,
             Email = userForCreationDto.Email,
             Password = userForCreationDto.Password,
-            Coins = 0,
-            SubscriptionId = 0
+            SubscriptionId = 1 //default subscription free
         };
         
-        _context.Users.Add(user);
-        _context.SaveChanges();
+        try
+        {
+            _context.Users.Add(user);
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_01,
+                "An error occurred while setting the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
+        
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_02,
+                "An error occurred while saving the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto)
@@ -51,41 +100,119 @@ public class UserRepository : IUserRepository
 
         if (toChange.SubscriptionId == subscriptionUserUpdateDto.SubscriptionId)
         {
-            return;
+            throw APIException.CreateException(
+                APIException.Code.US_05,
+                "User have same subscription plan",
+                APIException.Type.BAD_REQUEST);
         }
+        
+        Subscription? subscription = _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUserUpdateDto.SubscriptionId);
 
-        if (_context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUserUpdateDto.SubscriptionId) == null)
+        if (subscription == null)
         {
-            return;
+            throw APIException.CreateException(
+                APIException.Code.SB_01,
+                "Subscription not found",
+                APIException.Type.NOT_FOUND);
         }
 
         toChange.SubscriptionId = subscriptionUserUpdateDto.SubscriptionId;
         
-        _context.Users.Update(toChange);
-        _context.SaveChanges();
+        try
+        { 
+            _context.Users.Update(toChange);
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_01,
+                "An error occurred while setting the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
+        
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_02,
+                "An error occurred while saving the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public void UpdateUser(UserForUpdateDTO userForUpdateDto)
     {
         User? toChange = GetUser(userForUpdateDto.UserToChangeID);
         
-        if (toChange == null)
+        User? userExist = _context.Users.FirstOrDefault((users) => users.Email == userForUpdateDto.Email);
+        if (userExist != null)
         {
-            return;
+            throw APIException.CreateException(
+                APIException.Code.US_02,
+                "User email already exists",
+                APIException.Type.BAD_REQUEST);
         }
         
         toChange.FirstName = userForUpdateDto.FirstName;
         toChange.LastName = userForUpdateDto.LastName;
         toChange.Email = userForUpdateDto.Email;
         toChange.Password = userForUpdateDto.Password;
-        toChange.Coins = userForUpdateDto.Coins;
 
-        _context.Users.Update(toChange);
-        _context.SaveChanges(); 
+        try
+        { 
+            _context.Users.Update(toChange);
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_01,
+                "An error occurred while setting the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
+        
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_02,
+                "An error occurred while saving the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public void DeleteUser(User user)
+    public void DeleteUser(int userId)
     {
-        _context.Users.Remove(user);
+        User? toRemove = GetUser(userId);
+
+        try
+        { 
+
+            _context.Users.Remove(toRemove);
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_01,
+                "An error occurred while setting the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
+        
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            throw APIException.CreateException(
+                APIException.Code.DB_02,
+                "An error occurred while saving the data in the database",
+                APIException.Type.INTERNAL_SERVER_ERROR);
+        }
     }
 }

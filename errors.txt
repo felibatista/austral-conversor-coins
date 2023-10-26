@@ -7,6 +7,7 @@ API ERRORS:
     - US-02: User already exists
     - US-03: User not logged in
     - US-04: User not authorized
+    - US-05: User have same subscription plan
     CONVERSION:
     - CV-01: Conversion not found
     - CV-02: Limit conversion reached (the user has reached the limit of conversions per plan, and can't create more)

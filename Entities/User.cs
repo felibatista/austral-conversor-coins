@@ -13,7 +13,7 @@ public class User
     public String LastName {get; set;}
     public String Email {get; set;}
     public String Password {get; set;}
-    public int Coins { get; set; }
+
     [OneToMany(CascadeOperations = CascadeOperation.All)]
     public List<ForeingCoversion> Conversions { get; set; }
     [ForeignKey(typeof(Subscription))]
