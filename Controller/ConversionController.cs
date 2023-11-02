@@ -10,15 +10,15 @@ namespace conversor_coin.Controller;
 [Route("/api/[controller]")]
 public class ConversionController : ControllerBase
 {
-    private readonly IConversionRepository _conversionContext;
+    private readonly IConversionService _conversionContext;
     private readonly APIException _apiException;
-    private readonly IAuthRepository _authRepository;
+    private readonly IAuthService _authService;
 
-    public ConversionController(IConversionRepository conversionContext, APIException apiException, IAuthRepository authRepository)
+    public ConversionController(IConversionService conversionContext, APIException apiException, IAuthService authService)
     {
         _conversionContext = conversionContext;
         _apiException = apiException;
-        _authRepository = authRepository;
+        _authService = authService;
     }
 
     [Route("all")]
@@ -32,7 +32,12 @@ public class ConversionController : ControllerBase
     [HttpGet("{userId}")]
     public ActionResult GetConversions(int userId, int limit)
     {
-        if (!_authRepository.isSameUserRequest(userId))
+        if (_authService.getCurrentUser() == null)
+        {
+            return Unauthorized("You are not logged in");
+        }
+
+        if (!_authService.isSameUserRequest(userId))
         {
             return Unauthorized("You are not authorized to see this user's conversions");
         }
@@ -53,7 +58,12 @@ public class ConversionController : ControllerBase
     [HttpPost]
     public ActionResult<ForeingCoversion> PostConversion(ConversionForCreationDTO conversionForCreationDto)
     {
-        if (!_authRepository.isSameUserRequest(conversionForCreationDto.UserId))
+        if (_authService.getCurrentUser() == null)
+        {
+            return Unauthorized("You are not logged in");
+        }
+        
+        if (!_authService.isSameUserRequest(conversionForCreationDto.UserId))
         {
             return Unauthorized("You are not authorized to create a conversion for this user");
         }
@@ -61,6 +71,7 @@ public class ConversionController : ControllerBase
         try
         {
             _conversionContext.addConversion(conversionForCreationDto);
+            return Ok("Conversion created successfully");
         }
         catch (Exception e)
         {
@@ -68,7 +79,5 @@ public class ConversionController : ControllerBase
 
             return _apiException.getResultFromError(type, e.Data);
         }
-
-        return Ok("Conversion created successfully");
     }
 }

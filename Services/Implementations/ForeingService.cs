@@ -4,11 +4,11 @@ using conversor_coin.Models.Repository.Interface;
 
 namespace conversor_coin.Models.Repository.Implementations;
 
-public class ForeingRepository : IForeingRepository
+public class ForeingService : IForeingService
 {
     private readonly ConversorContext _context;
 
-    public ForeingRepository(ConversorContext context)
+    public ForeingService(ConversorContext context)
     {
         _context = context;
     }

@@ -2,7 +2,7 @@ using conversor_coin.Models.DTO;
 
 namespace conversor_coin.Models.Repository.Interface;
 
-public interface IUserRepository
+public interface IUserService
 {
     public List<User> GetUsers();
     public User GetUser(int id);

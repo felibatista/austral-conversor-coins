@@ -4,11 +4,11 @@ using conversor_coin.Models.Repository.Interface;
 
 namespace conversor_coin.Models.Repository.Implementations;
 
-public class SubscriptionRepository : ISubscriptionRepository
+public class SubscriptionService : ISubscriptionService
 {
     private readonly ConversorContext _context;
 
-    public SubscriptionRepository(ConversorContext context)
+    public SubscriptionService(ConversorContext context)
     {
         _context = context;
     }

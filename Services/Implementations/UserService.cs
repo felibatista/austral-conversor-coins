@@ -5,11 +5,11 @@ using conversor_coin.Models.Repository.Interface;
 
 namespace conversor_coin.Models.Repository.Implementations;
 
-public class UserRepository : IUserRepository
+public class UserService : IUserService
 {
     private readonly ConversorContext _context;
     
-    public UserRepository (ConversorContext context)
+    public UserService (ConversorContext context)
     {
         _context = context;
     }

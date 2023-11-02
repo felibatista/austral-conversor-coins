@@ -16,23 +16,23 @@ namespace conversor_coin.Controller;
 public class AuthenticateController : ControllerBase
 {
     private readonly IConfiguration _config;
-    private readonly IAuthRepository _authRepository;
+    private readonly IAuthService _authService;
 
-    public AuthenticateController(IConfiguration config, IAuthRepository authRepository)
+    public AuthenticateController(IConfiguration config, IAuthService authService)
     {
         _config = config;
-        _authRepository = authRepository;
+        _authService = authService;
     }
 
     [AllowAnonymous]
     [HttpPost]
-    public ActionResult Login(UserLoginDTO userLoginDto)
+    public ActionResult Login(UserForLoginDTO userForLoginDto)
     {
-        var user = _authRepository.Authenticate(userLoginDto);
+        var user = _authService.Authenticate(userForLoginDto);
         
         if (user != null)
         {
-            var token = _authRepository.GenerateToken(user);
+            var token = _authService.GenerateToken(user);
             return Ok(token);
         }
 

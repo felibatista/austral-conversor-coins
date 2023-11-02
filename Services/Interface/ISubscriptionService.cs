@@ -2,7 +2,7 @@ using conversor_coin.Models.DTO;
 
 namespace conversor_coin.Models.Repository.Interface;
 
-public interface ISubscriptionRepository
+public interface ISubscriptionService
 {
     public List<Subscription> GetSubscriptions();
     public Subscription GetSubscription(int id);

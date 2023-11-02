@@ -36,11 +36,11 @@ System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeM
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ConversorContext>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
-builder.Services.AddScoped<IForeingRepository, ForeingRepository>();
-builder.Services.AddScoped<IConversionRepository, ConversionRepository>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IForeingService, ForeingService>();
+builder.Services.AddScoped<IConversionService, ConversionService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<APIException>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -66,9 +66,6 @@ builder.Services.AddSwaggerGen(setupAction =>
             }, new List<string>() }
     });
 });
-
-
-
 
 var app = builder.Build();
 

@@ -12,10 +12,10 @@ namespace conversor_coin.Controller;
 [Route("/api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserRepository _userContext;
+    private readonly IUserService _userContext;
     private readonly APIException _apiException;
     
-    public UserController(IUserRepository _userContext, APIException apiException)
+    public UserController(IUserService _userContext, APIException apiException)
     {
         this._userContext = _userContext;
         this._apiException = apiException;
@@ -63,7 +63,7 @@ public class UserController : ControllerBase
 
     }
     
-    [HttpPut("{userId}")]
+    [HttpPut]
     [Authorize(Roles = "admin")]
     public ActionResult<User> PutUser(UserForUpdateDTO userForUpdateDto)
     {

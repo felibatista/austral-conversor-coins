@@ -11,10 +11,10 @@ namespace conversor_coin.Controller;
 [Route("/api/[controller]")]
 public class SubscriptionController : ControllerBase
 {
-    private readonly ISubscriptionRepository _context;
+    private readonly ISubscriptionService _context;
     private readonly APIException _apiException;
 
-    public SubscriptionController(ISubscriptionRepository context, APIException apiException)
+    public SubscriptionController(ISubscriptionService context, APIException apiException)
     {
         _context = context;
         _apiException = apiException;

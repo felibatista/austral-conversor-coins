@@ -2,7 +2,7 @@ using conversor_coin.Models.DTO;
 
 namespace conversor_coin.Models.Repository.Interface;
 
-public interface IForeingRepository
+public interface IForeingService
 {
     public List<Foreing> GetForeings();
     public Foreing GetForeing(int id);

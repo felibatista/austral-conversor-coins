@@ -3,7 +3,7 @@ using Microsoft.VisualBasic;
 
 namespace conversor_coin.Models.Repository.Interface;
 
-public interface IConversionRepository
+public interface IConversionService
 {
     public List<ForeingCoversion> GetConversions();
     public List<ForeingCoversion> GetConversionsFromUser(int userId, int limit);

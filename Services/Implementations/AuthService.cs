@@ -9,23 +9,23 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace conversor_coin.Models.Repository.Implementations;
 
-public class AuthRepository : IAuthRepository
+public class AuthService : IAuthService
 {
     private readonly ConversorContext _context;
     private readonly IConfiguration _config;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthRepository(ConversorContext context, IConfiguration config, IHttpContextAccessor httpContextAccessor)
+    public AuthService(ConversorContext context, IConfiguration config, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _config = config;
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Auth Authenticate(UserLoginDTO userLoginDto)
+    public Auth Authenticate(UserForLoginDTO userForLoginDto)
     {
-        var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == userLoginDto.Username.ToLower());
-        var password = _context.Auth.FirstOrDefault(x => x.Password == userLoginDto.Password);
+        var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == userForLoginDto.Username.ToLower());
+        var password = _context.Auth.FirstOrDefault(x => x.Password == userForLoginDto.Password && x.Id == user.Id);
        
         if (user != null && password != null)
         {

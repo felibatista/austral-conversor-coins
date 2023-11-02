@@ -10,10 +10,10 @@ namespace conversor_coin.Controller;
 [Route("/api/[controller]")]
 public class ForeingController : ControllerBase
 {
-    private readonly IForeingRepository _context;
+    private readonly IForeingService _context;
     private readonly APIException _apiException;
     
-    public ForeingController(IForeingRepository context, APIException apiException)
+    public ForeingController(IForeingService context, APIException apiException)
     {
         _context = context;
         _apiException = apiException;

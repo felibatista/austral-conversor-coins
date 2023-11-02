@@ -6,11 +6,11 @@ using Microsoft.VisualBasic;
 
 namespace conversor_coin.Models.Repository.Implementations;
 
-public class ConversionRepository : IConversionRepository
+public class ConversionService : IConversionService
 {
     private readonly ConversorContext _context;
     
-    public ConversionRepository(ConversorContext context)
+    public ConversionService(ConversorContext context)
     {
         _context = context;
     }
