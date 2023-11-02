@@ -1,4 +1,4 @@
-# Conversor-Coins
+# COINS-Conversor
 
 ## 📕 Introducción al problema
 Se deberá desarrollar un conversor de monedas en un entorno web. El conversor permitiráa los usuarios registrados realizar conversiones entre diferentes monedas, pero con lalimitación de que solo aquellos usuarios que tengan una suscripción activa podrán utilizarlo.
