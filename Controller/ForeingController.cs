@@ -21,6 +21,7 @@ public class ForeingController : ControllerBase
     
     [Route("all")]
     [HttpGet]
+    [Authorize(Roles = "admin")]
     public IActionResult GetAll()
     {
         return Ok(_context.GetForeings());
@@ -42,6 +43,7 @@ public class ForeingController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public ActionResult<Foreing> PostForeing(ForeingForCreationDTO foreingForCreationDto)
     {
         try
@@ -56,6 +58,7 @@ public class ForeingController : ControllerBase
     }
     
     [HttpPut]
+    [Authorize(Roles = "admin")]
     public ActionResult<Foreing> PutForeing(ForeingForUpdateDTO foreingForUpdateDto)
     {
         try
@@ -70,12 +73,13 @@ public class ForeingController : ControllerBase
     }
     
     [HttpDelete("{foreingId}")]
+    [Authorize(Roles = "admin")]
     public ActionResult<Foreing> DeleteForeing(int foreingId)
     {
         try
         {
-          _context.DeleteForeing(foreingId);
-        return Ok("Foreing deleted successfully");
+          _context.DeleteForeing(foreingId);     
+          return Ok("Foreing deleted successfully");
         }catch (Exception e) {
             Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 

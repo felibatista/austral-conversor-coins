@@ -21,7 +21,7 @@ public class UserRepository : IUserRepository
 
     public User GetUser(int id)
     {
-        User? user = _context.Users.FirstOrDefault(users) => users.Id == id);
+        User? user = _context.Users.FirstOrDefault((users) => users.Id == id);
 
         if (user == null)
         {
@@ -65,13 +65,20 @@ public class UserRepository : IUserRepository
             FirstName = userForCreationDto.FirstName,
             LastName = userForCreationDto.LastName,
             Email = userForCreationDto.Email,
-            Password = userForCreationDto.Password,
             SubscriptionId = 1 //default subscription free
+        };
+        
+        Auth auth = new()
+        {
+            Password = userForCreationDto.Password,
+            Role = "User",
+            Id = user.Id
         };
         
         try
         {
             _context.Users.Add(user);
+            _context.Auth.Add(auth);
         }
         catch (Exception e)
         {
@@ -159,7 +166,6 @@ public class UserRepository : IUserRepository
         toChange.FirstName = userForUpdateDto.FirstName;
         toChange.LastName = userForUpdateDto.LastName;
         toChange.Email = userForUpdateDto.Email;
-        toChange.Password = userForUpdateDto.Password;
 
         try
         { 

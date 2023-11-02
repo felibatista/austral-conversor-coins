@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using conversor_coin.Models;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace conversor_coin.Controller;
@@ -19,6 +21,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [Route("all")]
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -42,6 +45,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public ActionResult<Subscription> PostSubscription(SubscriptionForCreationDTO subscriptionForCreationDto)
     {
         try
@@ -58,6 +62,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "admin")]
     public ActionResult<Subscription> PutSubscription(SubscriptionForUpdateDTO subscriptionForUpdateDto)
     {
         try
@@ -74,6 +79,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpDelete("{subscriptionId}")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<Subscription> DeleteSubscription(int subscriptionId)
     {
         try

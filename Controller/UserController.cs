@@ -1,7 +1,9 @@
 using conversor_coin.Data;
+using conversor_coin.Models;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Implementations;
 using conversor_coin.Models.Repository.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace conversor_coin.Controller;
@@ -11,87 +13,101 @@ namespace conversor_coin.Controller;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _userContext;
-    private readonly ISubscriptionRepository _subscriptionContext;
+    private readonly APIException _apiException;
     
-    public UserController(IUserRepository _userContext, ISubscriptionRepository _subscriptionContext)
+    public UserController(IUserRepository _userContext, APIException apiException)
     {
         this._userContext = _userContext;
-        this._subscriptionContext = _subscriptionContext;
+        this._apiException = apiException;
     }
     
     [Route("all")]
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
         return Ok(_userContext.GetUsers());
     }
 
-    
+
     [HttpGet("{userId}")]
+    [Authorize(Roles = "admin")]
     public ActionResult<User> GetUser(int id)
     {
-        User? user = _userContext.GetUser(id);
-        
-        if (user == null)
+        try
         {
-            return NotFound();
+            User? user = _userContext.GetUser(id);
+            return user;
         }
-        
-        return user;
+        catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
 
     [HttpPost]
     public ActionResult<User> PostUser(UserForCreationDTO userForCreationDto)
     {
-        _userContext.AddUser(userForCreationDto);
-        return Ok("User created successfully");
+        try
+        {
+            _userContext.AddUser(userForCreationDto);
+            return Ok("User created successfully");
+        }catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
+
     }
     
     [HttpPut("{userId}")]
+    [Authorize(Roles = "admin")]
     public ActionResult<User> PutUser(UserForUpdateDTO userForUpdateDto)
     {
-        if (_userContext.GetUser(userForUpdateDto.UserToChangeID) == null)
+        try
         {
-            return NotFound("Invalid user");
+            _userContext.UpdateUser(userForUpdateDto);
+            return Ok("User updated successfully");
+        }catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
         }
-        
-        _userContext.UpdateUser(userForUpdateDto);
-        return Ok("User updated successfully");
     }
     
     [HttpPut("subscription/{userId}")]
-    public ActionResult<User> PutSubscriptionUser(int userId, int subscriptionId)
+    [Authorize(Roles = "admin")]
+    public ActionResult<User> PutSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto)
     {
-        if (_userContext.GetUser(userId) == null)
+        try
         {
-            return NotFound("Invalid user");
-        }
-        if (_subscriptionContext.GetSubscription(subscriptionId) == null)
+            _userContext.UpdateSubscriptionUser(subscriptionUserUpdateDto);
+            return Ok("User subscription updated successfully");
+        }catch (Exception e)
         {
-            return NotFound("Invalid subscription");
-        }
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-        SubscriptionUserUpdateDTO subscriptionUserUpdateDto = new()
-        {
-            UserId = userId,
-            SubscriptionId = subscriptionId
-        };
-        
-        _userContext.UpdateSubscriptionUser(subscriptionUserUpdateDto);
-        return Ok("User subscription updated successfully");
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
 
     [HttpDelete("{userId}")]
+    [Authorize(Roles = "admin")]
     public ActionResult<User> DeleteUser(int id)
     {
-        User? user = _userContext.GetUser(id);
-
-        if (user == null)
+        try
         {
-            return NotFound();
-        }
+            _userContext.DeleteUser(id);
+            return Ok("User deleted successfully");
+        }catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-        _userContext.DeleteUser(user);
-        return Ok("User deleted successfully");
+            return _apiException.getResultFromError(type, e.Data);
+        }
     }
 }

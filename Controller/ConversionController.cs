@@ -1,6 +1,7 @@
 using conversor_coin.Models;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace conversor_coin.Controller;
@@ -10,18 +11,18 @@ namespace conversor_coin.Controller;
 public class ConversionController : ControllerBase
 {
     private readonly IConversionRepository _conversionContext;
-    private readonly IForeingRepository _foreingContext;
     private readonly APIException _apiException;
+    private readonly IAuthRepository _authRepository;
 
-    public ConversionController(IConversionRepository conversionContext, IForeingRepository foreingContext,
-        APIException apiException)
+    public ConversionController(IConversionRepository conversionContext, APIException apiException, IAuthRepository authRepository)
     {
         _conversionContext = conversionContext;
-        _foreingContext = foreingContext;
         _apiException = apiException;
+        _authRepository = authRepository;
     }
 
     [Route("all")]
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -31,6 +32,11 @@ public class ConversionController : ControllerBase
     [HttpGet("{userId}")]
     public ActionResult GetConversions(int userId, int limit)
     {
+        if (!_authRepository.isSameUserRequest(userId))
+        {
+            return Unauthorized("You are not authorized to see this user's conversions");
+        }
+        
         try
         {
             List<ForeingCoversion> conversion = _conversionContext.GetConversionsFromUser(userId, limit);
@@ -47,6 +53,11 @@ public class ConversionController : ControllerBase
     [HttpPost]
     public ActionResult<ForeingCoversion> PostConversion(ConversionForCreationDTO conversionForCreationDto)
     {
+        if (!_authRepository.isSameUserRequest(conversionForCreationDto.UserId))
+        {
+            return Unauthorized("You are not authorized to create a conversion for this user");
+        }
+        
         try
         {
             _conversionContext.addConversion(conversionForCreationDto);

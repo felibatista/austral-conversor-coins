@@ -10,5 +10,5 @@ public interface IUserRepository
     public void AddUser(UserForCreationDTO userForCreationDto);
     public void UpdateUser(UserForUpdateDTO userForUpdateDto);
     public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto);
-    public void DeleteUser(User user);
+    public void DeleteUser(int userId);
 }
