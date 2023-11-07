@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'conversor-front';
+  value = 0;
+ 
 }

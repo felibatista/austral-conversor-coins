@@ -3,14 +3,25 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SliderModule } from 'primeng/slider';
+import { FormsModule } from '@angular/forms';	
+import { ButtonModule } from 'primeng/button';
+import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarModule } from './navbar/navbar.module';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SliderModule,
+    FormsModule,
+    NavbarModule,
+    OrganizationChartModule,
+    ButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
