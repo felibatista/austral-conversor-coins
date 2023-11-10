@@ -11,6 +11,6 @@ export class ConversorComponent {
   constructor(private foreingService: ForeingService) {}
 
   ngOnInit(): void {
-    this.foreingService.getQuotes().subscribe((quotes) => console.log(quotes));
+    this.foreingService.getForeings().subscribe((quotes) => console.log(quotes));
   }
 }

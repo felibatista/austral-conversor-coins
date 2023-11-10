@@ -5,11 +5,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ForeingService {
-  private url: string = 'https://type.fit/api/quotes';
+  private url: string = 'https://localhost:7265/api/Foreing/all';
 
   constructor(private http: HttpClient) { }
 
-  getQuotes() {
+  getForeings() {
     return this.http.get(this.url);
   }
 }
