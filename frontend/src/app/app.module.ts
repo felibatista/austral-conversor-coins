@@ -9,12 +9,15 @@ import { ButtonModule } from 'primeng/button';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NavbarModule } from './navbar/navbar.module';
 import { OrganizationChartModule } from 'primeng/organizationchart';
+import { HeroComponent } from './hero/hero.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
+    FooterComponent,
     BrowserModule,
     AppRoutingModule,
     SliderModule,
@@ -22,6 +25,7 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
     NavbarModule,
     OrganizationChartModule,
     ButtonModule,
+    HeroComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,56 @@
+<div class="card bg-base-100 shadow-xl w-full">
+  <div class="card-body flex text-start">
+    <h2 class="card-title">Convertidor de divisas</h2>
+    <p>Seleccione dos monedas y sepa cuanto equivale.</p>
+    <div class="flex flex-row w-full items-start justify-start mt-4">
+      <div class="dropdown w-[35%]">
+        <label tabindex="0" class="btn m-1 w-full justify-start">
+          <img src="../../assets/ar.svg" class="w-6 h-6" alt="Argentina flag" />
+          ARS
+        </label>
+        <ul
+          tabindex="0"
+          class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+        >
+          <li><a>Item 1</a></li>
+          <li><a>Item 2</a></li>
+        </ul>
+        <p class="relative left-2 text-sm">Valor IC: 0.45</p>
+      </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-12 h-12 mx-auto"
+        id="Swap"
+      >
+        <path
+          d="M13.98 22 6 30l7.98 8v-6H28v-4H13.98v-6zM42 18l-7.98-8v6H20v4h14.02v6L42 18z"
+          fill="#f8fefe"
+          class="color000000 svgShape"
+        ></path>
+        <path fill="none" d="M0 0h48v48H0z"></path>
+      </svg>
+      <div class="dropdown w-[35%]">
+        <label tabindex="0" class="btn m-1 w-full justify-start">
+            <img src="../../assets/usa.svg" class="w-6 h-6" alt="Argentina flag" />
+            USD
+          </label>
+          <ul
+            tabindex="0"
+            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li><a>Item 1</a></li>
+            <li><a>Item 2</a></li>
+          </ul>
+          <p class="relative left-2 text-sm">Valor IC: 0.45</p>
+      </div>
+    </div>
+    <div class="flex gap-6 mt-4">
+      <input
+        type="number"
+        placeholder="Ingrese la cantidad"
+        class="input input-bordered w-full max-w-xs"
+      />
+      <button class="btn btn-secondary flex-1">Convertir</button>
+    </div>
+  </div>
+</div>
