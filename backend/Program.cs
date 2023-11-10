@@ -94,6 +94,10 @@ using (var context = new ConversorContext())
     context.Database.EnsureCreated();
 }
 
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
