@@ -21,7 +21,6 @@ public class ForeingController : ControllerBase
     
     [Route("all")]
     [HttpGet]
-    [Authorize(Roles = "admin")]
     public IActionResult GetAll()
     {
         return Ok(_context.GetForeings());

@@ -25,6 +25,12 @@ public class AuthService : IAuthService
     public Auth Authenticate(UserForLoginDTO userForLoginDto)
     {
         var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == userForLoginDto.Username.ToLower());
+
+        if (user == null)
+        {
+            return null;
+        }
+
         var password = _context.Auth.FirstOrDefault(x => x.Password == userForLoginDto.Password && x.Id == user.Id);
        
         if (user != null && password != null)

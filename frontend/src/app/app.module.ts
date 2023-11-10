@@ -6,11 +6,12 @@ import { AppComponent } from './app.component';
 import { SliderModule } from 'primeng/slider';
 import { FormsModule } from '@angular/forms';	
 import { ButtonModule } from 'primeng/button';
-import { NavbarComponent } from './navbar/navbar.component';
-import { NavbarModule } from './navbar/navbar.module';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { NavbarModule } from './components/navbar/navbar.module';
 import { OrganizationChartModule } from 'primeng/organizationchart';
-import { HeroComponent } from './hero/hero.component';
-import { FooterComponent } from './footer/footer.component';
+import { HeroComponent } from './components/hero/hero.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HttpClientModule } from '@angular/common/http';  
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { FooterComponent } from './footer/footer.component';
     NavbarModule,
     OrganizationChartModule,
     ButtonModule,
+    HttpClientModule,
     HeroComponent
   ],
   providers: [],
