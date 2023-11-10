@@ -45,17 +45,17 @@ public class ConversorContext : DbContext
             new Foreing
             {
                 Id = 1,
-                Name = "Dolar",
+                Name = "Dolar estadounidense",
                 Code = "USD",
                 Value = 1,
-                ImageUrl = ""
+                ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/us.svg"
             }, new Foreing
             {
                 Id = 2,
                 Name = "Euro",
                 Code = "EUR",
                 Value = 1.2,
-                ImageUrl = ""
+                ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/eu.svg"
                 
             },
             new Foreing
@@ -64,7 +64,15 @@ public class ConversorContext : DbContext
                 Name = "Real",
                 Code = "BRL",
                 Value = 0.2,
-                ImageUrl = ""
+                ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/br.svg"
+            },
+            new Foreing
+            {
+                Id = 4,
+                Name = "Peso argentino",
+                Code = "ARS",
+                Value = 0.33,
+                ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/ar.svg"
             });
 
         modelBuilder.Entity<Subscription>().HasData(

@@ -5,17 +5,31 @@
     <div class="flex flex-row w-full items-start justify-start mt-4">
       <div class="dropdown w-[35%]">
         <label tabindex="0" class="btn m-1 w-full justify-start">
-          <img src="../../assets/ar.svg" class="w-6 h-6" alt="Argentina flag" />
-          ARS
+          <img src={{from.imageUrl}} class="w-6 h-6" alt="From flag" />
+          {{from.code}}
         </label>
         <ul
           tabindex="0"
+          id="fromDropdown"
           class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
         >
-          <li><a>Item 1</a></li>
-          <li><a>Item 2</a></li>
+          <li *ngFor="let foreing of foreings" class="p-1">
+            <div (click)="setFrom(foreing)" class="flex gap-2 flex-row">
+
+              <img
+                *ngIf="foreing.imageUrl != ''"
+                src="{{foreing.imageUrl}}"
+                alt="Bandera"
+                height="25"
+                width="25"
+                class="object-contain"
+              /><a class=""
+                >{{ foreing.code }} - {{ foreing.name }}</a
+              >
+            </div>
+          </li>
         </ul>
-        <p class="relative left-2 text-sm">Valor IC: 0.45</p>
+        <p class="relative left-2 text-sm">Valor IC: {{from.value}}</p>
       </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -31,17 +45,31 @@
       </svg>
       <div class="dropdown w-[35%]">
         <label tabindex="0" class="btn m-1 w-full justify-start">
-            <img src="../../assets/usa.svg" class="w-6 h-6" alt="Argentina flag" />
-            USD
-          </label>
-          <ul
-            tabindex="0"
-            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li><a>Item 1</a></li>
-            <li><a>Item 2</a></li>
-          </ul>
-          <p class="relative left-2 text-sm">Valor IC: 0.45</p>
+          <img src={{to.imageUrl}} class="w-6 h-6" alt="To flag" />
+          {{to.code}}
+        </label>
+        <ul
+          tabindex="0"
+          id="toDropdown"
+          class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 max-h-[200px] overflow-y-auto flex-col flex-nowrap "
+        >
+          <li *ngFor="let foreing of foreings" class="p-1">
+            <div (click)="setTo(foreing)" class="flex gap-2 flex-row">
+
+              <img
+                *ngIf="foreing.imageUrl != ''"
+                src="{{foreing.imageUrl}}"
+                alt="Bandera"
+                height="25"
+                width="25"
+                class="object-contain"
+              /><a class=""
+                >{{ foreing.code }} - {{ foreing.name }}</a
+              >
+            </div>
+          </li>
+        </ul>
+        <p class="relative left-2 text-sm">Valor IC: {{to.value}}</p>
       </div>
     </div>
     <div class="flex gap-6 mt-4">

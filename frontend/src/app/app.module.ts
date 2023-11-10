@@ -12,6 +12,7 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
 import { HeroComponent } from './components/hero/hero.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';  
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     FooterComponent,
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     SliderModule,
     FormsModule,
