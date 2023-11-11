@@ -13,10 +13,16 @@ import { HeroComponent } from './components/hero/hero.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';  
 import { CommonModule } from '@angular/common';
+import { UserComponent } from './components/user/user.component';
+import { LoginComponent } from './pages/login/login.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    UserComponent,
+    LoginComponent,
+    HomeComponent,
   ],
   imports: [
     FooterComponent,
