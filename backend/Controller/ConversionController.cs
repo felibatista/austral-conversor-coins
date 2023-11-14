@@ -70,8 +70,8 @@ public class ConversionController : ControllerBase
         
         try
         {
-            _conversionContext.addConversion(conversionForCreationDto);
-            return Ok("Conversion created successfully");
+            var conversion = _conversionContext.addConversion(conversionForCreationDto);
+            return Ok(conversion);
         }
         catch (Exception e)
         {

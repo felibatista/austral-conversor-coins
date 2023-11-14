@@ -29,7 +29,7 @@ public class ConversorContext : DbContext
                 LastName = "Admin",
                 Email = "admin@admin.com",
                 Conversions = new List<ForeingCoversion>(),
-                SubscriptionId = 0,
+                SubscriptionId = 1,
             });
         
         modelBuilder.Entity<Auth>().HasData(

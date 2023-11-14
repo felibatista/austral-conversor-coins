@@ -42,6 +42,11 @@ public class ConversionService : IConversionService
                 "User conversions not found",
                 APIException.Type.NOT_FOUND);
         }
+
+        if (limit == 0)
+        {
+            return conversions.ToList();
+        }
         
         if (limit > 0)
         {
@@ -51,7 +56,7 @@ public class ConversionService : IConversionService
         return conversions;
     }
 
-    public void addConversion(ConversionForCreationDTO conversionForCreationDto)
+    public ForeingCoversion addConversion(ConversionForCreationDTO conversionForCreationDto)
     {
         User? user = _context.Users.FirstOrDefault((user) => user.Id == conversionForCreationDto.UserId);
         
@@ -79,10 +84,19 @@ public class ConversionService : IConversionService
                 APIException.Type.NOT_FOUND);
         }
         
-        List<ForeingCoversion> temporalUserForeingList = _context.ForeingCoversion.ToList();
-
+        List<ForeingCoversion> temporalUserForeingList = _context.ForeingCoversion.Where((conversions) => conversions.UserId == user.Id).ToList();
+        
         int planLimit = _context.Subscriptions.First((subscription) => subscription.Id == user.SubscriptionId)
             .Limit;
+        
+        if (planLimit == 0 || planLimit == null)
+        {
+            throw APIException.CreateException(
+                APIException.Code.SB_01,
+                "User plan not found",
+                APIException.Type.NOT_FOUND
+            );
+        }
       
         if (planLimit != -1 && temporalUserForeingList.Count >= planLimit)
         {
@@ -126,5 +140,7 @@ public class ConversionService : IConversionService
                 "An error occurred while saving the data in the database",
                 APIException.Type.INTERNAL_SERVER_ERROR);
         }
+
+        return conversion;
     }
 }
