@@ -1,6 +1,8 @@
 export type User = {
     id: number;
-    name: string;
+    username: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    token: string;
+    subscriptionId: number;
 }
