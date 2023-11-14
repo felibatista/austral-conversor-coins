@@ -7,7 +7,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    
   ],
   imports: [
     CommonModule,
@@ -16,7 +16,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
     AvatarGroupModule
   ],
   exports: [
-    NavbarComponent
+    
   ]
 })
 

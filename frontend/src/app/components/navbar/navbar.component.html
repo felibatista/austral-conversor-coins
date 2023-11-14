@@ -2,7 +2,12 @@
   <div class="w-full flex justify-between px-[60px] py-7  items-center">
     <h1 class="font-semibold text-xl">Conversor de divisas</h1>
     <div class="card flex justify-content-center">
-        <button class="btn btn-secondary">Iniciar sesión</button>
+      <div *ngIf="logged === null ? true : false" class="skeleton w-[150px] h-[48px]"></div>
+      <a href="/login" *ngIf="logged !==null && logged === true ? false : true" class="btn btn-secondary">Iniciar sesión</a>
+      <div *ngIf="logged === true ? true : false" class="flex gap-3">
+        <a href="/dashboard" class="btn btn-secondary">Tú cuenta</a>
+        <button class="btn btn-accent" (click)="logout()">Cerrar sesión</button>
+      </div>
     </div>
   </div>
 </nav>
