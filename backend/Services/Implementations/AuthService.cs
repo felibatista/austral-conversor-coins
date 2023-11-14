@@ -47,8 +47,8 @@ public class AuthService : IAuthService
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier,auth.Id.ToString()),
-            new Claim(ClaimTypes.Role,auth.Role)
+            new Claim("userId",auth.Id.ToString()),
+            new Claim("role",auth.Role)
         };
         var token = new JwtSecurityToken(_config["Jwt:Issuer"],
             _config["Jwt:Audience"],
@@ -61,14 +61,31 @@ public class AuthService : IAuthService
     
     public Auth getCurrentUser()
     {
-        var identity = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
+        var claimPrincipal = _httpContextAccessor.HttpContext.User;
+        
+        if (claimPrincipal == null)
+        {
+            return null;
+        }
+        
+        var identity = claimPrincipal.Identity as ClaimsIdentity;
         if (identity != null)
         {
             var userClaims = identity.Claims;
+            
+            if (userClaims == null)
+            {
+                return null;
+            }
+
+            if (userClaims.FirstOrDefault(x => x.Type == "userId") == null)
+            {
+                return null;
+            }
             return new Auth
             {
-                Id = int.Parse(userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value),
-                Role = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value
+                Id = int.Parse(userClaims.FirstOrDefault(x => x.Type == "userId")?.Value),
+                Role = userClaims.FirstOrDefault(x => x.Type == "role")?.Value
             };
         }
         return null;
@@ -81,14 +98,14 @@ public class AuthService : IAuthService
         {
             var userClaims = identity.Claims;
             
-            if (userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value.ToLower() == "admin")
+            if (userClaims.FirstOrDefault(x => x.Type == "role")?.Value.ToLower() == "admin")
             {
                 return true;
             }
             
-            if (userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value != null)
+            if (userClaims.FirstOrDefault(x => x.Type == "userId")?.Value != null)
 
-            return int.Parse(userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value) == userId;
+            return int.Parse(userClaims.FirstOrDefault(x => x.Type == "userId")?.Value) == userId;
         }
         return false;
     }

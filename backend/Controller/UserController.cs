@@ -14,11 +14,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserService _userContext;
     private readonly APIException _apiException;
+    private readonly IAuthService _authService;
     
-    public UserController(IUserService _userContext, APIException apiException)
+    public UserController(IUserService userContext, APIException apiException, IAuthService authService)
     {
-        this._userContext = _userContext;
+        this._userContext = userContext;
         this._apiException = apiException;
+        this._authService = authService;
     }
     
     [Route("all")]
@@ -31,20 +33,55 @@ public class UserController : ControllerBase
 
 
     [HttpGet("{userId}")]
-    [Authorize(Roles = "admin")]
-    public ActionResult<User> GetUser(int id)
+    public ActionResult<User> GetUser(int userId)
     {
-        try
+        if (_authService.getCurrentUser() == null)
         {
-            User? user = _userContext.GetUser(id);
-            return user;
+            return Unauthorized();
         }
-        catch (Exception e)
+            
+        if (_authService.getCurrentUser().Id == userId || _authService.getCurrentUser().Role == "admin")
         {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+            try
+            {
+                User? user = _userContext.GetUser(userId);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-            return _apiException.getResultFromError(type, e.Data);
+                return _apiException.getResultFromError(type, e.Data);
+            }
         }
+
+        return Unauthorized();
+    }
+    
+    [HttpGet("getFull/{userId}")]
+    public ActionResult<UserDTO> GetUserFull(int userId)
+    {
+        if (_authService.getCurrentUser() == null)
+        {
+            return Unauthorized();
+        }
+            
+        if (_authService.getCurrentUser().Id == userId || _authService.getCurrentUser().Role == "admin")
+        {
+            try
+            {
+                UserDTO? user = _userContext.GetUserFull(userId);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+                return _apiException.getResultFromError(type, e.Data);
+            }
+        }
+
+        return Unauthorized();
     }
 
     [HttpPost]
@@ -80,7 +117,6 @@ public class UserController : ControllerBase
     }
     
     [HttpPut("subscription/{userId}")]
-    [Authorize(Roles = "admin")]
     public ActionResult<User> PutSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto)
     {
         try

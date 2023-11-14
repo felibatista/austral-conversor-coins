@@ -19,7 +19,7 @@ public class UserService : IUserService
         return _context.Users.ToList();
     }
 
-    public User GetUser(int id)
+    public UserDTO GetUserFull(int id)
     {
         User? user = _context.Users.FirstOrDefault((users) => users.Id == id);
 
@@ -31,12 +31,23 @@ public class UserService : IUserService
                            APIException.Type.NOT_FOUND);
         }
 
-        return user;
-    }
+        UserDTO userDto = new()
+        {
+            UserId = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Subscription = _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == user.SubscriptionId)?.Name
+        };
 
-    public User GetUser(string email)
+        return userDto;
+    }
+    
+    public User GetUser(int id)
     {
-        User? user = _context.Users.FirstOrDefault((users) => users.Email == email);
+        User? user = _context.Users.FirstOrDefault((users) => users.Id == id);
+
         if (user == null)
         {
             throw APIException.CreateException(

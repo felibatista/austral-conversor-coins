@@ -6,7 +6,7 @@ public interface IUserService
 {
     public List<User> GetUsers();
     public User GetUser(int id);
-    public User GetUser(String email);
+    public UserDTO GetUserFull(int id);
     public void AddUser(UserForCreationDTO userForCreationDto);
     public void UpdateUser(UserForUpdateDTO userForUpdateDto);
     public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto);
