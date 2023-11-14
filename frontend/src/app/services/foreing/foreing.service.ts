@@ -8,11 +8,15 @@ import { Foreing } from 'src/app/types/foreing';
 })
 
 export class ForeingService {
-  private url: string = 'https://localhost:7265/api/Foreing/all';
+  url = 'https://localhost:7265';
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
-  getForeings(): Observable<Array<Foreing>> {
-    return this.http.get<Array<Foreing>>(this.url);
+  async getForeings() {
+    const get = await fetch(this.url + '/api/Foreing/all');
+
+    const response = await get.json();
+
+    return response;
   }
 }
