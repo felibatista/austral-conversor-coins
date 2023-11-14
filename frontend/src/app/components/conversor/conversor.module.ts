@@ -6,7 +6,7 @@ import { Foreing } from 'src/app/types/foreing';
 
 @NgModule({
   declarations: [
-    ConversorComponent
+
   ],
   imports: [
     CommonModule
