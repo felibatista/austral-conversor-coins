@@ -62,18 +62,6 @@ export class ConversorComponent {
       value: 1,
       imageUrl: 'https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/us.svg'
     }
-
-    this.userService.getConversions().then((conversions) => {
-      if (conversions) {
-        this.userService.conversions.set(conversions);
-      }
-    });
-
-    this.userService.getPlan().then((plan) => {
-      if (plan) {
-        this.userService.plan.set(plan);
-      }
-    });
   }
 
   canConvert(): boolean {

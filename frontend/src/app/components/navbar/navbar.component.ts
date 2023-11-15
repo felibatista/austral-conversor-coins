@@ -15,7 +15,7 @@ export class NavbarComponent {
 
   logout() {
     this.authService.logout();
-    window.location.reload();
+    window.location.href = '/';
   }
 
   constructor(private authService: AuthService) {
