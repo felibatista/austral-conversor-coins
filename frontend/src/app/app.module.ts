@@ -13,17 +13,17 @@ import { HeroComponent } from './components/hero/hero.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';  
 import { CommonModule } from '@angular/common';
-import { UserComponent } from './components/user/user.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { onlyLoggedGuard } from './guards/onlyLogged.guard';
 import { onlyWithoutLoggedGuard } from './guards/onlyWithoutLogged.guard';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ConversionListComponent } from './components/conversion-list/conversion-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserComponent,
   ],
   imports: [
     FooterComponent,
@@ -41,7 +41,6 @@ import { onlyWithoutLoggedGuard } from './guards/onlyWithoutLogged.guard';
   ],
   providers: [],
   exports: [ CommonModule, FormsModule, ReactiveFormsModule],
-
   bootstrap: [AppComponent]
 })
 export class AppModule { }
