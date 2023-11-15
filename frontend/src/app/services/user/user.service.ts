@@ -55,6 +55,9 @@ export class UserService {
     ).then((res) => res.json());
 
     if (conversions.length > 0) {
+      conversions.forEach((conversion) => {
+        conversion.date = new Date(conversion.date);
+      });
       this.conversions.set(conversions);
       return conversions;
     }
