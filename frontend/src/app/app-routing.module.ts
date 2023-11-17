@@ -5,10 +5,11 @@ import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { onlyWithoutLoggedGuard } from './guards/onlyWithoutLogged.guard';
 import { onlyLoggedGuard } from './guards/onlyLogged.guard';
+import { RegisterComponent } from './pages/register/register.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, title: 'Conversor | Home' },
-  { path: 'home', component: HomeComponent, title: 'Conversor | Home' },
+  { path: '', component: HomeComponent, title: 'Conversor | Inicio' },
+  { path: 'home', component: HomeComponent, title: 'Conversor | Inicio' },
   {
     path: 'dashboard',
     loadChildren: () =>
@@ -23,6 +24,13 @@ const routes: Routes = [
     pathMatch: 'full',
     component: LoginComponent,
     title: 'Conversor | Login',
+    canActivate: [onlyWithoutLoggedGuard],
+  },
+  {
+    path: 'register',
+    pathMatch: 'full',
+    component: RegisterComponent,
+    title: 'Conversor | Registro',
     canActivate: [onlyWithoutLoggedGuard],
   },
 ];

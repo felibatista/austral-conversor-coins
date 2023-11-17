@@ -5,8 +5,8 @@
     <form class="flex flex-row w-full items-start relative justify-start mt-4">
       <div class="dropdown w-[35%]">
         <label tabindex="0" class="btn m-1 w-full justify-start">
-          <img src={{from.imageUrl}} class="w-6 h-6" alt="From flag" />
-          {{from.code}}
+          <img src={{from?.imageUrl}} class="w-6 h-6" alt="From flag" />
+          {{from?.code}}
         </label>
         <ul
           tabindex="0"
@@ -29,7 +29,7 @@
             </div>
           </li>
         </ul>
-        <p class="relative left-2 text-sm">Valor IC: {{from.value}}</p>
+        <p class="relative left-2 text-sm">Valor IC: {{from?.value}}</p>
       </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -45,8 +45,8 @@
       </svg>
       <div class="dropdown w-[35%]">
         <label tabindex="0" class="btn m-1 w-full justify-start">
-          <img src={{to.imageUrl}} class="w-6 h-6" alt="To flag" />
-          {{to.code}}
+          <img src={{to?.imageUrl}} class="w-6 h-6" alt="To flag" />
+          {{to?.code}}
         </label>
         <ul
           tabindex="0"
@@ -69,7 +69,7 @@
             </div>
           </li>
         </ul>
-        <p class="relative left-2 text-sm">Valor IC: {{to.value}}</p>
+        <p class="relative left-2 text-sm">Valor IC: {{to?.value}}</p>
       </div>
     </form>
     <div class="flex gap-6 mt-4">
@@ -84,14 +84,14 @@
       <button [disabled]="!canConvert()" (click)="convert()" class="btn btn-secondary flex-1">Convertir</button>
     </div>
     <div class="mt-4">
-      <h2 *ngIf="conversionRemaining() == -1 ? false : true">Cantidad de conversiones restantes: <span class="{{color()}}" >{{conversionRemaining()}}</span></h2>
-      <h2 *ngIf="conversionRemaining() == -1 ? true : false" class="text-green-400">¡Tú plan no tiene límite de conversiones!</h2>
-      <h2 *ngIf="errors.length == 0">Valor de la convertibilidad de <span class="text-accent">{{from.code}}</span> a <span class="text-accent">{{to.code}}</span>: {{result.toFixed(4)}}</h2>
+      <h2 class="text-lg" *ngIf="errors.length == 0">Valor de la convertibilidad de <span class="text-accent">{{from?.code}}</span> a <span class="text-accent">{{to?.code}}</span>: {{result.toFixed(4)}}</h2>
       <ul *ngIf="errors.length > 0" class="flex flex-col gap-1">
         <li *ngFor="let error of errors" class="text-red-500">
           {{errors.indexOf(error) + 1}} - {{error.message}}
         </li>
       </ul>
+      <h2 *ngIf="conversionRemaining() == -1 ? false : true">Cantidad de conversiones restantes: <span class="{{color()}}" >{{conversionRemaining()}}</span></h2>
+      <h2 *ngIf="conversionRemaining() == -1 ? true : false" class="text-green-400">¡Tú plan no tiene límite de conversiones!</h2>
     </div>
   </div>
 </div>

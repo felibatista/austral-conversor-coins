@@ -20,6 +20,7 @@ import { onlyLoggedGuard } from './guards/onlyLogged.guard';
 import { onlyWithoutLoggedGuard } from './guards/onlyWithoutLogged.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ConversionListComponent } from './components/conversion-list/conversion-list.component';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
 
 @NgModule({
   declarations: [

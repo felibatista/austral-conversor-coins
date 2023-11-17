@@ -13,22 +13,28 @@ import { getColorFromMax } from 'src/app/utils/color-from-max';
   standalone: true,
   templateUrl: './conversor.component.html',
   styleUrls: ['./conversor.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule
-  ]
+  imports: [CommonModule, FormsModule],
 })
 export class ConversorComponent {
   foreings: any[] = [];
-  from: Foreing;
-  to: Foreing;
+  from: Foreing | null = null;
+  to: Foreing | null = null;
   amount: number = 0;
   result: number = 0;
   errors: ConversorError[] = [];
 
-  totalConversions = computed(() => { return this.userService.conversions().length});
-  plan = computed(() => { return this.userService.plan() });
-  color = computed(() => { return getColorFromMax((this.plan().limit - this.totalConversions()), this.plan().limit) });
+  totalConversions = computed(() => {
+    return this.userService.conversions().length;
+  });
+  plan = computed(() => {
+    return this.userService.plan();
+  });
+  color = computed(() => {
+    return getColorFromMax(
+      this.plan().limit - this.totalConversions(),
+      this.plan().limit
+    );
+  });
 
   conversionLimitReached = computed(() => {
     if (this.plan().limit == -1) {
@@ -46,7 +52,11 @@ export class ConversorComponent {
     return this.plan().limit - this.totalConversions();
   });
 
-  constructor(private foreingService: ForeingService, private authService: AuthService, private userService: UserService) {
+  constructor(
+    private foreingService: ForeingService,
+    private authService: AuthService,
+    private userService: UserService
+  ) {
     this.from = {
       id: 1,
       code: 'ARS',
@@ -65,7 +75,11 @@ export class ConversorComponent {
   }
 
   canConvert(): boolean {
-    return this.from && this.to && this.amount > 0;
+    if (this.from != null && this.to != null) {
+      return this.from && this.to && this.amount > 0;
+    } else {
+      return false;
+    }
   }
 
   setFrom(foreing: Foreing): void {
@@ -111,17 +125,50 @@ export class ConversorComponent {
       return;
     }
 
-    this.userService.postConversion(this.from, this.to, this.amount).then((conversion) => {
-      if (conversion) {
-        this.result = this.amount * this.from.value / this.to.value;
-      }
-    });
+    if (this.canConvert() == false) {
+      return;
+    }
+
+    this.userService
+      .postConversion(this.from!, this.to!, this.amount)
+      .then((conversion) => {
+        if (conversion) {
+          this.result = (this.amount * this.from!.value) / this.to!.value;
+        }
+      });
   }
 
   ngOnInit(): void {
     this.foreingService.getForeings().then((data: Array<Foreing>) => {
+      if (data.length == 0) {
+        return;
+      }
+
+      this.from = data[0];
+      this.to = data[1];
+
+      data = data.sort((a, b) => {
+        if (a.code < b.code) {
+          return -1;
+        }
+
+        if (a.code > b.code) {
+          return 1;
+        }
+
+        return 0;
+      });
+
       data.forEach((foreing) => {
         this.foreings.push(foreing);
+
+        if (this.from == null) {
+          this.from = foreing;
+        }
+
+        if (this.to == null) {
+          this.to = foreing;
+        }
       });
     });
   }

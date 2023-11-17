@@ -34,7 +34,7 @@
             class="skeleton w-full h-[36px] my-1"
           ></span>
           <span
-            *ngIf="conversionLimit != null && totalConversions!; null"
+            *ngIf="conversionLimit != null && totalConversions != null"
             class="font-bold text-3xl transition-all"
             >{{ conversionLimit - totalConversions }}</span
           >

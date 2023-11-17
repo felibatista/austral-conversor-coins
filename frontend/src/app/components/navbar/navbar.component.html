@@ -5,7 +5,11 @@
     </h1>
     <div class="card flex justify-content-center">
       <div *ngIf="logged === null ? true : false" class="skeleton w-[150px] h-[48px]"></div>
-      <a href="/login" *ngIf="logged !==null && logged === true ? false : true" class="btn btn-secondary">Iniciar sesión</a>
+      <div *ngIf="logged === true ? false : true" class="flex gap-3">
+
+        <a href="/login" *ngIf="logged !==null && logged === true ? false : true" class="btn btn-secondary">Iniciar sesión</a>
+        <a href="/register" *ngIf="logged !==null && logged === true ? false : true" class="btn btn-accent">Registrarme</a>
+      </div>
       <div *ngIf="logged === true ? true : false" class="flex gap-3">
         <a href="/dashboard" class="btn btn-secondary">Tú cuenta</a>
         <button class="btn btn-accent" (click)="logout()">Cerrar sesión</button>
