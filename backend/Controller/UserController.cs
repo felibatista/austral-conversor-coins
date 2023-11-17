@@ -116,6 +116,12 @@ public class UserController : ControllerBase
         }
     }
     
+    /*
+    Esta solicitud solo se podría aplicar cuando el usuario complete
+    el pago de la suscripción, por lo que debería traer algun tipo de
+    verificación de la api de el gestor de pagos. Se dejará para una
+    futura implementación, ahora todos tienen acceso a cambiarse de suscripción
+    */
     [HttpPut("subscription/{userId}")]
     public ActionResult<User> PutSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto)
     {

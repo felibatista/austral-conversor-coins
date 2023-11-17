@@ -59,7 +59,7 @@ public class UserService : IUserService
         return user;
     }
     
-    public void AddUser(UserForCreationDTO userForCreationDto)
+    public User AddUser(UserForCreationDTO userForCreationDto)
     {
         User? userExist = _context.Users.FirstOrDefault((users) => users.Email == userForCreationDto.Email);
         if (userExist != null)
@@ -110,6 +110,8 @@ public class UserService : IUserService
                 "An error occurred while saving the data in the database",
                 APIException.Type.INTERNAL_SERVER_ERROR);
         }
+
+        return user;
     }
 
     public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto)
