@@ -1,5 +1,5 @@
 <form #form (ngSubmit)="onSubmit()">
-  <div class="flex flex-col mt-4 gap-4">
+  <div class="flex flex-col mt-4 gap-2">
     <div class="form-control w-full grid grid-cols-2 gap-3">
       <div>
         <label class="label">
@@ -8,6 +8,7 @@
         <input
           type="text"
           [(ngModel)]="firstName"
+          required
           id="firstName"
           name="firstName"
           placeholder="Felipe"
@@ -21,6 +22,7 @@
         </label>
         <input
           type="text"
+          required
           [(ngModel)]="lastName"
           id="lastName"
           name="lastName"
@@ -36,6 +38,8 @@
       <input
         type="text"
         [(ngModel)]="username"
+        required
+        minlength="4"
         id="username"
         name="username"
         placeholder="Felipe221"
@@ -49,6 +53,7 @@
       <input
         type="text"
         [(ngModel)]="email"
+        required
         id="email"
         name="email"
         placeholder="fbatista@mail.austral.edu.ar"
@@ -59,6 +64,20 @@
     <div class="form-control w-full">
       <label class="label">
         <span class="label-text">Contraseña</span>
+      </label>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        id="password"
+        name="password"
+        placeholder="Contraseña"
+        class="input input-bordered w-full"
+      />
+    </div>
+
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Repetir contraseña</span>
       </label>
       <input
         type="password"

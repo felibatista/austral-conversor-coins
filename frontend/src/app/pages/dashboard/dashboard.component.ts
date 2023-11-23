@@ -37,11 +37,16 @@ export class DashboardComponent implements OnInit {
       if (conversions) {
         //timeout load
         setTimeout(() => {
+          this.userService.getPlan().then((plan) => {
+            if (plan) {
+              this.conversionLimit = plan.limit;
+            }
+          });
+
           if (conversions.length == 0) {
             this.totalConversions = 0;
             this.conversionsThisMonth = 0;
             this.conversionsLastMonth = 0;
-            this.conversionLimit = 0;
             this.firstForeing = '-';
             this.secondForeing = '-';
 
@@ -50,11 +55,6 @@ export class DashboardComponent implements OnInit {
           
           this.totalConversions = conversions.length;
 
-          this.userService.getPlan().then((plan) => {
-            if (plan) {
-              this.conversionLimit = plan.limit;
-            }
-          });
 
           this.conversionsThisMonth = conversions.filter((conversion) => {
             return conversion.date.getMonth() == new Date().getMonth();

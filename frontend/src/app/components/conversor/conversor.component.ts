@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Signal, computed, signal } from '@angular/core';
+import { Component, Input, Signal, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ForeingService } from 'src/app/services/foreing/foreing.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { Conversion } from 'src/app/types/conversion';
 import { ConversorError } from 'src/app/types/error';
 import { Foreing } from 'src/app/types/foreing';
 import { getColorFromMax } from 'src/app/utils/color-from-max';
@@ -16,11 +17,15 @@ import { getColorFromMax } from 'src/app/utils/color-from-max';
   imports: [CommonModule, FormsModule],
 })
 export class ConversorComponent {
-  foreings: any[] = [];
+  @Input() foreings: any[] = [];
+  @Input() userConversions: Conversion[] = [];
+  @Input() userPlan: any = {};
+
   from: Foreing | null = null;
   to: Foreing | null = null;
   amount: number = 0;
   result: number = 0;
+
   errors: ConversorError[] = [];
 
   totalConversions = computed(() => {
