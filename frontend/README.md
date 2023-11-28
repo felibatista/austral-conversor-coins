@@ -1,44 +1,27 @@
-# COINS-Conversor
+# Fronted17
 
-## 📕 Introducción al problema
-Se deberá desarrollar un conversor de monedas en un entorno web. El conversor permitiráa los usuarios registrados realizar conversiones entre diferentes monedas, pero con lalimitación de que solo aquellos usuarios que tengan una suscripción activa podrán utilizarlo.
-Las suscripciones están diseñadas para restringir la cantidad de conversiones que un usuario puede realizar.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.3.
 
-## 📃 Requisitos
-🫂 Registro de Usuarios: Los usuarios podrán registrarse en la plataforma para obtener
-acceso al conversor.
+## Development server
 
-⌨️ Inicio de sesión: Los usuarios registrados deberán poder iniciar sesión en sus
-cuentas.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-🪙 Monedas: el sistema permitirá consultar crear modificar y eliminar en base de datos
-monedas con su codigo, leyenda e índice de convertibilidad La moneda va a tener código, leyenda, símbolo y un índice de convertibilidad (IC) que va permitir convertir de una moneda a otra. Este índice será guardado en la ase de datos de manera estática para fines didácticos pero la idea sería que se pueda actualizar según varia las monedas. El índice de convertibilidad será la
-relación que existe entre una moneda y el dólar americano expresada en cuanto vale una unidad de dicha moneda en comparación a 1 USD.
-Ejemplos de índices de convertibilidad para diferentes monedas:
-  - IC para ARS (Peso argentino): 0.002
-  - IC para EUR (Euro): 1.09
-  - IC para KC (Corona Checa): 0.043
-  - IC para USD (Dolar americano): 1
+## Code scaffolding
 
-📩 Suscripciones: Deberá implementar un sistema de suscripciones que controle el
-acceso al conversor. Los usuarios sin suscripción no podrán utilizarlo.
-  - Suscripción Free: Los usuarios podrán activar una suscripción gratuita que les dará como máximo unas 10 conversiones.
-  - Suscripción Trial: 100 conversiones.
-  - Suscripción Pro: Sin límite de conversiones.
-    
-💱 Conversión de Monedas: Los usuarios podrán seleccionar dos monedas diferentes y
-especificar la cantidad a convertir. El sistema deberá proporcionar la cantidad
-convertida.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-📅 Historial de Conversiones: Deberás mantener un registro de las conversiones
-realizadas por cada usuario, incluyendo la fecha en que se realizó.
+## Build
 
-❤️ Monedas favoritas: cuando un usuario con suscripción free o pro puede hacer a las
-monedas que desee como favoritas de manera tal que cuando dicho usuario acceda
-al sistema sus monedas favoritas se despliegan con mayor relevancia que las
-demás.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-🖲️ Un panel administrativo en donde solo un usuario administrador pueda crear y actualizar
-monedas con su respectivo IC, código, leyenda y también pueda crear, actualizar y dar
-de baja usuarios, modificar usuarios incluirá la posibilidad de cambiar la suscripción
-del mismo.
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

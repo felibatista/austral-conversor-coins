@@ -1,0 +1,22 @@
+<nav class="max-w-[1400px] bg-base-200 mx-auto px-8">
+  <div class="flex justify-between md:p-4 py-4 mt-2 items-center">
+    <h1 class="font-semibold text-xl">
+      <a href="/">Conversor de divisas</a>
+    </h1>
+    <div class="card flex justify-content-center">
+      @if ( logged === null) {
+      <div class="skeleton w-[150px] h-[48px]"></div>
+      }@else { @if (logged === false) {
+      <div class="flex gap-3">
+        <a href="/login" class="btn btn-secondary">Iniciar sesión</a>
+        <a href="/register" class="btn btn-accent">Registrarme</a>
+      </div>
+      }@else{
+      <div class="flex gap-3">
+        <a href="/dashboard" class="btn btn-secondary">Tú cuenta</a>
+        <button class="btn btn-accent" (click)="logout()">Cerrar sesión</button>
+      </div>
+      } }
+    </div>
+  </div>
+</nav>

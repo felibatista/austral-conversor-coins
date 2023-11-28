@@ -1,0 +1,104 @@
+<form #form (ngSubmit)="onSubmit()">
+  <div class="flex flex-col mt-4 gap-2">
+    <div class="form-control w-full grid grid-cols-2 gap-3">
+      <div>
+        <label class="label">
+          <span class="label-text">Nombre</span>
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="firstName"
+          required
+          id="firstName"
+          name="firstName"
+          placeholder="Felipe"
+          class="input input-bordered w-full"
+        />
+      </div>
+
+      <div>
+        <label class="label">
+          <span class="label-text">Apellido</span>
+        </label>
+        <input
+          type="text"
+          required
+          [(ngModel)]="lastName"
+          id="lastName"
+          name="lastName"
+          placeholder="Batista"
+          class="input input-bordered w-full"
+        />
+      </div>
+    </div>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Nombre de usuario</span>
+      </label>
+      <input
+        type="text"
+        [(ngModel)]="username"
+        required
+        minlength="4"
+        id="username"
+        name="username"
+        placeholder="Felipe221"
+        class="input input-bordered w-full"
+      />
+    </div>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Email</span>
+      </label>
+      <input
+        type="text"
+        [(ngModel)]="email"
+        required
+        id="email"
+        name="email"
+        placeholder="fbatista@mail.austral.edu.ar"
+        class="input input-bordered w-full"
+      />
+    </div>
+
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Contraseña</span>
+      </label>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        id="password"
+        name="password"
+        placeholder="Contraseña"
+        class="input input-bordered w-full"
+      />
+    </div>
+
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Repetir contraseña</span>
+      </label>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        id="password"
+        name="password"
+        placeholder="Contraseña"
+        class="input input-bordered w-full"
+      />
+    </div>
+  </div>
+
+  <div class="card-actions w-full p-2 mt-4">
+    <button type="submit" class="btn btn-secondary w-full">Registrar</button>
+  </div>
+
+  <div
+    class="m-4 flex flex-col items-center justify-center gap-3 text-blue-500"
+  >
+    <a href="/login" class="hover:underline"
+      >¿Ya tienes cuenta? Inicia sesion</a
+    >
+  </div>
+</form>
