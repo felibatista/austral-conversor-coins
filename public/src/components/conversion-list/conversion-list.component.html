@@ -1,5 +1,5 @@
-<div class="overflow-x-auto ">
-  <table class="table table-zebra ">
+<div class="overflow-x-auto">
+  <table class="table table-zebra">
     <thead>
       <tr>
         <th>Moneda emisora</th>
@@ -9,12 +9,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let conversion of conversions().slice(0, 10)" class="{{(conversions().indexOf(conversion) + 1) % 2 == 0 ? 'bg-base-100' : 'bg-base-100'}}">
+      @for (conversion of conversions().slice(0, 10); track $index) {
+      <tr
+        class="{{
+          (conversions().indexOf(conversion) + 1) % 2 == 0
+            ? 'bg-base-100'
+            : 'bg-base-100'
+        }}"
+      >
         <th>{{ getForeing(conversion.fromForeingId)?.name }}</th>
         <th>{{ getForeing(conversion.toForeingId)?.name }}</th>
         <th>{{ conversion.amount }}</th>
         <th>{{ getDateFormatted(conversion.date) }}</th>
       </tr>
+      }
     </tbody>
   </table>
 </div>

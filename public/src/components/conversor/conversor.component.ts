@@ -16,10 +16,11 @@ import { getColorFromMax } from '../../utils/color-from-max';
   styleUrls: ['./conversor.component.css'],
   imports: [CommonModule, FormsModule],
 })
+
 export class ConversorComponent {
-  @Input() foreings: any[] = [];
-  @Input() userConversions: Conversion[] = [];
-  @Input() userPlan: any = {};
+  foreings: any[] = [];
+  userConversions: Conversion[] = [];
+  userPlan: any = {};
 
   from: Foreing | null = null;
   to: Foreing | null = null;
@@ -31,9 +32,11 @@ export class ConversorComponent {
   totalConversions = computed(() => {
     return this.userService.conversions().length;
   });
+
   plan = computed(() => {
     return this.userService.plan();
   });
+
   color = computed(() => {
     return getColorFromMax(
       this.plan().limit - this.totalConversions(),
@@ -61,23 +64,7 @@ export class ConversorComponent {
     private foreingService: ForeingService,
     private authService: AuthService,
     private userService: UserService
-  ) {
-    this.from = {
-      id: 1,
-      code: 'ARS',
-      name: 'Pesos Argentinos',
-      value: 0.33,
-      imageUrl: 'https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/ar.svg'
-    }
-
-    this.to = {
-      id: 2,
-      code: 'USD',
-      name: 'Dolar Estadounidense',
-      value: 1,
-      imageUrl: 'https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/us.svg'
-    }
-  }
+  ) {}
 
   canConvert(): boolean {
     if (this.from != null && this.to != null) {
@@ -144,6 +131,24 @@ export class ConversorComponent {
   }
 
   ngOnInit(): void {
+    this.from = {
+      id: 1,
+      code: 'ARS',
+      name: 'Pesos Argentinos',
+      value: 0.33,
+      imageUrl:
+        'https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/ar.svg',
+    };
+
+    this.to = {
+      id: 2,
+      code: 'USD',
+      name: 'Dolar Estadounidense',
+      value: 1,
+      imageUrl:
+        'https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/us.svg',
+    };
+
     this.foreingService.getForeings().then((data: Array<Foreing>) => {
       if (data.length == 0) {
         return;
