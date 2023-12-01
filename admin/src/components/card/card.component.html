@@ -1,0 +1,13 @@
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body flex flex-col card">
+    <div class="flex gap-2">
+     <img src="../../assets/{{icon}}" alt={{id}} class="h-8 w-8">
+      <h3 class="font-bold text-[20px]">{{ title }}</h3>
+    </div>
+    <p class="text-[16px]">{{ description }}</p>
+
+    <button (click)="send()" class="btn w-fit mt-4 flex items-center">Ingresar
+        <img src="../../assets/arrowRight.svg" stroke alt="arrowRight" class="h-6 w-6"/>
+    </button>
+  </div>
+</div>
