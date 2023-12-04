@@ -15,14 +15,14 @@ public class UserController : ControllerBase
     private readonly IUserService _userContext;
     private readonly APIException _apiException;
     private readonly IAuthService _authService;
-    
+
     public UserController(IUserService userContext, APIException apiException, IAuthService authService)
     {
         this._userContext = userContext;
         this._apiException = apiException;
         this._authService = authService;
     }
-    
+
     [Route("all")]
     [Authorize(Roles = "admin")]
     [HttpGet]
@@ -39,7 +39,7 @@ public class UserController : ControllerBase
         {
             return Unauthorized();
         }
-            
+
         if (_authService.getCurrentUser().Id == userId || _authService.getCurrentUser().Role == "admin")
         {
             try
@@ -57,7 +57,7 @@ public class UserController : ControllerBase
 
         return Unauthorized();
     }
-    
+
     [HttpGet("getFull/{userId}")]
     public ActionResult<UserDTO> GetUserFull(int userId)
     {
@@ -65,7 +65,7 @@ public class UserController : ControllerBase
         {
             return Unauthorized();
         }
-            
+
         if (_authService.getCurrentUser().Id == userId || _authService.getCurrentUser().Role == "admin")
         {
             try
@@ -91,31 +91,32 @@ public class UserController : ControllerBase
         {
             _userContext.AddUser(userForCreationDto);
             return Ok("User created successfully");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
             Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
             return _apiException.getResultFromError(type, e.Data);
         }
-
     }
-    
+
     [HttpPut]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public ActionResult<User> PutUser(UserForUpdateDTO userForUpdateDto)
     {
         try
         {
             _userContext.UpdateUser(userForUpdateDto);
             return Ok("User updated successfully");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
             Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
             return _apiException.getResultFromError(type, e.Data);
         }
     }
-    
+
     /*
     Esta solicitud solo se podría aplicar cuando el usuario complete
     el pago de la suscripción, por lo que debería traer algun tipo de
@@ -129,7 +130,8 @@ public class UserController : ControllerBase
         {
             _userContext.UpdateSubscriptionUser(subscriptionUserUpdateDto);
             return Ok("User subscription updated successfully");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
             Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
@@ -138,18 +140,27 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{userId}")]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public ActionResult<User> DeleteUser(int id)
     {
         try
         {
             _userContext.DeleteUser(id);
             return Ok("User deleted successfully");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
             Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
             return _apiException.getResultFromError(type, e.Data);
         }
+    }
+
+    [HttpGet("counter")]
+    [Authorize]
+    public ActionResult<int> counter()
+    {
+        int counter = _userContext.counter();
+        return Ok(counter);
     }
 }

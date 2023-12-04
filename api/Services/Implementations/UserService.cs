@@ -234,4 +234,9 @@ public class UserService : IUserService
                 APIException.Type.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public int counter()
+    {
+        return _context.Users.Count();
+    }
 }

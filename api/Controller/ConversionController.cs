@@ -22,7 +22,7 @@ public class ConversionController : ControllerBase
     }
 
     [Route("all")]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     [HttpGet]
     public IActionResult GetAll()
     {

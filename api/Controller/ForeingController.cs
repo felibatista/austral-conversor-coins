@@ -42,7 +42,7 @@ public class ForeingController : ControllerBase
     }
     
     [HttpPost]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public ActionResult<Foreing> PostForeing(ForeingForCreationDTO foreingForCreationDto)
     {
         try
@@ -57,7 +57,7 @@ public class ForeingController : ControllerBase
     }
     
     [HttpPut]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public ActionResult<Foreing> PutForeing(ForeingForUpdateDTO foreingForUpdateDto)
     {
         try
@@ -72,7 +72,7 @@ public class ForeingController : ControllerBase
     }
     
     [HttpDelete("{foreingId}")]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public ActionResult<Foreing> DeleteForeing(int foreingId)
     {
         try

@@ -21,7 +21,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [Route("all")]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -45,7 +45,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public ActionResult<Subscription> PostSubscription(SubscriptionForCreationDTO subscriptionForCreationDto)
     {
         try
@@ -62,7 +62,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public ActionResult<Subscription> PutSubscription(SubscriptionForUpdateDTO subscriptionForUpdateDto)
     {
         try
@@ -79,7 +79,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpDelete("{subscriptionId}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public ActionResult<Subscription> DeleteSubscription(int subscriptionId)
     {
         try
