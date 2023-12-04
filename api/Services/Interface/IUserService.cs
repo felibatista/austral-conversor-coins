@@ -11,4 +11,5 @@ public interface IUserService
     public void UpdateUser(UserForUpdateDTO userForUpdateDto);
     public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto);
     public void DeleteUser(int userId);
+    public int counter();
 }

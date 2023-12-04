@@ -1,10 +1,57 @@
-<div class="flex justify-center items-center min-h-[80vh]">
-  <div class="min-w-[50%] bg-base-100 shadow-xl">
+<div class="flex justify-center items-center min-h-[80vh] p-4 md:p-0">
+  <div class="w-full md:max-w-[50%] bg-base-100 shadow-xl">
     <div class="card-body">
       <h2 class="font-bold text-[22px]">Inicio de sesión</h2>
       <p class="text-[18px]">
         Ingresa tus credenciales para acceder al panel de administración.
       </p>
+      <form #form (ngSubmit)="onSubmit()">
+        <div class="flex flex-col mt-4 gap-4">
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Nombre de usuario</span>
+            </label>
+            <input
+              type="text"
+              [(ngModel)]="username"
+              id="username"
+              required
+              name="username"
+              placeholder="Usuario"
+              class="input input-bordered w-full"
+            />
+          </div>
+
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Contraseña</span>
+            </label>
+            <input
+              type="password"
+              [(ngModel)]="password"
+              required
+              id="password"
+              name="password"
+              placeholder="Contraseña"
+              class="input input-bordered w-full"
+            />
+          </div>
+        </div>
+
+        @if ( !loading && error == true ) {
+        <div class="mt-4 text-red-500">
+          <p>Las credenciales de ingreso son incorrectas.</p>
+        </div>
+        }
+
+        <div class="card-actions w-full mt-10">
+          <button type="submit" class="btn btn-warning w-full">
+            Ingresar @if (loading) {
+            <span class="loading loading-spinner loading-sm"></span>
+            }
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

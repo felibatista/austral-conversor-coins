@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 pb-12">
   @for (card of panels; track $index) {
   <app-card
     [title]="card.title"
@@ -8,4 +8,18 @@
     [icon]="card.icon"
   ></app-card>
   }
+
+  <app-card-counter
+    title="Usuarios totales"
+    description="Cantidad de usuarios registrados en la aplicación."
+    [counter]="usersCount"
+    [loaded]="loaded"
+  ></app-card-counter>
+
+  <app-card-counter
+    title="Monedas totales"
+    description="Cantidad de monedas registradas en la aplicación."
+    [counter]="currencyCount"
+    [loaded]="loaded"
+  ></app-card-counter>
 </div>

@@ -1,0 +1,17 @@
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body flex flex-col gap-0">
+    <h3 class="font-bold text-[20px]">{{ title }}</h3>
+
+    <p class="text-[16px]">{{ description }}</p>
+
+    @if (loaded) {
+    <div class="mt-[1rem] font-bold text-[32px]">
+      {{ counter }}
+    </div>
+    }@else {
+    <div class="mt-[1rem] font-bold text-[32px]">
+      <span class="loading loading-lg"></span>
+    </div>
+    }
+  </div>
+</div>
