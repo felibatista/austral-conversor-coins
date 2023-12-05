@@ -13,6 +13,29 @@ export class LoginService {
     window.document.location.href = '/';
   }
 
+  isLogged() {
+    if (!this.cookieService.get('token')) {
+      return false;
+    }
+
+    const token = this.cookieService.get('token').split('.');
+    const user = JSON.parse(atob(token[1]));
+    const role = user.role;
+    //expiracion del token
+    const exp = user.exp;
+
+    if (exp < Date.now() / 1000) {
+      this.logout();
+      return false;
+    }
+
+    if (role === 'admin') {
+      return true;
+    }
+
+    return false;
+  }
+
   async authenticate(username: string, password: string) {
     const post = await fetch(URL_BACKEND + '/api/Authenticate/login', {
       method: 'POST',
