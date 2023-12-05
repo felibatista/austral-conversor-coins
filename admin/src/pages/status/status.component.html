@@ -1,0 +1,36 @@
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body flex flex-col card gap-0">
+    <h3 class="font-bold text-[20px]">Estado del sistema</h3>
+    <p class="text-[16px]">
+      Observa el estado de los servicios de la aplicación.
+    </p>
+
+    <div>
+      <div class="flex flex-col gap-6 mt-6">
+        <app-card-status
+          service="API"
+          [status]="api"
+          [loaded]="loaded"
+        ></app-card-status>
+
+        <app-card-status
+          service="Base de datos"
+          [status]="database"
+          [loaded]="loaded"
+        ></app-card-status>
+
+        <app-card-status
+          service="Servicio público"
+          [status]="public"
+          [loaded]="loaded"
+        ></app-card-status>
+
+        <app-card-status
+          service="Servicio administrativo"
+          [status]="admin"
+          [loaded]="loaded"
+        ></app-card-status>
+      </div>
+    </div>
+  </div>
+</div>

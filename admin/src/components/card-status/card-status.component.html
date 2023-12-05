@@ -1,0 +1,24 @@
+<div class="flex flex-col">
+  <h4 class="font-bold text-[18px]">{{ service }}</h4>
+  <div class="flex items-center gap-2 text-[15px]">
+    @if (!loaded) {
+    <div class="skeleton w-[16rem] h-5 mt-2"></div>
+    }@else { @if (status == true) {
+    <img
+      src="../../assets/green-circle.svg"
+      stroke
+      alt="arrowRight"
+      class="h-4 w-4 relative top-[1px]"
+    />
+    <p>Funcionando correctamente</p>
+    }@else{
+    <img
+      src="../../assets/red-circle.svg"
+      stroke
+      alt="arrowRight"
+      class="h-4 w-4 relative top-[1px]"
+    />
+    <p>No se encuentra disponible</p>
+    } }
+  </div>
+</div>
