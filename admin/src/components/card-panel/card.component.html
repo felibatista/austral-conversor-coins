@@ -1,13 +1,22 @@
 <div class="card bg-base-100 shadow-xl">
-  <div class="card-body flex flex-col card">
-    <div class="flex gap-2">
-     <img src="../../assets/{{icon}}" alt={{id}} class="h-8 w-8">
+  <div class="card-body flex flex-col card p-6 gap-0">
+    <div class="flex items-center gap-2">
+      <img src="../../assets/{{ icon }}" alt="{{ id }}" class="h-5 w-6" />
       <h3 class="font-bold text-[20px]">{{ title }}</h3>
     </div>
     <p class="text-[16px]">{{ description }}</p>
 
-    <button (click)="send()" class="btn w-fit mt-4 flex items-center">Ingresar
-        <img src="../../assets/arrowRight.svg" stroke alt="arrowRight" class="h-6 w-6"/>
+    <button
+      (click)="send()"
+      class="px-4 py-2 border border-white rounded-xl w-fit mt-4 gap-2 flex items-center justify-center hover:scale-105 transition-all"
+    >
+      Ingresar
+      <img
+        src="../../assets/arrowRight.svg"
+        stroke
+        alt="arrowRight"
+        class="h-6 w-6 relative top-[1.5px]"
+      />
     </button>
   </div>
 </div>
