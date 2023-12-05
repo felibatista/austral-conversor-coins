@@ -163,4 +163,12 @@ public class UserController : ControllerBase
         int counter = _userContext.counter();
         return Ok(counter);
     }
+    
+    [HttpGet("page/{page}")]
+    [Authorize]
+    public ActionResult<List<User>> getUsersByPage(int page)
+    {
+        List<User> users = _userContext.getUsersByPage(page);
+        return Ok(users);
+    }
 }

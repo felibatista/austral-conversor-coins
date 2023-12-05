@@ -6,20 +6,34 @@ namespace conversor_coin.Data;
 
 public class ConversorContext : DbContext
 {
- 
     public DbSet<User> Users { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<Foreing> Foreings { get; set; }
     public DbSet<ForeingCoversion> ForeingCoversion { get; set; }
     public DbSet<Auth> Auth { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source=final_conversor.sqlite");
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        for (int a = 2; a < 50; a++)
+        {
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = a,
+                    UserName = "Admin"+a,
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    Email = "admin@admin.com"+a,
+                    Conversions = new List<ForeingCoversion>(),
+                    SubscriptionId = 1,
+                });
+        }
+
         modelBuilder.Entity<User>().HasData(
             new User
             {
@@ -31,16 +45,16 @@ public class ConversorContext : DbContext
                 Conversions = new List<ForeingCoversion>(),
                 SubscriptionId = 1,
             });
-        
+
         modelBuilder.Entity<Auth>().HasData(
             new Auth
             {
                 Id = 1,
                 Password = "admin",
                 Role = "admin"
-            }    
+            }
         );
-        
+
         modelBuilder.Entity<Foreing>().HasData(
             new Foreing
             {
@@ -56,7 +70,6 @@ public class ConversorContext : DbContext
                 Code = "EUR",
                 Value = 1.2,
                 ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/eu.svg"
-                
             },
             new Foreing
             {
@@ -97,5 +110,4 @@ public class ConversorContext : DbContext
                 Limit = -1
             });
     }
-    
 }

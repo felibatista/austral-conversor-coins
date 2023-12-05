@@ -239,4 +239,9 @@ public class UserService : IUserService
     {
         return _context.Users.Count();
     }
+    
+    public List<User> getUsersByPage(int page)
+    {
+        return _context.Users.Skip((page - 1) * 10).Take(10).ToList();
+    }
 }
