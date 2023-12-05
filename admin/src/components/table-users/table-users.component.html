@@ -1,0 +1,73 @@
+<div class="overflow-x-auto border-b border-white pb-8">
+  @if (!loaded) {
+  <table class="table table-zebra">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Usuario</th>
+        <th>Plan</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+  </table>
+  @for (item of [0,1,2,3,4,5,6,7,8,9]; track $index) {
+  <div class="skeleton w-full h-10 my-4"></div>
+  }}@else {
+  <table class="table table-zebra">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Usuario</th>
+        <th>Plan</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (user of users; track $index) {
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ planToText(user.subscriptionId) }}</td>
+        <td>...</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  }
+</div>
+
+<div class="flex justify-between text-[15px] mt-2">
+  <p>Página {{ page }}/{{ maxPages }}</p>
+
+  <div class="space-x-1 flex">
+    <button
+      class="flex items-center disabled:opacity-30"
+      [disabled]="page - 1 == 0"
+      (click)="previous()"
+    >
+      <img
+        src="../../assets/chevron-left.svg"
+        alt="arrowLeft"
+        class="h-4 w-4 relative top-[1px]"
+      />
+      Anterior
+    </button>
+    <span>/</span>
+    <button
+      class="flex items-center disabled:opacity-30"
+      [disabled]="page + 1 > maxPages"
+      (click)="next()"
+    >
+      Siguiente
+      <img
+        src="../../assets/chevron-right.svg"
+        alt="arrowRight"
+        class="h-4 w-4 relative top-[1px]"
+      />
+    </button>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="card bg-base-100 shadow-xl my-8">
+  <div class="card-body flex flex-col card gap-0">
+    <div class="flex justify-between items-end">
+      <div class="flex flex-col">
+        <h3 class="font-bold text-[20px]">Lista de usuarios</h3>
+        <p class="text-[16px]">
+          Aquí podrás ver todos los usuarios y tomar acciones sobre ellos.
+        </p>
+      </div>
+      <input
+        type="text"
+        placeholder="Buscar por usuario..."
+        class="input input-bordered w-full max-w-xs"
+      />
+    </div>
+
+    <app-table-users class="mt-8"></app-table-users>
+  </div>
+</div>
