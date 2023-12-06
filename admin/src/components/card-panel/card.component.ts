@@ -13,6 +13,10 @@ export class CardComponent{
   @Input() description!: string;
   @Input() icon!: string;
   @Input() link!: string;
+  @Input() dimensions!: {
+    width: number,
+    height: number
+  }
 
   send(){
     window.document.location.href = this.link

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { LoginService } from '../../services/login.service';
+import { themeChange } from 'theme-change'
 
 @Component({
   selector: 'app-navbar',
@@ -16,8 +17,9 @@ export class NavbarComponent {
   logout() {
     this.loginService.logout();
   }
-
+  
   constructor(private loginService: LoginService) {
+    themeChange(false);
     if (window.location.pathname === '/login') {
       this.isLoginPage = true;
     }
