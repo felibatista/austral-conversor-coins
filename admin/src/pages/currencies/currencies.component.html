@@ -1,13 +1,13 @@
-<div class="card bg-base-100 shadow-xl my-8">
+<div class="card bg-base-100 shadow-xl md:my-8 my-4">
   <div class="card-body flex flex-col card gap-0">
-    <div class="flex justify-between items-end">
+    <div class="flex justify-between md:items-end flex-col md:flex-row">
       <div class="flex flex-col">
         <h3 class="font-bold text-[20px]">Lista de divisas</h3>
         <p class="text-[16px]">
           Aquí podrás ver todos las divisas y tomar acciones sobre ellos.
         </p>
       </div>
-      <button (click)="createCurrency()" class="btn btn-warning w-full max-w-[15rem]">
+      <button (click)="createCurrency()" class="btn btn-warning w-full md:max-w-[15rem] mt-4 md:mt-0">
         Agregar divisa
       </button>
     </div>
