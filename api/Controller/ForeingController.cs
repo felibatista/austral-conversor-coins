@@ -47,8 +47,8 @@ public class ForeingController : ControllerBase
     {
         try
         {
-            _context.AddForeing(foreingForCreationDto);
-            return Ok("Foreing created successfully");
+            Foreing foreing = _context.AddForeing(foreingForCreationDto);
+            return Ok(foreing);
         }catch (Exception e) {
             Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 

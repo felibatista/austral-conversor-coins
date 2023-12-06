@@ -4,17 +4,24 @@ import { Foreing } from '../../lib/types';
 import { CurrencyService } from '../../services/currency.service';
 import { TableCurrenciesComponent } from '../../components/table-currencies/table-currencies.component';
 import { EditCurrencyComponent } from '../../components/edit-currency/edit-currency.component';
+import { CreateCurrencyComponent } from '../../components/create-currency/create-currency.component';
 
 @Component({
   selector: 'app-currencies',
   standalone: true,
-  imports: [CommonModule, TableCurrenciesComponent, EditCurrencyComponent],
+  imports: [CommonModule, TableCurrenciesComponent, EditCurrencyComponent, CreateCurrencyComponent],
   templateUrl: './currencies.component.html',
   styleUrl: './currencies.component.css'
 })
 export class CurrenciesComponent implements OnInit {
   currencies: Foreing[] = [];
-  input: string = '';
+  currencyToEdit: Foreing = {
+    id: 0,
+    code: '',
+    name: '',
+    value: 0,
+    imageUrl: ''
+  };
 
   constructor(private currencyService: CurrencyService) {}
 
@@ -24,5 +31,15 @@ export class CurrenciesComponent implements OnInit {
         this.currencies = currencies;
       }
     });
+  }
+
+  createCurrency(){
+    this.currencyToEdit = {
+      id: 1,
+      code: '',
+      name: '',
+      value: 0,
+      imageUrl: ''
+    };
   }
 }

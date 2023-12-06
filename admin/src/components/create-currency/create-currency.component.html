@@ -1,0 +1,79 @@
+@if (currency.id != 0) { @if (saving && !finished) {
+<app-edit-loading title="Creando divisa..."></app-edit-loading>
+
+}@else if (finished && success) {
+<app-edit-close
+  title="¡Divisa guardada!"
+  description="La divisa se ha guardado correctamente."
+  (close)="close()"
+></app-edit-close>
+}@else if (finished && !success) {
+<app-edit-close
+  title="¡Error!"
+  description="Ha ocurrido un error al guardar la divisa."
+  (close)="close()"
+></app-edit-close>
+
+} @else {
+<div open="true" id="editUserModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Crear divisa</h3>
+    <form class="mt-4 flex flex-col gap-2">
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">Nombre</span>
+        </div>
+        <input
+          type="text"
+          [formControl]="name"
+          class="input input-bordered w-full"
+        />
+      </label>
+
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">Código</span>
+        </div>
+        <input
+          type="text"
+          [formControl]="code"
+          class="input input-bordered w-full"
+        />
+      </label>
+
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">Valor IC</span>
+        </div>
+        <input
+          type="number"
+          [formControl]="value"
+          class="input input-bordered w-full"
+        />
+      </label>
+
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">URL Imagen</span>
+        </div>
+        <input
+          type="text"
+          [formControl]="imageUrl"
+          class="input input-bordered w-full"
+        />
+      </label>
+    </form>
+
+      <button
+        class="rounded-lg h-[3rem] mt-6 font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100 w-full"
+        (click)="create()"
+      >
+        Guardar
+      </button>
+    
+  </div>
+  <form method="dialog" (click)="close()" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</div>
+} }

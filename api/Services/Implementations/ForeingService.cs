@@ -33,7 +33,7 @@ public class ForeingService : IForeingService
         return foreing;
     }
 
-    public void AddForeing(ForeingForCreationDTO foreingForCreationDto)
+    public Foreing AddForeing(ForeingForCreationDTO foreingForCreationDto)
     {
         if (_context.Foreings.FirstOrDefault((foreing) => foreing.Code == foreingForCreationDto.Code) != null)
         {
@@ -74,6 +74,8 @@ public class ForeingService : IForeingService
                 "An error occurred while saving the data in the database",
                 APIException.Type.INTERNAL_SERVER_ERROR);
         }
+
+        return foreing;
     }
 
     public void UpdateForeing(ForeingForUpdateDTO foreingForUpdateDto)

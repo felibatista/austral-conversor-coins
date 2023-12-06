@@ -34,9 +34,9 @@ export class HomeComponent implements OnInit {
         }
       })
       .then(() => {
-        this.currencyService.getCurrencys().then((count) => {
+        this.currencyService.getCurrenciesCount().then((count) => {
           if (count) {
-            this.currencyCount = count.length;
+            this.currencyCount = count;
           }
         });
       })

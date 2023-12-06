@@ -7,7 +7,9 @@
           Aquí podrás ver todos las divisas y tomar acciones sobre ellos.
         </p>
       </div>
-      <button class="btn btn-warning w-full max-w-[15rem]">Agregar divisa</button>
+      <button (click)="createCurrency()" class="btn btn-warning w-full max-w-[15rem]">
+        Agregar divisa
+      </button>
     </div>
 
     <app-table-currencies
@@ -18,3 +20,7 @@
 </div>
 
 <app-edit-currency></app-edit-currency>
+<app-create-currency
+  [currency]="currencyToEdit"
+  [currencies]="currencies"
+></app-create-currency>

@@ -53,9 +53,9 @@ export class CurrencyService {
     return response;
   }
 
-  async createCurrency(currency: Foreing): Promise<boolean> {
+  async createCurrency(currency: Foreing): Promise<Foreing | null> {
     if (!this.cookieService.get('token')) {
-      return false;
+      return null;
     }
 
     const post = await fetch(URL_BACKEND + '/api/Foreing', {
@@ -73,10 +73,12 @@ export class CurrencyService {
     });
 
     if (post.status !== 200) {
-      return false;
+      return null;
     }
 
-    return true;
+    const response: Foreing = await post.json();
+
+    return response;
   }
 
   async updateCurrency(currency: Foreing): Promise<boolean> {
