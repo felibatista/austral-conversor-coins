@@ -141,11 +141,11 @@ public class UserController : ControllerBase
 
     [HttpDelete("{userId}")]
     [Authorize]
-    public ActionResult<User> DeleteUser(int id)
+    public ActionResult<User> DeleteUser(int userId)
     {
         try
         {
-            _userContext.DeleteUser(id);
+            _userContext.DeleteUser(userId);
             return Ok("User deleted successfully");
         }
         catch (Exception e)
