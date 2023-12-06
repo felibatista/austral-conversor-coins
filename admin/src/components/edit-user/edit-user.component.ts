@@ -4,11 +4,13 @@ import { User } from '../../lib/types';
 import { fromNumberToPlanName, fromPlanNameToNumber } from '../../lib/util';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { EditLoadingComponent } from '../edit-loading/edit-loading.component';
+import { EditCloseComponent } from '../edit-close/edit-close.component';
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, EditLoadingComponent, EditCloseComponent],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.css',
 })
