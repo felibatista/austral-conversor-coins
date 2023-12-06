@@ -10,3 +10,16 @@ export function fromNumberToPlanName(number: number): string {
       return 'Free';
   }
 }
+
+export function fromPlanNameToNumber(name: string): number {
+  switch (name) {
+    case 'Free':
+      return 1;
+    case 'Trial':
+      return 2;
+    case 'Pro':
+      return 3;
+    default:
+      return 1;
+  }
+}

@@ -1,3 +1,4 @@
+
 <div class="overflow-x-auto border-b border-white pb-8">
   @if (!loaded) {
   <table class="table table-zebra">
@@ -30,9 +31,11 @@
       <tr>
         <td>{{ user.id }}</td>
         <td>{{ user.firstName }}</td>
-        <td>{{ user.username }}</td>
+        <td>{{ user.userName }}</td>
         <td>{{ planToText(user.subscriptionId) }}</td>
-        <td>...</td>
+        <td>
+          <img (click)="editUser(user)" src="../../assets/dots.svg" alt="Acciones" class="w-3 h-3 hover:scale-125 transition-all cursor-pointer">
+        </td>
       </tr>
       }
     </tbody>
@@ -40,34 +43,38 @@
   }
 </div>
 
-<div class="flex justify-between text-[15px] mt-2">
-  <p>Página {{ page }}/{{ maxPages }}</p>
-
-  <div class="space-x-1 flex">
-    <button
-      class="flex items-center disabled:opacity-30"
-      [disabled]="page - 1 == 0"
-      (click)="previous()"
-    >
-      <img
-        src="../../assets/chevron-left.svg"
-        alt="arrowLeft"
-        class="h-4 w-4 relative top-[1px]"
-      />
-      Anterior
-    </button>
-    <span>/</span>
-    <button
-      class="flex items-center disabled:opacity-30"
-      [disabled]="page + 1 > maxPages"
-      (click)="next()"
-    >
-      Siguiente
-      <img
-        src="../../assets/chevron-right.svg"
-        alt="arrowRight"
-        class="h-4 w-4 relative top-[1px]"
-      />
-    </button>
+@if (input.length === 0) {
+  <div class="flex justify-between text-[15px] mt-2">
+    <p>Página {{ page }}/{{ maxPages }}</p>
+  
+    <div class="space-x-1 flex">
+      <button
+        class="flex items-center disabled:opacity-30"
+        [disabled]="page - 1 == 0"
+        (click)="previous()"
+      >
+        <img
+          src="../../assets/chevron-left.svg"
+          alt="arrowLeft"
+          class="h-4 w-4 relative top-[1px]"
+        />
+        Anterior
+      </button>
+      <span>/</span>
+      <button
+        class="flex items-center disabled:opacity-30"
+        [disabled]="page + 1 > maxPages"
+        (click)="next()"
+      >
+        Siguiente
+        <img
+          src="../../assets/chevron-right.svg"
+          alt="arrowRight"
+          class="h-4 w-4 relative top-[1px]"
+        />
+      </button>
+    </div>
   </div>
-</div>
+}
+
+<app-edit-user [user]="userToEdit"></app-edit-user>

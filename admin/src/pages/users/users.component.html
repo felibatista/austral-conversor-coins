@@ -9,11 +9,16 @@
       </div>
       <input
         type="text"
+        name="input"
+        [(ngModel)]="input"
+        (change)="filterUsers()"
         placeholder="Buscar por usuario..."
         class="input input-bordered w-full max-w-xs"
       />
     </div>
 
-    <app-table-users class="mt-8"></app-table-users>
+    <app-table-users [users]="users" class="mt-8"></app-table-users>
   </div>
 </div>
+
+<app-edit-user></app-edit-user>

@@ -1,23 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '../../lib/types';
 import { UserService } from '../../services/user.service';
 import { fromNumberToPlanName } from '../../lib/util';
+import { EditUserComponent } from '../edit-user/edit-user.component';
 
 @Component({
   selector: 'app-table-users',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditUserComponent],
   templateUrl: './table-users.component.html',
   styleUrl: './table-users.component.css',
 })
 export class TableUsersComponent implements OnInit {
-  users: User[] = [];
+  @Input() users: User[] = [];
+  @Input() input: string = '';
 
   page: number = 1;
   maxPages: number = 0;
 
   loaded: boolean = false;
+
+  userToEdit: User = {
+    id: 0,
+    userName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    subscriptionId: 0,
+  };
 
   constructor(private userService: UserService) {}
 
@@ -30,16 +41,8 @@ export class TableUsersComponent implements OnInit {
           this.maxPages = Math.ceil(count / 10);
         }
       })
-      .then(() => {
-        //users page 1 
-        this.userService.getUsersPage(1).then((users) => {
-          if (users) {
-            this.users = users;
-          }
-        });
-      })
       .finally(() => {
-       this.loaded = true;
+        this.loaded = true;
       });
   }
 
@@ -47,7 +50,11 @@ export class TableUsersComponent implements OnInit {
     return fromNumberToPlanName(plan);
   }
 
-  previous(){
+  editUser(user: User) {
+    this.userToEdit = user;
+  }
+
+  previous() {
     if (this.page > 1) {
       this.page--;
       this.userService.getUsersPage(this.page).then((users) => {
@@ -58,7 +65,7 @@ export class TableUsersComponent implements OnInit {
     }
   }
 
-  next(){
+  next() {
     if (this.page < this.maxPages) {
       this.page++;
       this.userService.getUsersPage(this.page).then((users) => {

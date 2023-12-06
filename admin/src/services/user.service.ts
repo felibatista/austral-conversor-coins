@@ -53,6 +53,28 @@ export class UserService {
     return response;
   }
 
+  async findUser(input: string): Promise<User[] | null> {
+    if (!this.cookieService.get('token')) {
+      return null;
+    }
+
+    const get = await fetch(URL_BACKEND + '/api/User/find/' + input, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.cookieService.get('token'),
+      },
+    });
+
+    if (get.status !== 200) {
+      return null;
+    }
+
+    const response: User[] = await get.json();
+
+    return response;
+  }
+
   async getUsersCount(): Promise<number | null> {
     if (!this.cookieService.get('token')) {
       return null;
@@ -73,5 +95,49 @@ export class UserService {
     const response: number = await get.json();
 
     return response;
+  }
+
+  async updateUser(user: User): Promise<boolean> {
+    if (!this.cookieService.get('token')) {
+      return false;
+    }
+
+    //update user
+    const putUser = await fetch(URL_BACKEND + '/api/User/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.cookieService.get('token'),
+      },
+      body: JSON.stringify({
+        userToChangeID: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      }),
+    });
+
+    if (putUser.status !== 200) {
+      return false;
+    }
+
+    //update subscription
+    const putSubscription = await fetch(URL_BACKEND + '/api/User/subscription/' + user.id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.cookieService.get('token'),
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        subscriptionId: user.subscriptionId,
+      }),
+    });
+
+    if (putSubscription.status !== 200) {
+      return false;
+    }
+
+    return true;
   }
 }
