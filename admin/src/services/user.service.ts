@@ -140,4 +140,24 @@ export class UserService {
 
     return true;
   }
+
+  async deleteUser(id: number): Promise<boolean> {
+    if (!this.cookieService.get('token')) {
+      return false;
+    }
+
+    const deleteUser = await fetch(URL_BACKEND + '/api/User/' + id, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.cookieService.get('token'),
+      },
+    });
+
+    if (deleteUser.status !== 200) {
+      return false;
+    }
+
+    return true;
+  }
 }

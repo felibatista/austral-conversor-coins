@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '../../lib/types';
 import { fromNumberToPlanName, fromPlanNameToNumber } from '../../lib/util';
@@ -21,6 +21,9 @@ export class EditUserComponent {
     email: '',
     subscriptionId: 0,
   };
+  @Input() users: User[] = [];
+  @Output() usersChange = new EventEmitter<User[]>();
+
 
   firstName = new FormControl('');
   lastName = new FormControl('');
@@ -30,6 +33,8 @@ export class EditUserComponent {
   saving: boolean = false;
   closeMessage: boolean = false;
   success: boolean = false;
+
+  sureDelete: boolean = false;
 
   constructor(private userService: UserService) {}
 
@@ -88,10 +93,35 @@ export class EditUserComponent {
       subscriptionId: 0,
     };
 
+    this.firstName.setValue('');
+    this.lastName.setValue('');
+    this.email.setValue('');
+    this.plan.setValue('');
+
+    this.success = false;
+    this.saving = false;
+    this.sureDelete = false;
     this.closeMessage = false;
   }
 
-  delete() {
-    //delete user
+  deleteUser() {
+    this.saving = true;
+
+    setTimeout(() => {
+      this.userService
+        .deleteUser(this.user.id)
+        .then((success) => {
+          this.success = success;
+          this.usersChange.emit(this.users.filter((user) => user.id !== this.user.id));
+        })
+        .finally(() => {
+          this.saving = false;
+          this.closeMessage = true;
+        });
+    }, 2000);
+  }
+
+  sureClick() {
+    this.sureDelete = true;
   }
 }

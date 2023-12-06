@@ -1,4 +1,47 @@
-@if (user.id != 0) { @if (saving) {
+@if (user.id != 0) { @if (closeMessage) {
+<div open="true" id="closeUserModal" class="modal">
+  <div class="modal-box">
+    @if (success) { @if (sureDelete) {
+    <h3 class="font-bold text-lg">¡Usuario eliminado correctamente!</h3>
+    <p>El usuario se ha eliminado correctamente.</p>
+    <div class="flex justify-center mt-4">
+      <button
+        class="rounded-lg h-[3rem] w-[40%] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
+        (click)="close()"
+      >
+        Cerrar
+      </button>
+    </div>
+    }@else {
+
+    <h3 class="font-bold text-lg">¡Usuario guardado!</h3>
+    <p>El usuario se ha guardado correctamente.</p>
+    <div class="flex justify-center mt-4">
+      <button
+        class="rounded-lg h-[3rem] w-[40%] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
+        (click)="close()"
+      >
+        Cerrar
+      </button>
+    </div>
+    } }@else {
+    <h3 class="font-bold text-lg text-red-400">¡Error!</h3>
+    <p>Ha ocurrido un error al guardar el usuario.</p>
+    <div class="flex justify-center mt-4">
+      <button
+        class="rounded-lg h-[3rem] w-[40%] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
+        (click)="close()"
+      >
+        Cerrar
+      </button>
+    </div>
+    }
+  </div>
+  <form method="dialog" (click)="close()" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</div>
+}@else if (saving) {
 <div open="true" id="saveUserModal" class="modal">
   <div class="modal-box">
     <div class="flex justify-center py-5">
@@ -7,7 +50,31 @@
     </div>
   </div>
 </div>
-}@else { @if (closeMessage) {
+}@else if (sureDelete) {
+<div open="true" id="deleteUserModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">¡Ten cuidado con esto!</h3>
+    <p>¿Estás seguro de que quieres eliminar este usuario?</p>
+    <div class="grid grid-cols-2 gap-2 mt-4">
+      <button
+        class="rounded-lg h-[3rem] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
+        (click)="deleteUser()"
+      >
+        Eliminar
+      </button>
+      <button
+        class="rounded-lg h-[3rem] font-semibold text-[14px] bg-[#FF9696] text-black opacity-90 hover:opacity-100"
+        (click)="close()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+  <form method="dialog" (click)="close()" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</div>
+}@else if (closeMessage) {
 <div open="true" id="closeUserModal" class="modal">
   <div class="modal-box">
     @if (success) {
@@ -104,7 +171,7 @@
       </button>
       <button
         class="rounded-lg h-[3rem] font-semibold text-[14px] bg-[#FF9696] text-black opacity-90 hover:opacity-100"
-        (click)="delete()"
+        (click)="sureClick()"
       >
         Eliminar usuario
       </button>
@@ -114,4 +181,4 @@
     <button>close</button>
   </form>
 </div>
-} } }
+} }
