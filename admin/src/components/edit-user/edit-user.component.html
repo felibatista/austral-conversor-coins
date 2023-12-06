@@ -1,6 +1,8 @@
-@if (user.id != 0) { @if (saving) {
+@if (user.id != 0) { @if (saving && !sureDelete) {
 <app-edit-loading title="Guardando usuario..."></app-edit-loading>
-}@else if (sureDelete) {
+}@else if (saving && sureDelete) {
+<app-edit-loading title="Eliminando usuario..."></app-edit-loading>
+}@else if (sureDelete && !saving && !closeMessage) {
 <div open="true" id="deleteUserModal" class="modal">
   <div class="modal-box">
     <h3 class="font-bold text-lg">¡Ten cuidado con esto!</h3>
@@ -28,21 +30,25 @@
 <app-edit-close
   title="¡Usuario guardado!"
   description="El usuario se ha guardado correctamente."
+  (close)="close()"
 ></app-edit-close>
 } @if (!success && !sureDelete) {
 <app-edit-close
   title="¡Error!"
   description="Ha ocurrido un error al guardar el usuario."
+  (close)="close()"
 ></app-edit-close>
 } @if (success && sureDelete) {
 <app-edit-close
   title="¡Usuario eliminado correctamente!"
   description="El usuario se ha eliminado correctamente."
+  (close)="close()"
 ></app-edit-close>
 } @if (!success && sureDelete) {
 <app-edit-close
   title="¡Error!"
   description="Ha ocurrido un error al eliminar el usuario."
+  (close)="close()"
 ></app-edit-close>
 } } @else {
 <div open="true" id="editUserModal" class="modal">

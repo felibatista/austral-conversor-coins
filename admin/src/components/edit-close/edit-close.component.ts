@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,12 +6,17 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './edit-close.component.html',
-  styleUrl: './edit-close.component.css'
+  styleUrl: './edit-close.component.css',
 })
 export class EditCloseComponent {
   @Input() title = '-';
-  @Input() description = "-";
-  @Input() close(): (args: any) => void {
-    throw new Error("Method not implemented.");
+  @Input() description = '-';
+
+  @Output() close = new EventEmitter<void>();
+
+  constructor() {}
+
+  closeEdit() {
+    this.close.emit();
   }
 }

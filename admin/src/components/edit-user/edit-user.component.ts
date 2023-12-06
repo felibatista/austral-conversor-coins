@@ -10,7 +10,12 @@ import { EditCloseComponent } from '../edit-close/edit-close.component';
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, EditLoadingComponent, EditCloseComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    EditLoadingComponent,
+    EditCloseComponent,
+  ],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.css',
 })
@@ -26,16 +31,15 @@ export class EditUserComponent {
   @Input() users: User[] = [];
   @Output() usersChange = new EventEmitter<User[]>();
 
-
   firstName = new FormControl('');
   lastName = new FormControl('');
   email = new FormControl('');
   plan = new FormControl('');
 
   saving: boolean = false;
-  closeMessage: boolean = false;
   success: boolean = false;
 
+  closeMessage: boolean = false;
   sureDelete: boolean = false;
 
   constructor(private userService: UserService) {}
@@ -95,13 +99,7 @@ export class EditUserComponent {
       subscriptionId: 0,
     };
 
-    this.firstName.setValue('');
-    this.lastName.setValue('');
-    this.email.setValue('');
-    this.plan.setValue('');
-
     this.success = false;
-    this.saving = false;
     this.sureDelete = false;
     this.closeMessage = false;
   }
@@ -114,13 +112,20 @@ export class EditUserComponent {
         .deleteUser(this.user.id)
         .then((success) => {
           this.success = success;
-          this.usersChange.emit(this.users.filter((user) => user.id !== this.user.id));
+          this.usersChange.emit(
+            this.users.filter((user) => user.id !== this.user.id)
+          );
         })
         .finally(() => {
           this.saving = false;
           this.closeMessage = true;
         });
     }, 2000);
+
+    this.firstName.setValue('');
+    this.lastName.setValue('');
+    this.email.setValue('');
+    this.plan.setValue('');
   }
 
   sureClick() {

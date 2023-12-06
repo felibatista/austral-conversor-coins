@@ -5,14 +5,14 @@
     <div class="flex justify-center mt-4">
       <button
         class="rounded-lg h-[3rem] w-[40%] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
-        (click)="close()"
+        (click)="closeEdit()"
       >
         Cerrar
       </button>
     </div>
   </div>
 
-  <form method="dialog" (click)="close()" class="modal-backdrop">
+  <form method="dialog" (click)="closeEdit()" class="modal-backdrop">
     <button>close</button>
   </form>
 </div>
