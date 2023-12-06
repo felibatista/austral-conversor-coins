@@ -34,16 +34,18 @@ export class TableUsersComponent implements OnInit {
 
   ngOnInit(): void {
     //max pages
-    this.userService
-      .getUsersCount()
-      .then((count) => {
-        if (count) {
-          this.maxPages = Math.ceil(count / 10);
-        }
-      })
-      .finally(() => {
-        this.loaded = true;
-      });
+    setTimeout(() => {
+      this.userService
+        .getUsersCount()
+        .then((count) => {
+          if (count) {
+            this.maxPages = Math.ceil(count / 10);
+          }
+        })
+        .finally(() => {
+          this.loaded = true;
+        });
+    }, 1000);
   }
 
   planToText(plan: number): string {

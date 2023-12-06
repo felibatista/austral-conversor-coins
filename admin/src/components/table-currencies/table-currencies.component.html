@@ -4,36 +4,47 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th>Divisa emisora</th>
-        <th>Divisa receptora</th>
-        <th>Cantidad</th>
-        <th>Fecha</th>
+        <th>Nombre</th>
+        <th>Código</th>
+        <th>Valor IC</th>
+        <th>Acciones</th>
       </tr>
     </thead>
   </table>
   @for (item of [0,1,2,3,4,5,6,7,8,9]; track $index) {
   <div class="skeleton w-full h-10 my-4"></div>
   }}@else {
-
   <table class="table table-zebra">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Divisa emisora</th>
-        <th>Divisa receptora</th>
-        <th>Cantidad</th>
-        <th>Fecha</th>
+        <th>Nombre</th>
+        <th>Código</th>
+        <th>Valor IC</th>
+        <th>Acciones</th>
       </tr>
     </thead>
 
     <tbody class="font-semibold">
-      @for (conversion of conversions; track $index) {
+      @for (currency of currencies; track $index) {
       <tr>
-        <td>{{ conversion.id }}</td>
-        <td>{{ fromIdToName(conversion.fromForeingId) }}</td>
-        <td>{{ fromIdToName(conversion.toForeingId) }}</td>
-        <td>{{ conversion.amount }}</td>
-        <td>{{ formatDate(conversion.date) }}</td>
+        <td>{{ currency.id }}</td>
+        <td>{{ currency.name }}</td>
+        <td class="flex gap-2">
+          <img src="{{ currency.imageUrl }}" alt="{{ currency.id }}" class="w-6 h-6" />
+          <span>
+            {{ currency.code }}
+          </span>
+        </td>
+        <td>{{ currency.value }}</td>
+        <td>
+          <img
+            (click)="editCurrency(currency)"
+            src="../../assets/dots.svg"
+            alt="Acciones"
+            class="w-3 h-3 hover:scale-125 transition-all cursor-pointer"
+          />
+        </td>
       </tr>
       }
     </tbody>
@@ -72,3 +83,5 @@
     </button>
   </div>
 </div>
+
+<app-edit-currency [currency]="currencyToEdit" [(currencies)]="currencies"></app-edit-currency>

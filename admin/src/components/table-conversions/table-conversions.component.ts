@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Conversion, Foreing } from '../../lib/types';
 import { ConversionsService } from '../../services/conversions.service';
 import { CurrencyService } from '../../services/currency.service';
+import { formatDateExtra } from '../../lib/util';
 
 @Component({
   selector: 'app-table-conversions',
@@ -27,23 +28,25 @@ export class TableConversionsComponent implements OnInit {
 
   ngOnInit(): void {
     //max pages
-    this.conversionsService
-      .getConversionsCount()
-      .then((count) => {
-        if (count) {
-          this.maxPages = Math.ceil(count / 10);
-        }
-      })
-      .then(() => {
-        this.currencyService.getCurrencys().then((foreings) => {
-          if (foreings) {
-            this.foreings = foreings;
+    setTimeout(() => {
+      this.conversionsService
+        .getConversionsCount()
+        .then((count) => {
+          if (count) {
+            this.maxPages = Math.ceil(count / 10);
           }
+        })
+        .then(() => {
+          this.currencyService.getCurrencys().then((foreings) => {
+            if (foreings) {
+              this.foreings = foreings;
+            }
+          });
+        })
+        .finally(() => {
+          this.loaded = true;
         });
-      })
-      .finally(() => {
-        this.loaded = true;
-      });
+    }, 1000);
   }
 
   fromIdToName(id: number): string {
@@ -54,6 +57,10 @@ export class TableConversionsComponent implements OnInit {
       }
     });
     return name;
+  }
+
+  formatDate(date: Date): string {
+    return formatDateExtra(date);
   }
 
   previous() {

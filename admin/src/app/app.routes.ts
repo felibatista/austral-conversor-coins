@@ -6,12 +6,19 @@ import { loggedGuard } from '../guards/loggedGuard.guard';
 import { notLoggedGuard } from '../guards/notLoggedGuard.guard';
 import { UsersComponent } from '../pages/users/users.component';
 import { ConversionsComponent } from '../pages/conversions/conversions.component';
+import { CurrenciesComponent } from '../pages/currencies/currencies.component';
 
 export const routes: Routes = [
   {
     path: 'admin/usuarios',
     component: UsersComponent,
     title: 'Usuarios | Panel de control',
+    canActivate: [loggedGuard],
+  },
+  {
+    path: 'admin/divisas',
+    component: CurrenciesComponent,
+    title: 'Divisas | Panel de control',
     canActivate: [loggedGuard],
   },
   {

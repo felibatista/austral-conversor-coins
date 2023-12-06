@@ -1,0 +1,127 @@
+@if (currency.id != 0) { @if (saving && !sureDelete) {
+<app-edit-loading title="Guardando divisa..."></app-edit-loading>
+}@else if (saving && sureDelete) {
+<app-edit-loading title="Eliminando divisa..."></app-edit-loading>
+}@else if (sureDelete && !saving && !closeMessage) {
+<div open="true" id="deleteUserModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">¡Ten cuidado con esto!</h3>
+    <p>¿Estás seguro de que quieres eliminar esta divisa?</p>
+    <div class="grid grid-cols-2 gap-2 mt-4">
+      <button
+        class="rounded-lg h-[3rem] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
+        (click)="deleteCurrency()"
+      >
+        Eliminar
+      </button>
+      <button
+        class="rounded-lg h-[3rem] font-semibold text-[14px] bg-[#FF9696] text-black opacity-90 hover:opacity-100"
+        (click)="close()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+  <form method="dialog" (click)="close()" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</div>
+}@else if (closeMessage) { @if (success && !sureDelete) {
+<app-edit-close
+  title="¡Divisa guardada!"
+  description="La divisa se ha guardado correctamente."
+  (close)="close()"
+></app-edit-close>
+} @if (!success && !sureDelete) {
+<app-edit-close
+  title="¡Error!"
+  description="Ha ocurrido un error al guardar la divisa."
+  (close)="close()"
+></app-edit-close>
+} @if (success && sureDelete) {
+<app-edit-close
+  title="¡Divisa eliminada correctamente!"
+  description="La divisa se ha eliminado correctamente."
+  (close)="close()"
+></app-edit-close>
+} @if (!success && sureDelete) {
+<app-edit-close
+  title="¡Error!"
+  description="Ha ocurrido un error al eliminar la divisa."
+  (close)="close()"
+></app-edit-close>
+} } @else {
+<div open="true" id="editUserModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Editar divisa</h3>
+    <p>ID: {{ currency.id }}</p>
+    <form class="mt-4 flex flex-col gap-2">
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">Nombre</span>
+        </div>
+        <input
+          type="text"
+          [placeholder]="currency.name"
+          [formControl]="name"
+          class="input input-bordered w-full"
+        />
+      </label>
+
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">Código</span>
+        </div>
+        <input
+          type="text"
+          [placeholder]="currency.code"
+          [formControl]="code"
+          class="input input-bordered w-full"
+        />
+      </label>
+
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">Valor IC</span>
+        </div>
+        <input
+          type="number"
+          [placeholder]="currency.value"
+          [formControl]="value"
+          class="input input-bordered w-full"
+        />
+      </label>
+
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">URL Imagen</span>
+        </div>
+        <input
+          type="text"
+          [placeholder]="currency.imageUrl"
+          [formControl]="imageUrl"
+          class="input input-bordered w-full"
+        />
+      </label>
+    </form>
+
+    <div class="grid grid-cols-2 gap-4 justify-between mt-8">
+      <button
+        class="rounded-lg h-[3rem] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
+        (click)="save()"
+      >
+        Guardar
+      </button>
+      <button
+        class="rounded-lg h-[3rem] font-semibold text-[14px] bg-[#FF9696] text-black opacity-90 hover:opacity-100"
+        (click)="sureClick()"
+      >
+        Eliminar divisa
+      </button>
+    </div>
+  </div>
+  <form method="dialog" (click)="close()" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</div>
+} }

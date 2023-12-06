@@ -1,0 +1,20 @@
+<div class="card bg-base-100 shadow-xl my-8">
+  <div class="card-body flex flex-col card gap-0">
+    <div class="flex justify-between items-end">
+      <div class="flex flex-col">
+        <h3 class="font-bold text-[20px]">Lista de divisas</h3>
+        <p class="text-[16px]">
+          Aquí podrás ver todos las divisas y tomar acciones sobre ellos.
+        </p>
+      </div>
+      <button class="btn btn-warning w-full max-w-[15rem]">Agregar divisa</button>
+    </div>
+
+    <app-table-currencies
+      [currencies]="currencies"
+      class="mt-8"
+    ></app-table-currencies>
+  </div>
+</div>
+
+<app-edit-currency></app-edit-currency>

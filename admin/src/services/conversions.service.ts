@@ -49,7 +49,14 @@ export class ConversionsService {
       return null;
     }
 
-    const response: any[] = await get.json();
+    const response: Conversion[] = await get.json();
+
+    if (response.length > 0) {
+      response.forEach((conversion) => {
+        conversion.date = new Date(conversion.date);
+      });
+      return response;
+    }
 
     return response;
   }
@@ -71,7 +78,14 @@ export class ConversionsService {
       return null;
     }
 
-    const response: any[] = await get.json();
+    const response: Conversion[] = await get.json();
+
+    if (response.length > 0) {
+      response.forEach((conversion) => {
+        conversion.date = new Date(conversion.date);
+      });
+      return response;
+    }
 
     return response;
   }
