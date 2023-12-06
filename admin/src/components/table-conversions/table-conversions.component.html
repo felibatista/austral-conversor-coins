@@ -4,61 +4,40 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th>Nombre</th>
-        <th>Usuario</th>
-        <th>Plan</th>
-        <th>Acciones</th>
+        <th>Divisa emisora</th>
+        <th>Divisa receptora</th>
+        <th>Cantidad</th>
       </tr>
     </thead>
   </table>
   @for (item of [0,1,2,3,4,5,6,7,8,9]; track $index) {
   <div class="skeleton w-full h-10 my-4"></div>
-  }}@else { @if (users.length == 0) {
-  <div class="flex flex-col items-center justify-center mt-8">
-    <p class="text-[20px] mt-4 text-red-400">
-      No hay ningún usuario para mostrar
-    </p>
-    @if (input.length > 0) {
-    <p class="text-[15px] mt-2">
-      No se encontraron usuarios con el nombre "{{ input }}"
-    </p>
-    }
-  </div>
-  }@else {
+  }}@else {
+
   <table class="table table-zebra">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Nombre</th>
-        <th>Usuario</th>
-        <th>Plan</th>
-        <th>Acciones</th>
+        <th>Divisa emisora</th>
+        <th>Divisa receptora</th>
+        <th>Cantidad</th>
       </tr>
     </thead>
 
     <tbody class="font-semibold">
-      @for (user of users; track $index) {
+      @for (conversion of conversions; track $index) {
       <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.userName }}</td>
-        <td>{{ planToText(user.subscriptionId) }}</td>
-        <td>
-          <img
-            (click)="editUser(user)"
-            src="../../assets/dots.svg"
-            alt="Acciones"
-            class="w-3 h-3 hover:scale-125 transition-all cursor-pointer"
-          />
-        </td>
+        <td>{{ conversion.id }}</td>
+        <td>{{ fromIdToName(conversion.fromForeingId) }}</td>
+        <td>{{ fromIdToName(conversion.toForeingId) }}</td>
+        <td>{{ conversion.amount }}</td>
       </tr>
       }
     </tbody>
   </table>
-  }}
+  }
 </div>
 
-@if (input.length === 0) {
 <div class="flex justify-between text-[15px] mt-2">
   <p>Página {{ page }}/{{ maxPages }}</p>
 
@@ -90,6 +69,3 @@
     </button>
   </div>
 </div>
-}
-
-<app-edit-user [user]="userToEdit" [(users)]="users"></app-edit-user>

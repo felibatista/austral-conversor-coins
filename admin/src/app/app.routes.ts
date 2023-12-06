@@ -5,12 +5,19 @@ import { StatusComponent } from '../pages/status/status.component';
 import { loggedGuard } from '../guards/loggedGuard.guard';
 import { notLoggedGuard } from '../guards/notLoggedGuard.guard';
 import { UsersComponent } from '../pages/users/users.component';
+import { ConversionsComponent } from '../pages/conversions/conversions.component';
 
 export const routes: Routes = [
   {
     path: 'admin/usuarios',
     component: UsersComponent,
     title: 'Usuarios | Panel de control',
+    canActivate: [loggedGuard],
+  },
+  {
+    path: 'admin/conversiones',
+    component: ConversionsComponent,
+    title: 'Conversiones | Panel de control',
     canActivate: [loggedGuard],
   },
   {

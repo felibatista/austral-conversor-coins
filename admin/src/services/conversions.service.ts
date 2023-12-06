@@ -14,7 +14,7 @@ export class ConversionsService {
       return null;
     }
 
-    const get = await fetch(URL_BACKEND + '/api/Conversions/counter', {
+    const get = await fetch(URL_BACKEND + '/api/Conversion/count', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -27,6 +27,7 @@ export class ConversionsService {
     }
 
     const response: number = await get.json();
+    console.log(response)
 
     return response;
   }
@@ -36,7 +37,7 @@ export class ConversionsService {
       return null;
     }
 
-    const get = await fetch(URL_BACKEND + '/api/Conversions/all', {
+    const get = await fetch(URL_BACKEND + '/api/Conversion/all', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ export class ConversionsService {
       return null;
     }
 
-    const get = await fetch(URL_BACKEND + '/api/Conversions/page/' + page, {
+    const get = await fetch(URL_BACKEND + '/api/Conversion/page/' + page, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
