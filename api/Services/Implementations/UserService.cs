@@ -118,14 +118,6 @@ public class UserService : IUserService
     {
         User? toChange = GetUser(subscriptionUserUpdateDto.UserId);
 
-        if (toChange.SubscriptionId == subscriptionUserUpdateDto.SubscriptionId)
-        {
-            throw APIException.CreateException(
-                APIException.Code.US_05,
-                "User have same subscription plan",
-                APIException.Type.BAD_REQUEST);
-        }
-        
         Subscription? subscription = _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionUserUpdateDto.SubscriptionId);
 
         if (subscription == null)
@@ -168,7 +160,7 @@ public class UserService : IUserService
         User? toChange = GetUser(userForUpdateDto.UserToChangeID);
         
         User? userExist = _context.Users.FirstOrDefault((users) => users.Email == userForUpdateDto.Email);
-        if (userExist != null)
+        if (userExist != null && userExist.Id != toChange.Id)
         {
             throw APIException.CreateException(
                 APIException.Code.US_02,
@@ -178,7 +170,11 @@ public class UserService : IUserService
         
         toChange.FirstName = userForUpdateDto.FirstName;
         toChange.LastName = userForUpdateDto.LastName;
-        toChange.Email = userForUpdateDto.Email;
+        
+        if (userForUpdateDto.Email != null)
+        {
+            toChange.Email = userForUpdateDto.Email;
+        }
 
         try
         { 
@@ -243,5 +239,10 @@ public class UserService : IUserService
     public List<User> getUsersByPage(int page)
     {
         return _context.Users.Skip((page - 1) * 10).Take(10).ToList();
+    }
+
+    public List<User> findUserByInput(string input)
+    {
+        return _context.Users.Where((user) => user.UserName.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", ""))).Take(10).ToList();
     }
 }

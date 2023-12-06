@@ -171,4 +171,12 @@ public class UserController : ControllerBase
         List<User> users = _userContext.getUsersByPage(page);
         return Ok(users);
     }
+    
+    [HttpGet("find/{input}")]
+    [Authorize]
+    public ActionResult<List<User>> findUserByInput(string input)
+    {
+        List<User> users = _userContext.findUserByInput(input);
+        return Ok(users);
+    }
 }

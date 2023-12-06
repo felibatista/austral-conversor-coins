@@ -14,4 +14,5 @@ public interface IUserService
     public int counter();
     
     public List<User> getUsersByPage(int page);
+    public List<User> findUserByInput(string input);
 }
