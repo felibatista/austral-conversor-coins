@@ -149,4 +149,14 @@ public class ForeingService : IForeingService
                 APIException.Type.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    public int getForeingsCount()
+    {
+        return _context.Foreings.Count();
+    }
+    
+    public List<Foreing> getForeingsByPage(int page)
+    {
+        return _context.Foreings.Skip((page - 1) * 10).Take(10).ToList();
+    }
 }

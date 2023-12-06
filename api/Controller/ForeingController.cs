@@ -85,4 +85,32 @@ public class ForeingController : ControllerBase
             return _apiException.getResultFromError(type, e.Data);
         }
     }
+    
+    [HttpGet("count")]
+    public ActionResult<Foreing> GetForeingsCount()
+    {
+        try
+        {
+            int count = _context.getForeingsCount();
+            return Ok(count);
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
+    }
+    
+    [HttpGet("page/{page}")]
+    public ActionResult<Foreing> GetForeingsByPage(int page)
+    {
+        try
+        {
+            var foreings = _context.getForeingsByPage(page);
+            return Ok(foreings);
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
+    }
 }

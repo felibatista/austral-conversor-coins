@@ -9,4 +9,6 @@ public interface IForeingService
     public void AddForeing(ForeingForCreationDTO foreingForCreationDto);
     public void UpdateForeing(ForeingForUpdateDTO foreingForUpdateDto);
     public void DeleteForeing(int foreingId);
+    public int getForeingsCount();
+    public List<Foreing> getForeingsByPage(int page);
 }
