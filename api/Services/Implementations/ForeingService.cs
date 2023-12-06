@@ -47,7 +47,8 @@ public class ForeingService : IForeingService
         {
             Name = foreingForCreationDto.Name,
             Value = foreingForCreationDto.Value,
-            Code = foreingForCreationDto.Code
+            Code = foreingForCreationDto.Code,
+            ImageUrl = foreingForCreationDto.ImageUrl
         };
 
         try
@@ -84,7 +85,7 @@ public class ForeingService : IForeingService
             return;
         }
 
-        if (_context.Foreings.FirstOrDefault((foreing) => foreing.Code == foreingForUpdateDto.Code) != null)
+        if (_context.Foreings.FirstOrDefault((foreing) => foreing.Code == foreingForUpdateDto.Code) != null && toChange.Code != foreingForUpdateDto.Code)
         {
             throw APIException.CreateException(
                 APIException.Code.FG_02,
@@ -95,6 +96,7 @@ public class ForeingService : IForeingService
         toChange.Name = foreingForUpdateDto.Name;
         toChange.Value = foreingForUpdateDto.Value;
         toChange.Code = foreingForUpdateDto.Code;
+        toChange.ImageUrl = foreingForUpdateDto.ImageUrl;
 
         try
         {
