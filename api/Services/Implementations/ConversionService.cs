@@ -9,12 +9,12 @@ namespace conversor_coin.Models.Repository.Implementations;
 public class ConversionService : IConversionService
 {
     private readonly ConversorContext _context;
-    
+
     public ConversionService(ConversorContext context)
     {
         _context = context;
     }
-    
+
     public List<ForeingCoversion> GetConversions()
     {
         return _context.ForeingCoversion.ToList();
@@ -23,22 +23,23 @@ public class ConversionService : IConversionService
     public List<ForeingCoversion> GetConversionsFromUser(int userId, int limit)
     {
         User? user = _context.Users.FirstOrDefault((user) => user.Id == userId);
-        
+
         if (user == null)
         {
             throw APIException.CreateException(
-                APIException.Code.US_01, 
-                "User not found", 
+                APIException.Code.US_01,
+                "User not found",
                 APIException.Type.NOT_FOUND);
         }
-        
-        List<ForeingCoversion> conversions = _context.ForeingCoversion.Where((conversions) => conversions.UserId == userId).ToList();
-        
+
+        List<ForeingCoversion> conversions =
+            _context.ForeingCoversion.Where((conversions) => conversions.UserId == userId).ToList();
+
         //no se chequea que está vacío para que devuelva un array vacio y no un error
         if (conversions == null)
         {
             throw APIException.CreateException(
-                APIException.Code.CV_01, 
+                APIException.Code.CV_01,
                 "User conversions not found",
                 APIException.Type.NOT_FOUND);
         }
@@ -47,48 +48,50 @@ public class ConversionService : IConversionService
         {
             return conversions.ToList();
         }
-        
+
         if (limit > 0)
         {
             return conversions.Take(limit).ToList();
         }
-        
+
         return conversions;
     }
 
     public ForeingCoversion addConversion(ConversionForCreationDTO conversionForCreationDto)
     {
         User? user = _context.Users.FirstOrDefault((user) => user.Id == conversionForCreationDto.UserId);
-        
+
         if (user == null)
         {
             throw APIException.CreateException(
-                APIException.Code.US_01, 
-                "User not found", 
+                APIException.Code.US_01,
+                "User not found",
                 APIException.Type.NOT_FOUND);
         }
-        
+
         if (_context.Foreings.FirstOrDefault((foreing) => foreing.Id == conversionForCreationDto.ToForeingId) == null)
         {
             throw APIException.CreateException(
-                APIException.Code.CV_03, 
-                "Foreing To not found", 
+                APIException.Code.CV_03,
+                "Foreing To not found",
                 APIException.Type.NOT_FOUND
-                );
+            );
         }
+
         if (_context.Foreings.FirstOrDefault((foreing) => foreing.Id == conversionForCreationDto.FromForeingId) == null)
         {
             throw APIException.CreateException(
-                APIException.Code.CV_04, 
+                APIException.Code.CV_04,
                 "Foreing From not found",
                 APIException.Type.NOT_FOUND);
         }
-        
-        List<ForeingCoversion> temporalUserForeingList = _context.ForeingCoversion.Where((conversions) => conversions.UserId == user.Id).ToList();
-        
+
+        List<ForeingCoversion> temporalUserForeingList =
+            _context.ForeingCoversion.Where((conversions) => conversions.UserId == user.Id).ToList();
+
         int planLimit = _context.Subscriptions.First((subscription) => subscription.Id == user.SubscriptionId)
             .Limit;
-        
+
         if (planLimit == 0 || planLimit == null)
         {
             throw APIException.CreateException(
@@ -97,15 +100,15 @@ public class ConversionService : IConversionService
                 APIException.Type.NOT_FOUND
             );
         }
-      
+
         if (planLimit != -1 && temporalUserForeingList.Count >= planLimit)
         {
             throw APIException.CreateException(
-                APIException.Code.US_02, 
-                "User limit reached", 
+                APIException.Code.US_02,
+                "User limit reached",
                 APIException.Type.FORBIDDEN);
         }
-        
+
         ForeingCoversion conversion = new()
         {
             FromForeingId = conversionForCreationDto.FromForeingId,
@@ -125,7 +128,7 @@ public class ConversionService : IConversionService
         catch (Exception e)
         {
             throw APIException.CreateException(
-                APIException.Code.DB_01, 
+                APIException.Code.DB_01,
                 "An error occurred while setting the data in the database",
                 APIException.Type.INTERNAL_SERVER_ERROR);
         }
@@ -134,7 +137,8 @@ public class ConversionService : IConversionService
         {
             _context.SaveChanges();
         }
-        catch (Exception e){
+        catch (Exception e)
+        {
             throw APIException.CreateException(
                 APIException.Code.DB_02,
                 "An error occurred while saving the data in the database",
@@ -142,5 +146,15 @@ public class ConversionService : IConversionService
         }
 
         return conversion;
+    }
+
+    public int getConversionsCount()
+    {
+        return _context.ForeingCoversion.Count();
+    }
+
+    public List<ForeingCoversion> getConversionsByPage(int page)
+    {
+        return _context.ForeingCoversion.Skip((page - 1) * 10).Take(10).ToList();
     }
 }

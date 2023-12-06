@@ -80,4 +80,46 @@ public class ConversionController : ControllerBase
             return _apiException.getResultFromError(type, e.Data);
         }
     }
+    
+    [HttpGet("page/{page}")]
+    public ActionResult<ForeingCoversion> GetConversionsByPage(int page)
+    {
+        if (_authService.getCurrentUser() == null)
+        {
+            return Unauthorized("You are not logged in");
+        }
+        
+        try
+        {
+            var conversion = _conversionContext.getConversionsByPage(page);
+            return Ok(conversion);
+        }
+        catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
+    }
+    
+    [HttpGet("count")]
+    public ActionResult<ForeingCoversion> GetConversionsCount()
+    {
+        if (_authService.getCurrentUser() == null)
+        {
+            return Unauthorized("You are not logged in");
+        }
+        
+        try
+        {
+            var conversion = _conversionContext.getConversionsCount();
+            return Ok(conversion);
+        }
+        catch (Exception e)
+        {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
+    }
 }

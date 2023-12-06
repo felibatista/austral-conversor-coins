@@ -231,7 +231,7 @@ public class UserService : IUserService
         }
     }
 
-    public int counter()
+    public int getUsersCount()
     {
         return _context.Users.Count();
     }

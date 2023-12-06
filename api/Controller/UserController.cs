@@ -160,7 +160,7 @@ public class UserController : ControllerBase
     [Authorize]
     public ActionResult<int> counter()
     {
-        int counter = _userContext.counter();
+        int counter = _userContext.getUsersCount();
         return Ok(counter);
     }
     

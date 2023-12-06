@@ -87,6 +87,21 @@ public class ConversorContext : DbContext
                 Value = 0.33,
                 ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/ar.svg"
             });
+        
+        for (int a = 2; a < 50; a++)
+        {
+            modelBuilder.Entity<ForeingCoversion>().HasData(
+                new ForeingCoversion
+                {
+                    Id = a,
+                    UserId = a,
+                    FromForeingId = 1,
+                    ToForeingId = 2,
+                    Amount = 10,
+                    Date = DateTime.Now
+                });
+        }
+        
 
         modelBuilder.Entity<Subscription>().HasData(
             new Subscription
