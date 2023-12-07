@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RegisterFormComponent } from '../../components/register-form/register-form.component';
+import { RegisterFormComponent } from '../../components/form-register/register-form.component';
 
 @Component({
   selector: 'app-register',

@@ -7,13 +7,18 @@
         </label>
         <input
           type="text"
-          [(ngModel)]="firstName"
+          [formControl]="firstName"
           required
           id="firstName"
           name="firstName"
           placeholder="Felipe"
           class="input input-bordered w-full"
         />
+        @if (firstName.errors && firstName.touched) {
+        <p class="mt-2 text-xs text-red-500">
+          {{ parseErrors(firstName.errors) }}
+        </p>
+        }
       </div>
 
       <div>
@@ -23,12 +28,17 @@
         <input
           type="text"
           required
-          [(ngModel)]="lastName"
+          [formControl]="lastName"
           id="lastName"
           name="lastName"
           placeholder="Batista"
           class="input input-bordered w-full"
         />
+        @if (lastName.errors && lastName.touched) {
+        <p class="mt-2 text-xs text-red-500">
+          {{ parseErrors(lastName.errors) }}
+        </p>
+        }
       </div>
     </div>
     <div class="form-control w-full">
@@ -37,7 +47,7 @@
       </label>
       <input
         type="text"
-        [(ngModel)]="username"
+        [formControl]="username"
         required
         minlength="4"
         id="username"
@@ -45,6 +55,11 @@
         placeholder="Felipe221"
         class="input input-bordered w-full"
       />
+      @if (username.errors && username.touched) {
+      <p class="mt-2 text-xs text-red-500">
+        {{ parseErrors(username.errors) }}
+      </p>
+      }
     </div>
     <div class="form-control w-full">
       <label class="label">
@@ -52,13 +67,18 @@
       </label>
       <input
         type="text"
-        [(ngModel)]="email"
+        [formControl]="email"
         required
         id="email"
         name="email"
         placeholder="fbatista@mail.austral.edu.ar"
         class="input input-bordered w-full"
       />
+      @if (email.errors && email.touched) {
+      <p class="mt-2 text-xs text-red-500">
+        {{ parseErrors(email.errors) }}
+      </p>
+      }
     </div>
 
     <div class="form-control w-full">
@@ -67,12 +87,17 @@
       </label>
       <input
         type="password"
-        [(ngModel)]="password"
+        [formControl]="password"
         id="password"
         name="password"
         placeholder="Contraseña"
         class="input input-bordered w-full"
       />
+      @if (password.errors && password.touched) {
+      <p class="mt-2 text-xs text-red-500">
+        {{ parseErrors(password.errors) }}
+      </p>
+      }
     </div>
 
     <div class="form-control w-full">
@@ -81,17 +106,30 @@
       </label>
       <input
         type="password"
-        [(ngModel)]="password"
-        id="password"
-        name="password"
-        placeholder="Contraseña"
+        [formControl]="repeatPassword"
+        id="repeatPassword"
+        name="repeatPassword"
+        placeholder="Repetir ontraseña"
         class="input input-bordered w-full"
       />
+      @if (repeatPassword.errors && repeatPassword.touched) {
+      <p class="mt-2 text-xs text-red-500">
+        {{ parseErrors(repeatPassword.errors) }}
+      </p>
+      } @if (!passwordMatch) {
+      <p class="mt-2 text-xs text-red-500">
+        Las contraseñas ingresadas no coinciden
+      </p>
+      }
     </div>
   </div>
 
-  <div class="card-actions w-full p-2 mt-4">
-    <button type="submit" class="btn btn-secondary w-full">Registrar</button>
+  <div class="card-actions w-full mt-10">
+    <button type="submit" class="btn btn-secondary w-full">
+      Registrar @if (loading) {
+      <span class="loading loading-spinner loading-sm"></span>
+      }
+    </button>
   </div>
 
   <div

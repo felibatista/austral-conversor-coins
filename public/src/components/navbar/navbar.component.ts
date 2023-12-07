@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth/auth.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,21 +12,22 @@ import { AuthService } from '../../services/auth/auth.service';
 
 export class NavbarComponent {
   isLoginPage: boolean = false;
-
   logged: boolean | null = null;
 
+  loading: boolean = true;
+
   logout() {
-    this.authService.logout();
+    this.loginService.logout();
     window.location.href = '/';
   }
 
-  constructor(private authService: AuthService) {
+  constructor(private loginService: LoginService) {
     if (window.location.pathname === '/login') {
       this.isLoginPage = true;
     }
     
-    this.authService.isLogged().then((res) => {
-      this.logged = res;
-    })
+    this.logged = this.loginService.isLogged();
+
+    this.loading = false;
   }
 }

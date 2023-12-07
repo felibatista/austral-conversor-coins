@@ -6,7 +6,68 @@
         Ingresa tus credenciales para acceder al panel de administración.
       </p>
 
-      <app-login-form></app-login-form>
+      <form #form (ngSubmit)="onSubmit()">
+        <div class="flex flex-col mt-4 gap-4">
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Nombre de usuario</span>
+            </label>
+            <input
+              type="text"
+              [formControl]="username"
+              id="username"
+              name="username"
+              placeholder="Usuario"
+              class="input input-bordered w-full"
+            />
+            @if (username.errors && username.touched) {
+              <p class="mt-2 text-xs text-red-500">
+                {{ parseErrors(username.errors) }}
+              </p>
+            }
+          </div>
+
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Contraseña</span>
+            </label>
+            <input
+              type="password"
+              [formControl]="password"
+              id="password"
+              name="password"
+              placeholder="Contraseña"
+              class="input input-bordered w-full"
+            />
+            @if (password.errors && password.touched) {
+              <p class="mt-2 text-xs text-red-500">
+                {{ parseErrors(password.errors) }}
+              </p>
+            }
+          </div>
+        </div>
+        @if (errorAuth) {
+          <p class="mt-4 text-red-500 text-sm">
+            La combinación de usuario y contraseña no es correcta. Por favor, intente nuevamente.
+          </p>
+        }
+
+        <div class="card-actions w-full mt-10">
+          <button type="submit" class="btn btn-secondary w-full">
+            Ingresar @if (loading) {
+            <span class="loading loading-spinner loading-sm"></span>
+            }
+          </button>
+        </div>
+
+        <div
+          class="m-4 flex flex-col items-center justify-center gap-3 text-blue-500"
+        >
+          <a href="/register" class="hover:underline"
+            >¿No tienes cuenta? Registrate</a
+          >
+        </div>
+      </form>
     </div>
   </div>
 </div>
