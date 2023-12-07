@@ -7,26 +7,26 @@ import { onlyLoggedGuard } from '../guards/onlyLogged.guard';
 import { onlyWithoutLoggedGuard } from '../guards/onlyWithoutLogged.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, title: 'Conversor | Inicio' },
-  { path: 'home', component: HomeComponent, title: 'Conversor | Inicio' },
+  { path: '', component: HomeComponent, title: 'Inicio | Conversor' },
+  { path: 'home', component: HomeComponent, title: 'Inicio | Conversor' },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    title: 'Conversor | Dashboard',
+    title: 'Información | Conversor',
     canActivate: [onlyLoggedGuard],
   },
   {
     path: 'login',
     pathMatch: 'full',
     component: LoginComponent,
-    title: 'Conversor | Login',
+    title: 'Iniciar sesión | Conversor',
     canActivate: [onlyWithoutLoggedGuard],
   },
   {
     path: 'register',
     pathMatch: 'full',
     component: RegisterComponent,
-    title: 'Conversor | Registro',
+    title: 'Registrarse | Conversor',
     canActivate: [onlyWithoutLoggedGuard],
   },
 ];
