@@ -19,7 +19,6 @@ export class NavbarComponent {
   }
   
   constructor(private loginService: LoginService) {
-    themeChange(false);
     if (window.location.pathname === '/login') {
       this.isLoginPage = true;
     }

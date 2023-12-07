@@ -1,9 +1,15 @@
 @if (!isLoginPage) {
-<nav class="flex justify-between py-8 px-4">
-  <a href="/" class="font-bold text-[24px]"> Panel administrativo </a>
+<nav class="max-w-[1400px] bg-base-200 mx-auto px-8">
+  <div class="flex justify-between md:p-4 py-4 mt-2 items-center">
+    <h1 class="font-semibold text-xl">
+      <a href="/" >Panel administrativo</a>
+    </h1>
 
-  <div>
-    <button (click)="logout()" class="btn btn-warning hidden md:block">Cerrar sesión</button>
+    <div>
+      <button (click)="logout()" class="btn btn-accent hidden md:block">
+        Cerrar sesión
+      </button>
+    </div>
   </div>
 </nav>
 }

@@ -2,7 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Foreing, User } from '../../lib/types';
 import { fromNumberToPlanName, fromPlanNameToNumber } from '../../lib/util';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { EditLoadingComponent } from '../edit-loading/edit-loading.component';
 import { EditCloseComponent } from '../edit-close/edit-close.component';
@@ -28,7 +34,7 @@ export class EditCurrencyComponent {
     value: 0,
     imageUrl: '',
   };
-  
+
   @Input() currencies: Foreing[] = [];
   @Output() currenciesChange = new EventEmitter<Foreing[]>();
 
@@ -42,10 +48,69 @@ export class EditCurrencyComponent {
 
   closeMessage: boolean = false;
   sureDelete: boolean = false;
+  codeExists: boolean = false;
 
-  constructor(private currencyService: CurrencyService) {}
+  constructor(private currencyService: CurrencyService) {
+    this.code.setValidators([Validators.minLength(2), Validators.maxLength(5)]);
+    this.name.setValidators([
+      Validators.minLength(3),
+      Validators.maxLength(30),
+    ]);
+    this.value.setValidators([Validators.min(0), Validators.max(1000000)]);
+  }
 
-  save() {
+  parseErrors(errors: ValidationErrors) {
+    if (errors == null) {
+      return;
+    }
+
+    if (errors?.['required']) {
+      return 'Completa este campo';
+    }
+
+    if (errors?.['minlength']) {
+      return (
+        'El campo debe tener mínimo ' +
+        errors?.['minlength'].requiredLength +
+        ' caracteres'
+      );
+    }
+
+    if (errors?.['maxlength']) {
+      return (
+        'El campo puede tener máximo ' +
+        errors?.['maxlength'].requiredLength +
+        ' caracteres'
+      );
+    }
+
+    if (errors?.['min']) {
+      return 'El campo debe tener un valor mínimo de ' + errors?.['min'].min;
+    }
+
+    return '';
+  }
+
+  async save() {
+    if (
+      this.code.errors != null ||
+      this.name.errors != null ||
+      this.value.errors != null ||
+      this.imageUrl.errors != null
+    ) {
+      return;
+    }
+
+    //check if code exists
+    if (this.code.value) {
+      const searchCode = await this.currencyService.getCurrencyByCode(this.code.value)
+
+      if (searchCode != null && searchCode.id !== this.currency.id) {
+        this.codeExists = true;
+        return;
+      }
+    }
+
     if (this.code.value) {
       this.currency.code = this.code.value;
     }
@@ -65,9 +130,10 @@ export class EditCurrencyComponent {
     this.saving = true;
 
     setTimeout(() => {
-      this.currencyService.updateCurrency(this.currency)
+      this.currencyService
+        .updateCurrency(this.currency)
         .then((success) => {
-          console.log(success)
+          console.log(success);
           this.success = success;
         })
         .finally(() => {
@@ -94,6 +160,11 @@ export class EditCurrencyComponent {
     this.success = false;
     this.sureDelete = false;
     this.closeMessage = false;
+
+    this.code.setValue('');
+    this.name.setValue('');
+    this.value.setValue('');
+    this.imageUrl.setValue('');
   }
 
   deleteCurrency() {
@@ -105,7 +176,9 @@ export class EditCurrencyComponent {
         .then((success) => {
           this.success = success;
           this.currenciesChange.emit(
-            this.currencies.filter((currency) => currency.id !== this.currency.id)
+            this.currencies.filter(
+              (currency) => currency.id !== this.currency.id
+            )
           );
         })
         .finally(() => {

@@ -66,6 +66,11 @@
           [formControl]="firstName"
           class="input input-bordered w-full"
         />
+        @if (firstName.errors) {
+        <p class="mt-2 text-xs text-red-500">
+          {{ parseErrors(firstName.errors) }}
+        </p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -78,6 +83,11 @@
           [formControl]="lastName"
           class="input input-bordered w-full"
         />
+        @if (lastName.errors) {
+        <p class="mt-2 text-xs text-red-500">
+          {{ parseErrors(lastName.errors) }}
+        </p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -90,6 +100,9 @@
           [formControl]="email"
           class="input input-bordered w-full"
         />
+        @if (email.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(email.errors) }}</p>
+        }
       </label>
 
       <label class="form-control w-full">

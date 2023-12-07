@@ -2,10 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '../../lib/types';
 import { fromNumberToPlanName, fromPlanNameToNumber } from '../../lib/util';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { EditLoadingComponent } from '../edit-loading/edit-loading.component';
 import { EditCloseComponent } from '../edit-close/edit-close.component';
+import { CurrencyService } from '../../services/currency.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -42,7 +43,39 @@ export class EditUserComponent {
   closeMessage: boolean = false;
   sureDelete: boolean = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+    this.firstName.setValidators([Validators.minLength(3), Validators.maxLength(20)]);
+    this.lastName.setValidators([Validators.minLength(3), Validators.maxLength(30)]);
+    this.email.setValidators([Validators.email]);
+  }
+
+  parseErrors(errors: ValidationErrors){
+    if (errors == null){
+      return;
+    }
+
+    if (errors?.["required"]){
+      return "Completa este campo";
+    }
+
+    if (errors?.["minlength"]){
+      return "El campo debe tener mínimo " + errors?.["minlength"].requiredLength+ " caracteres";
+    }
+
+    if (errors?.["maxlength"]){
+      return "El campo puede tener máximo " + errors?.["maxlength"].requiredLength+ " caracteres";
+    }
+
+    if (errors?.["min"]){
+      return "El campo debe tener un valor mínimo de " + errors?.["min"].min;
+    }
+
+    if (errors?.["email"]){
+      return "El campo debe ser un correo electrónico válido";
+    }
+
+    return ""
+  }
 
   planToText(plan: number): string {
     return fromNumberToPlanName(plan);
@@ -53,6 +86,11 @@ export class EditUserComponent {
   }
 
   save() {
+    if (this.firstName.errors != null || this.lastName.errors != null || this.email.errors != null){
+      console.log(this.firstName.errors, this.lastName.errors, this.email.errors)
+      return;
+    }
+
     if (this.firstName.value) {
       this.user.firstName = this.firstName.value;
     }

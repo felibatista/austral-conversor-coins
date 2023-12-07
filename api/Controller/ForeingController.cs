@@ -41,6 +41,21 @@ public class ForeingController : ControllerBase
         }
     }
     
+    [HttpGet("code/{code}")]
+    public ActionResult<Foreing> GetForeingByCode(String code)
+    {
+        try
+        {
+            Foreing foreing = _context.GetForeingByCode(code);
+            
+            return Ok(foreing);
+        }catch (Exception e) {
+            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+
+            return _apiException.getResultFromError(type, e.Data);
+        }
+    }
+    
     [HttpPost]
     [Authorize]
     public ActionResult<Foreing> PostForeing(ForeingForCreationDTO foreingForCreationDto)

@@ -11,6 +11,8 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 
 export class NavbarComponent {
+  isLoginPage: boolean = false;
+
   logged: boolean | null = null;
 
   logout() {
@@ -19,6 +21,10 @@ export class NavbarComponent {
   }
 
   constructor(private authService: AuthService) {
+    if (window.location.pathname === '/login') {
+      this.isLoginPage = true;
+    }
+    
     this.authService.isLogged().then((res) => {
       this.logged = res;
     })

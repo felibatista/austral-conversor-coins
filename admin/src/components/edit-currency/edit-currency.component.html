@@ -66,6 +66,9 @@
           [formControl]="name"
           class="input input-bordered w-full"
         />
+        @if (name.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(name.errors) }}</p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -75,9 +78,17 @@
         <input
           type="text"
           [placeholder]="currency.code"
+          (input)="codeExists = false"
           [formControl]="code"
           class="input input-bordered w-full"
         />
+        @if (code.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(code.errors) }}</p>
+        } @if (codeExists) {
+        <p class="mt-2 text-xs text-red-500">
+          Ya existe una divisa con este código.
+        </p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -90,6 +101,9 @@
           [formControl]="value"
           class="input input-bordered w-full"
         />
+        @if (value.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(value.errors) }}</p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -102,6 +116,11 @@
           [formControl]="imageUrl"
           class="input input-bordered w-full"
         />
+        @if (imageUrl.errors) {
+        <p class="mt-2 text-xs text-red-500">
+          {{ parseErrors(imageUrl.errors) }}
+        </p>
+        }
       </label>
     </form>
 

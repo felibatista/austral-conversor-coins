@@ -28,6 +28,9 @@
           [formControl]="name"
           class="input input-bordered w-full"
         />
+        @if (name.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(name.errors) }}</p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -39,6 +42,13 @@
           [formControl]="code"
           class="input input-bordered w-full"
         />
+        @if (code.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(code.errors) }}</p>
+        } @if (codeExists) {
+        <p class="mt-2 text-xs text-red-500">
+          Ya existe una divisa con este código.
+        </p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -50,6 +60,9 @@
           [formControl]="value"
           class="input input-bordered w-full"
         />
+        @if (value.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(value.errors) }}</p>
+        }
       </label>
 
       <label class="form-control w-full">
@@ -61,16 +74,20 @@
           [formControl]="imageUrl"
           class="input input-bordered w-full"
         />
+        @if (imageUrl.errors) {
+        <p class="mt-2 text-xs text-red-500">
+          {{ parseErrors(imageUrl.errors) }}
+        </p>
+        }
       </label>
     </form>
 
-      <button
-        class="rounded-lg h-[3rem] mt-6 font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100 w-full"
-        (click)="create()"
-      >
-        Guardar
-      </button>
-    
+    <button
+      class="rounded-lg h-[3rem] mt-6 font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100 w-full"
+      (click)="create()"
+    >
+      Guardar
+    </button>
   </div>
   <form method="dialog" (click)="close()" class="modal-backdrop">
     <button>close</button>

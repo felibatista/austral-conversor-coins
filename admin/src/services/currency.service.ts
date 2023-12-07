@@ -53,6 +53,28 @@ export class CurrencyService {
     return response;
   }
 
+  async getCurrencyByCode(code: string): Promise<Foreing | null> {
+    if (!this.cookieService.get('token')) {
+      return null;
+    }
+
+    const get = await fetch(URL_BACKEND + '/api/Foreing/code/' + code, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (get.status !== 200) {
+      return null;
+    }
+
+    const response: Foreing = await get.json();
+    console.log(response)
+
+    return response;
+  }
+
   async createCurrency(currency: Foreing): Promise<Foreing | null> {
     if (!this.cookieService.get('token')) {
       return null;

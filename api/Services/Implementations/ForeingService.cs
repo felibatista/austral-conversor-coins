@@ -32,6 +32,21 @@ public class ForeingService : IForeingService
 
         return foreing;
     }
+    
+    public Foreing GetForeingByCode(String code)
+    {
+        Foreing? foreing = _context.Foreings.FirstOrDefault((foreing) => foreing.Code.ToLower() == code.ToLower());
+
+        if (foreing == null)
+        {
+            throw APIException.CreateException(
+                APIException.Code.FG_01,
+                "Foreing not found",
+                APIException.Type.NOT_FOUND);
+        }
+
+        return foreing;
+    }
 
     public Foreing AddForeing(ForeingForCreationDTO foreingForCreationDto)
     {
