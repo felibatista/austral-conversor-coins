@@ -9,7 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class CurrencyService {
   constructor(private cookieService: CookieService) {}
 
-  async getCurrencys(): Promise<Foreing[] | null> {
+  async getCurrencies(): Promise<Foreing[] | null> {
     const get = await fetch(URL_BACKEND + '/api/Foreing/all', {
       method: 'GET',
       headers: {

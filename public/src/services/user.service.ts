@@ -9,6 +9,32 @@ import { User } from '../lib/types';
 export class UserService {
   constructor(private cookieService: CookieService) {}
 
+  async getUserLogged(): Promise<User | null> {
+    if (!this.cookieService.get('token')) {
+      return null;
+    }
+
+    const token = this.cookieService.get('token').split('.');
+    const user = JSON.parse(atob(token[1]));
+    const id = user.userId;
+
+    const get = await fetch(URL_BACKEND + '/api/User/' + id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.cookieService.get('token'),
+      },
+    });
+
+    if (get.status !== 200) {
+      return null;
+    }
+
+    const response: User = await get.json();
+
+    return response;
+  }
+
   async getUser(id: number): Promise<User | null> {
     if (!this.cookieService.get('token')) {
       return null;
@@ -144,17 +170,20 @@ export class UserService {
     }
 
     //update subscription
-    const putSubscription = await fetch(URL_BACKEND + '/api/User/subscription/' + user.id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.cookieService.get('token'),
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        subscriptionId: user.subscriptionId,
-      }),
-    });
+    const putSubscription = await fetch(
+      URL_BACKEND + '/api/User/subscription/' + user.id,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + this.cookieService.get('token'),
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          subscriptionId: user.subscriptionId,
+        }),
+      }
+    );
 
     if (putSubscription.status !== 200) {
       return false;

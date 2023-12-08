@@ -1,3 +1,25 @@
 <div class="flex justify-between flex-col min-h-screen bg-base-200">
-  <hero></hero>
+  <div class="hero bg-base-200 mt-[3rem]">
+    <div class="hero-content text-center">
+      <div class="max-w-3xl">
+        <h1 class="text-6xl font-bold">
+          Toma el control del <span class="text-secondary">cambio</span>
+        </h1>
+        <p class="py-4 mb-4 text-lg">
+          Convierte entre más de
+          <span class="underline underline-offset-2">{{ currencyCount }}</span>
+          monedas de todo el mundo. <br />
+        </p>
+
+        @if (!loading) {
+        <app-conversor
+          [currencies]="currencies"
+          [conversions]="conversions"
+          [plan]="plan"
+          [user]="user"
+        ></app-conversor>
+        }
+      </div>
+    </div>
+  </div>
 </div>

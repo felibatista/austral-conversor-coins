@@ -22,3 +22,10 @@ export type Conversion = {
   date: Date;
   amount: number;
 };
+
+export interface Plan {
+  id: number
+  name: string
+  limit: number
+  price: number
+}

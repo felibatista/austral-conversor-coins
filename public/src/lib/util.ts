@@ -42,3 +42,20 @@ export function formatDateExtra(date: Date): string {
     strTime
   );
 }
+
+
+export function getColorFromMax(value: number, max: number){
+  if (value < max * 0.25) return "text-red-400"
+  if (value < max * 0.5) return "text-orange-400"
+  if (value < max * 0.75) return "text-yellow-400"
+
+  return "text-green-400"
+}
+
+export function getFillFromMax(value: number, max: number){
+  if (value < max * 0.25) return "fill-red-400"
+  if (value < max * 0.5) return "fill-orange-400"
+  if (value < max * 0.75) return "fill-yellow-400"
+
+  return "fill-green-400"
+}
