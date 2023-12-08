@@ -1,0 +1,31 @@
+<div class="dropdown w-full transition-all">
+  <label tabindex="0" class="btn m-1 w-full justify-start items-center">
+    <img
+      src="{{ actual?.imageUrl }}"
+      class="w-6 h-6"
+      alt="{{ actual?.code }} Flag"
+    />
+    <span>
+      {{ actual?.code }}
+    </span>
+  </label>
+  <ul
+    tabindex="0"
+    id="{{ type }}-dropdown-currency"
+    class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 max-h-[200px] overflow-y-auto flex-col flex-nowrap"
+  >
+    <li *ngFor="let foreing of currencies" class="p-1">
+      <div (click)="updateCurrency(foreing)" class="flex gap-2 flex-row">
+        <img
+          *ngIf="foreing.imageUrl != ''"
+          src="{{ foreing.imageUrl }}"
+          alt="Bandera"
+          height="25"
+          width="25"
+          class="object-contain"
+        /><a class="">{{ foreing.code }} - {{ foreing.name }}</a>
+      </div>
+    </li>
+  </ul>
+  <p class="relative left-2 text-sm select-none">Valor IC: {{ actual?.value }}</p>
+</div>
