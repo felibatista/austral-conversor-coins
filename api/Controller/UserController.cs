@@ -1,7 +1,4 @@
-using conversor_coin.Data;
-using conversor_coin.Models;
 using conversor_coin.Models.DTO;
-using conversor_coin.Models.Repository.Implementations;
 using conversor_coin.Models.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,108 +10,144 @@ namespace conversor_coin.Controller;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userContext;
-    private readonly APIException _apiException;
     private readonly IAuthService _authService;
+    private readonly ISubscriptionService _subscriptionService;
 
-    public UserController(IUserService userContext, APIException apiException, IAuthService authService)
+    public UserController(IUserService userContext, IAuthService authService, ISubscriptionService subscriptionService)
     {
-        this._userContext = userContext;
-        this._apiException = apiException;
-        this._authService = authService;
+        _userContext = userContext;
+        _authService = authService;
+        _subscriptionService = subscriptionService;
     }
 
     [Route("all")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Policy = "Admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_userContext.GetUsers());
+        var users = _userContext.GetUsers();
+        var formattedUsers = users.ConvertAll(user => new UserViewDTO()
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Subscription = new SubscriptionForViewDTO()
+            {
+                Id = user.Subscription.Id,
+                Name = user.Subscription.Name,
+                Price = user.Subscription.Price,
+            }
+        });
+        
+        return Ok(formattedUsers);
     }
 
 
-    [HttpGet("{userId}")]
-    public ActionResult<User> GetUser(int userId)
+    [HttpGet("id/{userId}")]
+    public ActionResult<UserViewDTO> GetUserId(int userId)
     {
-        if (_authService.getCurrentUser() == null)
+        if (_authService.GetCurrentUser() == null)
         {
-            return Unauthorized();
+            return Unauthorized(new { error = "You are not logged in" });
         }
 
-        if (_authService.getCurrentUser().Id == userId || _authService.getCurrentUser().Role == "admin")
+        if (!_authService.IsSameUserRequestId(userId) && _authService.GetCurrentUser()!.Role != "admin")
         {
-            try
-            {
-                User? user = _userContext.GetUser(userId);
-                return Ok(user);
-            }
-            catch (Exception e)
-            {
-                Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
-
-                return _apiException.getResultFromError(type, e.Data);
-            }
+            return Unauthorized(new { error = "You are not authorized to see this user's information" });
         }
 
-        return Unauthorized();
+        if (_userContext.GetUserId(userId) == null)
+        {
+            return NotFound(new
+            {
+                error = "User id not found"
+            });
+        }
+
+        var user = _userContext.GetUserId(userId);
+        var formattedUser = new UserViewDTO()
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Subscription = new SubscriptionForViewDTO()
+            {
+                Id = user.Subscription.Id,
+                Name = user.Subscription.Name,
+                Price = user.Subscription.Price,
+            }
+        };
+        return Ok(formattedUser);
     }
 
-    [HttpGet("getFull/{userId}")]
-    public ActionResult<UserDTO> GetUserFull(int userId)
+    [HttpGet("email/{email}")]
+    public ActionResult<UserViewDTO> GetUserEmail(string email)
     {
-        if (_authService.getCurrentUser() == null)
+        if (_authService.GetCurrentUser() == null)
         {
-            return Unauthorized();
+            return Unauthorized(new { error = "You are not logged in" });
         }
 
-        if (_authService.getCurrentUser().Id == userId || _authService.getCurrentUser().Role == "admin")
+        if (!_authService.IsSameUserRequestEmail(email) && _authService.GetCurrentUser()!.Role != "admin")
         {
-            try
+            return Unauthorized(new { error = "You are not authorized to see this user's information" });
+        }
+
+        if (_userContext.GetUserEmail(email) == null)
+        {
+            return NotFound(new
             {
-                UserDTO? user = _userContext.GetUserFull(userId);
-                return Ok(user);
-            }
-            catch (Exception e)
+                error = "User email not found"
+            });
+        }
+
+        var user = _userContext.GetUserEmail(email);
+        var formattedUser = new UserViewDTO()
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Subscription = new SubscriptionForViewDTO()
             {
-                Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
-
-                return _apiException.getResultFromError(type, e.Data);
+                Id = user.Subscription.Id,
+                Name = user.Subscription.Name,
+                Price = user.Subscription.Price,
             }
-        }
-
-        return Unauthorized();
-    }
-
-    [HttpPost]
-    public ActionResult<User> PostUser(UserForCreationDTO userForCreationDto)
-    {
-        try
-        {
-            _userContext.AddUser(userForCreationDto);
-            return Ok("User created successfully");
-        }
-        catch (Exception e)
-        {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
-
-            return _apiException.getResultFromError(type, e.Data);
-        }
+        };
+        return Ok(formattedUser);
     }
 
     [HttpPut]
-    [Authorize]
+    [Authorize(Policy = "Admin")]
     public ActionResult<User> PutUser(UserForUpdateDTO userForUpdateDto)
     {
-        try
+        if (_userContext.GetUserId(userForUpdateDto.Id) == null)
         {
-            _userContext.UpdateUser(userForUpdateDto);
-            return Ok("User updated successfully");
+            return NotFound(new
+            {
+                error = "User id not found"
+            });
         }
-        catch (Exception e)
-        {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-            return _apiException.getResultFromError(type, e.Data);
+        if (userForUpdateDto.Email != null)
+        {
+            if (_userContext.GetUserEmail(userForUpdateDto.Email) != null)
+            {
+                return Conflict(new
+                {
+                    error = "User email already exists"
+                });
+            }
         }
+        
+        _userContext.UpdateUser(userForUpdateDto);
+        return Ok("User updated successfully");
     }
 
     /*
@@ -124,59 +157,109 @@ public class UserController : ControllerBase
     futura implementación, ahora todos tienen acceso a cambiarse de suscripción
     */
     [HttpPut("subscription/{userId}")]
-    public ActionResult<User> PutSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto)
+    public ActionResult<User> PutSubscriptionUser(int userId, int subscriptionId)
     {
-        try
+        if (_userContext.GetUserId(userId) == null)
         {
-            _userContext.UpdateSubscriptionUser(subscriptionUserUpdateDto);
-            return Ok("User subscription updated successfully");
+            return NotFound(new
+            {
+                error = "User id not found"
+            });
         }
-        catch (Exception e)
+        
+        if (_subscriptionService.GetSubscriptionId(subscriptionId) == null)
         {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
-
-            return _apiException.getResultFromError(type, e.Data);
+            return NotFound(new
+            {
+                error = "Subscription id not found"
+            });
         }
+        
+        _userContext.UpdateSubscriptionUser(userId, subscriptionId);
+        return Ok("User subscription updated successfully");
     }
 
     [HttpDelete("{userId}")]
-    [Authorize]
+    [Authorize(Policy = "Admin")]
     public ActionResult<User> DeleteUser(int userId)
     {
-        try
+        if (_userContext.GetUserId(userId) == null)
         {
-            _userContext.DeleteUser(userId);
-            return Ok("User deleted successfully");
+            return NotFound(new
+            {
+                error = "User id not found"
+            });
         }
-        catch (Exception e)
-        {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
-
-            return _apiException.getResultFromError(type, e.Data);
-        }
+        
+        _userContext.DeleteUser(userId);
+        return Ok("User deleted successfully");
     }
 
     [HttpGet("counter")]
-    [Authorize]
-    public ActionResult<int> counter()
+    [Authorize(Policy = "Admin")]
+    public ActionResult<int> Counter()
     {
-        int counter = _userContext.getUsersCount();
+        var counter = _userContext.GetUsersCount();
         return Ok(counter);
     }
-    
+
     [HttpGet("page/{page}")]
     [Authorize]
-    public ActionResult<List<User>> getUsersByPage(int page)
+    public ActionResult<List<UserViewDTO>> GetUsersByPage(int page)
     {
-        List<User> users = _userContext.getUsersByPage(page);
-        return Ok(users);
+        if (page <= 0)
+        {
+            return BadRequest(new
+            {
+                error = "Page must be greater than 0"
+            });
+        }
+        
+        if (page != (int)page)
+        {
+            return BadRequest(new
+            {
+                error = "Page must be an integer"
+            });
+        }
+        
+        var users = _userContext.GetUsersByPage(page);
+        var usersFormatted = users.ConvertAll(user => new UserViewDTO()
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Subscription = new SubscriptionForViewDTO()
+            {
+                Id = user.Subscription.Id,
+                Name = user.Subscription.Name,
+                Price = user.Subscription.Price,
+            }
+        });
+        return Ok(usersFormatted);
     }
-    
+
     [HttpGet("find/{input}")]
     [Authorize]
-    public ActionResult<List<User>> findUserByInput(string input)
+    public ActionResult<List<UserViewDTO>> FindUserByInput(string input)
     {
-        List<User> users = _userContext.findUserByInput(input);
-        return Ok(users);
+        var users = _userContext.FindUserByInput(input);
+        var formattedUsers = users.ConvertAll(user => new UserViewDTO()
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Subscription = new SubscriptionForViewDTO()
+            {
+                Id = user.Subscription.Id,
+                Name = user.Subscription.Name,
+                Price = user.Subscription.Price,
+            }
+        });
+        return Ok(formattedUsers);
     }
 }

@@ -5,14 +5,13 @@ namespace conversor_coin.Models.Repository.Interface;
 public interface IUserService
 {
     public List<User> GetUsers();
-    public User GetUser(int id);
-    public UserDTO GetUserFull(int id);
-    public User AddUser(UserForCreationDTO userForCreationDto);
+    public User? GetUserId(int userId);
+    public User? GetUserEmail(string email);
+    public UserViewDTO AddUser(UserForCreationDTO userForCreationDto);
     public void UpdateUser(UserForUpdateDTO userForUpdateDto);
-    public void UpdateSubscriptionUser(SubscriptionUserUpdateDTO subscriptionUserUpdateDto);
+    public void UpdateSubscriptionUser(int userId, int subscriptionId);
     public void DeleteUser(int userId);
-    public int getUsersCount();
-    
-    public List<User> getUsersByPage(int page);
-    public List<User> findUserByInput(string input);
+    public int GetUsersCount();
+    public List<User> GetUsersByPage(int page);
+    public List<User> FindUserByInput(string input);
 }
