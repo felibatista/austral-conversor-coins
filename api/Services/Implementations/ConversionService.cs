@@ -1,6 +1,7 @@
 using conversor_coin.Data;
 using conversor_coin.Models.DTO;
 using conversor_coin.Models.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.VisualBasic;
 
@@ -15,146 +16,67 @@ public class ConversionService : IConversionService
         _context = context;
     }
 
-    public List<ForeingCoversion> GetConversions()
+    public List<CurrencyConversion> GetConversions()
     {
-        return _context.ForeingCoversion.ToList();
+        //include all the data from foreings;
+        return _context.CurrencyConversion
+            .Include((conversion) => conversion.FromCurrency)
+            .Include((conversion) => conversion.ToCurrency)
+            .ToList();
     }
 
-    public List<ForeingCoversion> GetConversionsFromUser(int userId, int limit)
+    public List<CurrencyConversion> GetConversionsFromUser(int userId, int limit)
     {
-        User? user = _context.Users.FirstOrDefault((user) => user.Id == userId);
-
-        if (user == null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.US_01,
-                "User not found",
-                APIException.Type.NOT_FOUND);
-        }
-
-        List<ForeingCoversion> conversions =
-            _context.ForeingCoversion.Where((conversions) => conversions.UserId == userId).ToList();
-
-        //no se chequea que está vacío para que devuelva un array vacio y no un error
-        if (conversions == null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.CV_01,
-                "User conversions not found",
-                APIException.Type.NOT_FOUND);
-        }
-
         if (limit == 0)
         {
-            return conversions.ToList();
+            return _context.CurrencyConversion.Where((conversion) => conversion.UserId == userId)
+                .Include((conversion) => conversion.FromCurrency)
+                .Include((conversion) => conversion.ToCurrency).ToList();
         }
 
-        if (limit > 0)
-        {
-            return conversions.Take(limit).ToList();
-        }
-
-        return conversions;
+        return _context.CurrencyConversion.Where((conversion) => conversion.UserId == userId)
+            .Include((conversion) => conversion.FromCurrency)
+            .Include((conversion) => conversion.ToCurrency).Take(limit).ToList();
     }
 
-    public ForeingCoversion addConversion(ConversionForCreationDTO conversionForCreationDto)
+    public CurrencyConversion AddConversion(ConversionForCreationDTO conversionForCreationDto)
     {
-        User? user = _context.Users.FirstOrDefault((user) => user.Id == conversionForCreationDto.UserId);
+        var user = _context.Users.FirstOrDefault((user) => user.Id == conversionForCreationDto.UserId)!;
+        var temporalUserCurrencyList =
+            _context.CurrencyConversion.Where((conversion) => conversion.UserId == user.Id).ToList();
 
-        if (user == null)
+        var fromCurrency =
+            _context.Currency.FirstOrDefault((currency) => currency.Id == conversionForCreationDto.FromCurrencyId)!;
+        var toCurrency =
+            _context.Currency.FirstOrDefault((currency) => currency.Id == conversionForCreationDto.ToCurrencyId)!;
+
+        CurrencyConversion conversion = new()
         {
-            throw APIException.CreateException(
-                APIException.Code.US_01,
-                "User not found",
-                APIException.Type.NOT_FOUND);
-        }
-
-        if (_context.Foreings.FirstOrDefault((foreing) => foreing.Id == conversionForCreationDto.ToForeingId) == null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.CV_03,
-                "Foreing To not found",
-                APIException.Type.NOT_FOUND
-            );
-        }
-
-        if (_context.Foreings.FirstOrDefault((foreing) => foreing.Id == conversionForCreationDto.FromForeingId) == null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.CV_04,
-                "Foreing From not found",
-                APIException.Type.NOT_FOUND);
-        }
-
-        List<ForeingCoversion> temporalUserForeingList =
-            _context.ForeingCoversion.Where((conversions) => conversions.UserId == user.Id).ToList();
-
-        int planLimit = _context.Subscriptions.First((subscription) => subscription.Id == user.SubscriptionId)
-            .Limit;
-
-        if (planLimit == 0 || planLimit == null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.SB_01,
-                "User plan not found",
-                APIException.Type.NOT_FOUND
-            );
-        }
-
-        if (planLimit != -1 && temporalUserForeingList.Count >= planLimit)
-        {
-            throw APIException.CreateException(
-                APIException.Code.US_02,
-                "User limit reached",
-                APIException.Type.FORBIDDEN);
-        }
-
-        ForeingCoversion conversion = new()
-        {
-            FromForeingId = conversionForCreationDto.FromForeingId,
-            ToForeingId = conversionForCreationDto.ToForeingId,
             Amount = conversionForCreationDto.Amount,
-            Date = DateTime.Now
+            Date = DateTime.Now,
+            ToCurrency = toCurrency,
+            FromCurrency = fromCurrency
         };
 
-        try
-        {
-            EntityEntry<ForeingCoversion> conversionCreated = _context.ForeingCoversion.Add(conversion);
-
-            temporalUserForeingList.Add(conversionCreated.Entity);
-
-            user.Conversions = temporalUserForeingList;
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_01,
-                "An error occurred while setting the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
-
-        try
-        {
-            _context.SaveChanges();
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_02,
-                "An error occurred while saving the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
+        temporalUserCurrencyList.Add(conversion);
+        user.Conversions = temporalUserCurrencyList;
+        _context.SaveChanges();
 
         return conversion;
     }
 
-    public int getConversionsCount()
+    public int GetConversionsCount()
     {
-        return _context.ForeingCoversion.Count();
+        return _context.CurrencyConversion.Count();
     }
 
-    public List<ForeingCoversion> getConversionsByPage(int page)
+    public List<CurrencyConversion> GetConversionsByPage(int page)
     {
-        return _context.ForeingCoversion.Skip((page - 1) * 10).Take(10).ToList();
+        return _context.CurrencyConversion
+            .Include((conversion) => conversion.FromCurrency)
+            .Include((conversion) => conversion.ToCurrency)
+            .Skip((page - 1) * 10)
+            .Take(10)
+            .ToList();
     }
 }

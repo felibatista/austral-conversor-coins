@@ -5,9 +5,9 @@ namespace conversor_coin.Models.Repository.Interface;
 
 public interface IConversionService
 {
-    public List<ForeingCoversion> GetConversions();
-    public List<ForeingCoversion> GetConversionsFromUser(int userId, int limit);
-    public ForeingCoversion addConversion(ConversionForCreationDTO conversionForCreationDto);
-    public List<ForeingCoversion> getConversionsByPage(int page);
-    public int getConversionsCount();
+    public List<CurrencyConversion> GetConversions();
+    public List<CurrencyConversion> GetConversionsFromUser(int userId, int limit);
+    public CurrencyConversion AddConversion(ConversionForCreationDTO conversionForCreationDto);
+    public List<CurrencyConversion> GetConversionsByPage(int page);
+    public int GetConversionsCount();
 }
