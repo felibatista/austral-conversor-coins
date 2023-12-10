@@ -6,4 +6,5 @@ public class Subscription
     public string Name { get; set; }
     public int Limit { get; set; }
     public double Price { get; set; }
+    public List<User> Users { get; } = new List<User>();
 }

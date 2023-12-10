@@ -8,8 +8,8 @@ public class ConversorContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
-    public DbSet<Foreing> Foreings { get; set; }
-    public DbSet<ForeingCoversion> ForeingCoversion { get; set; }
+    public DbSet<Currency> Currency { get; set; }
+    public DbSet<CurrencyConversion> CurrencyConversion { get; set; }
     public DbSet<Auth> Auth { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -19,51 +19,26 @@ public class ConversorContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        for (int a = 2; a < 50; a++)
-        {
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = a,
-                    UserName = "Admin"+a,
-                    FirstName = "Admin",
-                    LastName = "Admin",
-                    Email = "admin@admin.com"+a,
-                    Conversions = new List<ForeingCoversion>(),
-                    SubscriptionId = 1,
-                });
-        }
+        modelBuilder.Entity<Subscription>()
+            .HasMany(e => e.Users)
+            .WithOne(e => e.Subscription)
+            .HasForeignKey("SubscriptionId")
+            .IsRequired();
 
-        modelBuilder.Entity<User>().HasData(
-            new User
-            {
-                Id = 1,
-                UserName = "Admin",
-                FirstName = "Admin",
-                LastName = "Admin",
-                Email = "admin@admin.com",
-                Conversions = new List<ForeingCoversion>(),
-                SubscriptionId = 1,
-            });
+        modelBuilder.Entity<Auth>()
+            .HasOne(e => e.User)
+            .WithOne(e => e.Auth)
+            .HasForeignKey<User>(e => e.AuthId);
 
-        modelBuilder.Entity<Auth>().HasData(
-            new Auth
-            {
-                Id = 1,
-                Password = "admin",
-                Role = "admin"
-            }
-        );
-
-        modelBuilder.Entity<Foreing>().HasData(
-            new Foreing
+        modelBuilder.Entity<Currency>().HasData(
+            new Currency
             {
                 Id = 1,
                 Name = "Dolar estadounidense",
                 Code = "USD",
                 Value = 1,
                 ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/us.svg"
-            }, new Foreing
+            }, new Currency
             {
                 Id = 2,
                 Name = "Euro",
@@ -71,7 +46,7 @@ public class ConversorContext : DbContext
                 Value = 1.2,
                 ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/eu.svg"
             },
-            new Foreing
+            new Currency
             {
                 Id = 3,
                 Name = "Real",
@@ -79,7 +54,7 @@ public class ConversorContext : DbContext
                 Value = 0.2,
                 ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/br.svg"
             },
-            new Foreing
+            new Currency
             {
                 Id = 4,
                 Name = "Peso argentino",
@@ -87,21 +62,6 @@ public class ConversorContext : DbContext
                 Value = 0.33,
                 ImageUrl = "https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/ar.svg"
             });
-        
-        for (int a = 2; a < 50; a++)
-        {
-            modelBuilder.Entity<ForeingCoversion>().HasData(
-                new ForeingCoversion
-                {
-                    Id = a,
-                    UserId = a,
-                    FromForeingId = 1,
-                    ToForeingId = 2,
-                    Amount = 10,
-                    Date = DateTime.Now
-                });
-        }
-        
 
         modelBuilder.Entity<Subscription>().HasData(
             new Subscription
@@ -124,5 +84,77 @@ public class ConversorContext : DbContext
                 Price = 20,
                 Limit = -1
             });
+
+        modelBuilder.Entity<Auth>().HasData(
+            new Auth
+            {
+                Id = 1,
+                Password = "admin",
+                Role = "admin",
+            });
+
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = 1,
+                UserName = "Admin",
+                FirstName = "Admin",
+                LastName = "Admin",
+                Email = "admin@admin.com",
+                AuthId = 1,
+                SubscriptionId = 1
+            });
+
+
+        /*for (int a = 2; a < 50; a++)
+        {
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = a,
+                    UserName = "Admin"+a,
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    Email = "admin@admin.com"+a,
+                });
+        }
+
+
+
+
+
+        for (int a = 2; a < 50; a++)
+        {
+            modelBuilder.Entity<CurrencyConversion>().HasData(
+                new CurrencyConversion
+                {
+                    Id = a,
+                    Amount = 10,
+                    Date = DateTime.Now
+                });
+        }
+
+
+        modelBuilder.Entity<Subscription>().HasData(
+            new Subscription
+            {
+                Id = 1,
+                Name = "Free",
+                Price = 0,
+                Limit = 10
+            }, new Subscription
+            {
+                Id = 2,
+                Name = "Trial",
+                Price = 10,
+                Limit = 100
+            },
+            new Subscription
+            {
+                Id = 3,
+                Name = "Premium",
+                Price = 20,
+                Limit = -1
+            });*/
     }
 }

@@ -1,8 +1,9 @@
 using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace conversor_coin;
 
-public class Foreing
+public class Currency
 {
     public int Id { get; set; }
     public String Name { get; set; }
