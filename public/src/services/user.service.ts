@@ -101,6 +101,25 @@ export class UserService {
     return response;
   }
 
+  async existEmail(email: string): Promise<boolean> {
+    const get = await fetch(URL_BACKEND + '/api/User/emailExist/' + email, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (get.status !== 200) {
+      return false;
+    }
+
+    const response: boolean = await get.json();
+
+    console.log(email, response);
+
+    return response;
+  }
+
   async findUser(input: string): Promise<User[] | null> {
     if (!this.cookieService.get('token')) {
       return null;

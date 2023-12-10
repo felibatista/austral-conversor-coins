@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-register-form',
@@ -21,10 +22,11 @@ export class RegisterFormComponent {
   repeatPassword = new FormControl('');
 
   passwordMatch: boolean = true;
+  emailExists: boolean = false;
 
   loading: boolean = false;
 
-  constructor(private loginService: LoginService) {
+  constructor(private loginService: LoginService, private userService: UserService) {
     this.firstName.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
     this.lastName.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
     this.email.setValidators([Validators.required, Validators.email]);
@@ -61,7 +63,15 @@ export class RegisterFormComponent {
     return ""
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
+    
+    this.email.markAllAsTouched();
+    this.firstName.markAllAsTouched();
+    this.lastName.markAllAsTouched();
+    this.username.markAllAsTouched();
+    this.password.markAllAsTouched();
+    this.repeatPassword.markAllAsTouched();
+    
     if (this.firstName.errors != null || this.lastName.errors != null || this.email.errors != null || this.username.errors != null || this.password.errors != null || this.repeatPassword.errors != null) {
       return;
     }
@@ -71,7 +81,7 @@ export class RegisterFormComponent {
 
       return;
     }
-
+    
     this.loading = true;
 
     const registerData = {
@@ -81,6 +91,16 @@ export class RegisterFormComponent {
       username: this.username,
       password: this.password,
     };
+
+    //check email exist
+    const email = await this.userService.existEmail(this.email.value!);
+
+    if (email) {
+      this.emailExists = true;
+      this.loading = false;
+
+      return;
+    }
 
     console.log(registerData);
     this.loading = false;

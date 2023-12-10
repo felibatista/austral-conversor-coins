@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using conversor_coin.Data;
 using conversor_coin.Models;
 using conversor_coin.Models.Repository.Implementations;
@@ -26,6 +27,12 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
+
 builder.Services
     .AddHttpContextAccessor()
     .AddAuthorization()
@@ -50,12 +57,16 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ConversorContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
-builder.Services.AddScoped<IForeingService, ForeingService>();
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<IConversionService, ConversionService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<APIException>();
+builder.Services.AddScoped<IAuthService, AuthService>(); ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireClaim("role", "admin"));
+});
 
 builder.Services.AddSwaggerGen(setupAction =>
 {
