@@ -19,49 +19,30 @@ public class AuthenticateController : ControllerBase
 {
     private readonly IAuthService _authService;
     private readonly IUserService _userService;
-    private readonly APIException _apiException;
 
-    public AuthenticateController(IAuthService authService, IUserService userService, APIException apiException)
+    public AuthenticateController(IAuthService authService, IUserService userService)
     {
         _authService = authService;
         _userService = userService;
-        _apiException = apiException;
     }
-    
+
     [AllowAnonymous]
     [HttpPost("register")]
     public ActionResult Register(UserForCreationDTO userForCreationDto)
     {
-        try
+        var userEmail = _userService.GetUserEmail(userForCreationDto.Email);
+        
+        if (userEmail != null)
         {
-            var user = _userService.AddUser(userForCreationDto);
-            var token = "";
-            
-            if (user.UserName != null)
+            return Conflict(new
             {
-                var userForLoginDto = new UserForLoginDTO()
-                {
-                    Username = userForCreationDto.UserName,
-                    Password = userForCreationDto.Password
-                };
-                
-                var auth = _authService.Authenticate(userForLoginDto);
-                token = _authService.GenerateToken(auth);
-            }
-            var response = new
-            {
-                token = token,
-                userId = user.Id
-            };
-            
-            return Ok(response);
+                error = "Email already exists"
+            });
         }
-        catch (Exception e)
-        {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-            return _apiException.getResultFromError(type, e.Data);
-        }
+        var user = _userService.AddUser(userForCreationDto);
+
+        return Ok(user);
     }
 
     [AllowAnonymous]
@@ -69,25 +50,21 @@ public class AuthenticateController : ControllerBase
     public ActionResult Login(UserForLoginDTO userForLoginDto)
     {
         var user = _authService.Authenticate(userForLoginDto);
-        
-        if (user != null)
-        {
-            var token = _authService.GenerateToken(user);
-            
-            var response = new
-            {
-                token = token,
-                userId = user.Id
-            };
-            
-            return Ok(response);
-        }
-        
-        var error = new
-        {
-            error = "Username or password incorrect"
-        };
 
-        return NotFound(error);
+        if (user is null)
+        {
+            return NotFound(new
+            {
+                error = "Username or password incorrect"
+            });
+        }
+
+        var token = _authService.GenerateToken(user);
+
+        return Ok(new
+        {
+            token,
+            userId = user.Id
+        });
     }
 }

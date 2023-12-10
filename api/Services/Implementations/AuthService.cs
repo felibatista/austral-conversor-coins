@@ -22,23 +22,16 @@ public class AuthService : IAuthService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Auth Authenticate(UserForLoginDTO userForLoginDto)
+    public Auth? Authenticate(UserForLoginDTO userForLoginDto)
     {
-        var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == userForLoginDto.Username.ToLower());
+        var user = _context.Users.FirstOrDefault(x => x.Email.ToLower() == userForLoginDto.Email.ToLower());
 
         if (user == null)
         {
             return null;
         }
 
-        var password = _context.Auth.FirstOrDefault(x => x.Password == userForLoginDto.Password && x.Id == user.Id);
-       
-        if (user != null && password != null)
-        {
-            return password;
-        }
-
-        return null;
+        return _context.Auth.FirstOrDefault(x => x.Password == userForLoginDto.Password && x.Id == user.Id);
     }
 
     public string GenerateToken(Auth auth)
@@ -59,7 +52,7 @@ public class AuthService : IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);    
     }
     
-    public Auth getCurrentUser()
+    public Auth? GetCurrentUser()
     {
         var claimPrincipal = _httpContextAccessor.HttpContext.User;
         
@@ -91,7 +84,7 @@ public class AuthService : IAuthService
         return null;
     }
 
-    public bool isSameUserRequest(int userId)
+    public bool IsSameUserRequestId(int userId)
     {
         var identity = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
         if (identity != null)
@@ -106,6 +99,34 @@ public class AuthService : IAuthService
             if (userClaims.FirstOrDefault(x => x.Type == "userId")?.Value != null)
 
             return int.Parse(userClaims.FirstOrDefault(x => x.Type == "userId")?.Value) == userId;
+        }
+        return false;
+    }
+
+    public bool IsSameUserRequestEmail(string email)
+    {
+        var identity = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
+        if (identity != null)
+        {
+            var userClaims = identity.Claims;
+            
+            if (userClaims.FirstOrDefault(x => x.Type == "role")?.Value.ToLower() == "admin")
+            {
+                return true;
+            }
+            
+            if (userClaims.FirstOrDefault(x => x.Type == "userId")?.Value != null)
+            { 
+                var userIdJwt = int.Parse(userClaims.FirstOrDefault(x => x.Type == "userId").Value);
+                
+                var user = _context.Users.FirstOrDefault(x => x.Id == userIdJwt && x.Email == email);
+                
+                if (user != null)
+                {
+                    return true;
+                }
+            }
+
         }
         return false;
     }
