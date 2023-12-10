@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { URL_BACKEND } from '../lib/constants';
-import { Foreing } from '../lib/types';
+import { Currency } from '../lib/types';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -9,12 +9,12 @@ import { CookieService } from 'ngx-cookie-service';
 export class CurrencyService {
   constructor(private cookieService: CookieService) {}
 
-  async getCurrencys(): Promise<Foreing[] | null> {
+  async getCurrencys(): Promise<Currency[] | null> {
     if (!this.cookieService.get('token')) {
       return null;
     }
 
-    const get = await fetch(URL_BACKEND + '/api/Foreing/all', {
+    const get = await fetch(URL_BACKEND + '/api/Currency/all', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -26,17 +26,17 @@ export class CurrencyService {
       return null;
     }
 
-    const response: Foreing[] = await get.json();
+    const response: Currency[] = await get.json();
 
     return response;
   }
 
-  async getCurrency(id: string): Promise<Foreing | null> {
+  async getCurrency(id: string): Promise<Currency | null> {
     if (!this.cookieService.get('token')) {
       return null;
     }
 
-    const get = await fetch(URL_BACKEND + '/api/Foreing/' + id, {
+    const get = await fetch(URL_BACKEND + '/api/Currency/' + id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -48,17 +48,17 @@ export class CurrencyService {
       return null;
     }
 
-    const response: Foreing = await get.json();
+    const response: Currency = await get.json();
 
     return response;
   }
 
-  async getCurrencyByCode(code: string): Promise<Foreing | null> {
+  async getCurrencyByCode(code: string): Promise<Currency | null> {
     if (!this.cookieService.get('token')) {
       return null;
     }
 
-    const get = await fetch(URL_BACKEND + '/api/Foreing/code/' + code, {
+    const get = await fetch(URL_BACKEND + '/api/Currency/code/' + code, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -69,18 +69,18 @@ export class CurrencyService {
       return null;
     }
 
-    const response: Foreing = await get.json();
+    const response: Currency = await get.json();
     console.log(response)
 
     return response;
   }
 
-  async createCurrency(currency: Foreing): Promise<Foreing | null> {
+  async createCurrency(currency: Currency): Promise<Currency | null> {
     if (!this.cookieService.get('token')) {
       return null;
     }
 
-    const post = await fetch(URL_BACKEND + '/api/Foreing', {
+    const post = await fetch(URL_BACKEND + '/api/Currency', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -98,23 +98,29 @@ export class CurrencyService {
       return null;
     }
 
-    const response: Foreing = await post.json();
+    const response: Currency = await post.json();
 
     return response;
   }
 
-  async updateCurrency(currency: Foreing): Promise<boolean> {
+  async updateCurrency(currency: Currency): Promise<boolean> {
     if (!this.cookieService.get('token')) {
       return false;
     }
 
-    const put = await fetch(URL_BACKEND + '/api/Foreing/', {
+    const put = await fetch(URL_BACKEND + '/api/Currency/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + this.cookieService.get('token'),
       },
-      body: JSON.stringify(currency),
+      body: JSON.stringify({
+        currencyId: currency.id,
+        name: currency.name,
+        code: currency.code,
+        imageUrl: currency.imageUrl,
+        value: currency.value,
+      }),
     });
 
     if (put.status !== 200) {
@@ -128,7 +134,7 @@ export class CurrencyService {
     if (!this.cookieService.get('token')) {
       return false;
     }
-    const del = await fetch(URL_BACKEND + '/api/Foreing/' + id, {
+    const del = await fetch(URL_BACKEND + '/api/Currency/' + id, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -148,7 +154,7 @@ export class CurrencyService {
       return 0;
     }
 
-    const get = await fetch(URL_BACKEND + '/api/Foreing/count', {
+    const get = await fetch(URL_BACKEND + '/api/Currency/count', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -160,11 +166,11 @@ export class CurrencyService {
     return response;
   }
 
-  async getCurrenciesPage(page: number): Promise<Foreing[] | null> {
+  async getCurrenciesPage(page: number): Promise<Currency[] | null> {
     if (!this.cookieService.get('token')) {
       return null;
     }
-    const get = await fetch(URL_BACKEND + '/api/Foreing/page/' + page, {
+    const get = await fetch(URL_BACKEND + '/api/Currency/page/' + page, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -175,7 +181,7 @@ export class CurrencyService {
       return null;
     }
 
-    const response: Foreing[] = await get.json();
+    const response: Currency[] = await get.json();
 
     return response;
   }

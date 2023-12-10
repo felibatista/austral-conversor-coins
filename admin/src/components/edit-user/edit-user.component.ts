@@ -1,8 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { User } from '../../lib/types';
+import { Subscription, User, UserForUpdate } from '../../lib/types';
 import { fromNumberToPlanName, fromPlanNameToNumber } from '../../lib/util';
-import { FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { EditLoadingComponent } from '../edit-loading/edit-loading.component';
 import { EditCloseComponent } from '../edit-close/edit-close.component';
@@ -27,14 +33,20 @@ export class EditUserComponent {
     firstName: '',
     lastName: '',
     email: '',
-    subscriptionId: 0,
+    subscription: {
+      id: 0,
+      name: '',
+      price: 0,
+      limit: 0,
+    },
   };
+  @Input() subscriptions: Subscription[] = [];
   @Input() users: User[] = [];
   @Output() usersChange = new EventEmitter<User[]>();
 
+  userName = new FormControl('');
   firstName = new FormControl('');
   lastName = new FormControl('');
-  email = new FormControl('');
   plan = new FormControl('');
 
   saving: boolean = false;
@@ -44,50 +56,64 @@ export class EditUserComponent {
   sureDelete: boolean = false;
 
   constructor(private userService: UserService) {
-    this.firstName.setValidators([Validators.minLength(3), Validators.maxLength(20)]);
-    this.lastName.setValidators([Validators.minLength(3), Validators.maxLength(30)]);
-    this.email.setValidators([Validators.email]);
+    this.firstName.setValidators([
+      Validators.minLength(3),
+      Validators.maxLength(20),
+    ]);
+    this.lastName.setValidators([
+      Validators.minLength(3),
+      Validators.maxLength(30),
+    ]);
   }
 
-  parseErrors(errors: ValidationErrors){
-    if (errors == null){
+  parseErrors(errors: ValidationErrors) {
+    if (errors == null) {
       return;
     }
 
-    if (errors?.["required"]){
-      return "Completa este campo";
+    if (errors?.['required']) {
+      return 'Completa este campo';
     }
 
-    if (errors?.["minlength"]){
-      return "El campo debe tener mínimo " + errors?.["minlength"].requiredLength+ " caracteres";
+    if (errors?.['minlength']) {
+      return (
+        'El campo debe tener mínimo ' +
+        errors?.['minlength'].requiredLength +
+        ' caracteres'
+      );
     }
 
-    if (errors?.["maxlength"]){
-      return "El campo puede tener máximo " + errors?.["maxlength"].requiredLength+ " caracteres";
+    if (errors?.['maxlength']) {
+      return (
+        'El campo puede tener máximo ' +
+        errors?.['maxlength'].requiredLength +
+        ' caracteres'
+      );
     }
 
-    if (errors?.["min"]){
-      return "El campo debe tener un valor mínimo de " + errors?.["min"].min;
+    if (errors?.['min']) {
+      return 'El campo debe tener un valor mínimo de ' + errors?.['min'].min;
     }
 
-    if (errors?.["email"]){
-      return "El campo debe ser un correo electrónico válido";
+    if (errors?.['email']) {
+      return 'El campo debe ser un correo electrónico válido';
     }
 
-    return ""
+    return '';
   }
 
-  planToText(plan: number): string {
-    return fromNumberToPlanName(plan);
-  }
-
-  textToPlan(plan: string): number {
-    return fromPlanNameToNumber(plan);
+  getSubscriptionId(subscriptionName: string): number {
+    return this.subscriptions.find(
+      (subscription) => subscription.name === subscriptionName
+    )!.id;
   }
 
   save() {
-    if (this.firstName.errors != null || this.lastName.errors != null || this.email.errors != null){
-      console.log(this.firstName.errors, this.lastName.errors, this.email.errors)
+    if (
+      this.firstName.errors != null ||
+      this.lastName.errors != null ||
+      this.userName.errors != null
+    ) {
       return;
     }
 
@@ -99,20 +125,33 @@ export class EditUserComponent {
       this.user.lastName = this.lastName.value;
     }
 
-    if (this.email.value) {
-      this.user.email = this.email.value;
+    if (this.userName.value) {
+      this.user.userName = this.userName.value;
     }
 
     if (this.plan.value) {
-      this.user.subscriptionId = this.textToPlan(this.plan.value!);
+      this.user.subscription.id = this.getSubscriptionId(this.plan.value);
     }
 
     this.saving = true;
 
+    const userForUpdate: UserForUpdate = {
+      id: this.user.id,
+      userName: this.user.userName,
+      firstName: this.user.firstName,
+      lastName: this.user.lastName,
+      subscriptionId: this.user.subscription.id,
+    };
+
+
     setTimeout(() => {
       this.userService
-        .updateUser(this.user)
+        .updateUser(userForUpdate)
         .then((success) => {
+          //update user list
+          this.user.subscription = this.subscriptions.find(
+            (subscription) => subscription.id === this.user.subscription.id
+          )!;
           this.success = success;
         })
         .finally(() => {
@@ -123,7 +162,7 @@ export class EditUserComponent {
 
     this.firstName.setValue('');
     this.lastName.setValue('');
-    this.email.setValue('');
+    this.userName.setValue('');
     this.plan.setValue('');
   }
 
@@ -134,7 +173,12 @@ export class EditUserComponent {
       firstName: '',
       lastName: '',
       email: '',
-      subscriptionId: 0,
+      subscription: {
+        id: 0,
+        name: '',
+        price: 0,
+        limit: 0,
+      },
     };
 
     this.success = false;
@@ -162,7 +206,7 @@ export class EditUserComponent {
 
     this.firstName.setValue('');
     this.lastName.setValue('');
-    this.email.setValue('');
+    this.userName.setValue('');
     this.plan.setValue('');
   }
 

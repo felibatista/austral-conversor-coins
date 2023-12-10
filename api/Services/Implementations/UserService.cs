@@ -85,9 +85,20 @@ public class UserService : IUserService
     {
         var toChange = GetUserId(userForUpdateDto.Id)!;
 
-        toChange.UserName = userForUpdateDto.UserName;
-        toChange.FirstName = userForUpdateDto.FirstName;
-        toChange.LastName = userForUpdateDto.LastName;
+        if (userForUpdateDto.UserName != null)
+        {
+            toChange.UserName = userForUpdateDto.UserName;
+        }
+        
+        if (userForUpdateDto.FirstName != null)
+        {
+            toChange.FirstName = userForUpdateDto.FirstName;
+        }
+
+        if (userForUpdateDto.LastName != null)
+        {
+            toChange.LastName = userForUpdateDto.LastName;
+        }
 
         if (userForUpdateDto.Email != null)
         {

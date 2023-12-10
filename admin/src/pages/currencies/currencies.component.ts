@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Foreing } from '../../lib/types';
+import { Currency } from '../../lib/types';
 import { CurrencyService } from '../../services/currency.service';
 import { TableCurrenciesComponent } from '../../components/table-currencies/table-currencies.component';
 import { EditCurrencyComponent } from '../../components/edit-currency/edit-currency.component';
@@ -14,8 +14,8 @@ import { CreateCurrencyComponent } from '../../components/create-currency/create
   styleUrl: './currencies.component.css'
 })
 export class CurrenciesComponent implements OnInit {
-  currencies: Foreing[] = [];
-  currencyToEdit: Foreing = {
+  currencies: Currency[] = [];
+  currencyToEdit: Currency = {
     id: 0,
     code: '',
     name: '',

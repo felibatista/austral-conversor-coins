@@ -92,16 +92,16 @@
 
       <label class="form-control w-full">
         <div class="label">
-          <span class="label-text">Correo electronico</span>
+          <span class="label-text">Nombre de usuario</span>
         </div>
         <input
           type="text"
-          [placeholder]="user.email"
-          [formControl]="email"
+          [placeholder]="user.userName"
+          [formControl]="userName"
           class="input input-bordered w-full"
         />
-        @if (email.errors) {
-        <p class="mt-2 text-xs text-red-500">{{ parseErrors(email.errors) }}</p>
+        @if (userName.errors) {
+        <p class="mt-2 text-xs text-red-500">{{ parseErrors(userName.errors) }}</p>
         }
       </label>
 
@@ -110,11 +110,11 @@
           <span class="label-text">Plan</span>
         </div>
         <select class="select select-bordered" [formControl]="plan">
-          @for (plan of [1,2,3]; track $index) { @if (plan ==
-          user.subscriptionId) {
-          <option selected class="py-4">{{ planToText(plan) }}</option>
+          @for (plan of subscriptions; track $index) { @if (plan.id ==
+          user.subscription.id) {
+          <option selected class="py-4">{{ plan.name }}</option>
           }@else {
-          <option>{{ planToText(plan) }}</option>
+          <option>{{ plan.name }}</option>
           } }
         </select>
       </label>

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Foreing } from '../../lib/types';
+import { Currency } from '../../lib/types';
 import {
   FormControl,
   ReactiveFormsModule,
@@ -24,7 +24,7 @@ import { CurrencyService } from '../../services/currency.service';
   styleUrl: './create-currency.component.css',
 })
 export class CreateCurrencyComponent {
-  @Input() currency: Foreing = {
+  @Input() currency: Currency = {
     id: 0,
     code: '',
     name: '',
@@ -32,8 +32,8 @@ export class CreateCurrencyComponent {
     imageUrl: '',
   };
 
-  @Input() currencies: Foreing[] = [];
-  @Output() currenciesChange = new EventEmitter<Foreing[]>();
+  @Input() currencies: Currency[] = [];
+  @Output() currenciesChange = new EventEmitter<Currency[]>();
 
   code = new FormControl('');
   name = new FormControl('');

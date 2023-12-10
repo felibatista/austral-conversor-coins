@@ -36,13 +36,13 @@ export class LoginService {
     return false;
   }
 
-  async authenticate(username: string, password: string) {
+  async authenticate(email: string, password: string) {
     const post = await fetch(URL_BACKEND + '/api/Authenticate/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if (post.status !== 200) {

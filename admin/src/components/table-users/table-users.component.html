@@ -42,7 +42,7 @@
         <td>{{ user.id }}</td>
         <td>{{ user.firstName }}</td>
         <td>{{ user.userName }}</td>
-        <td>{{ planToText(user.subscriptionId) }}</td>
+        <td>{{ user.subscription.name }}</td>
         <td>
           <img
             (click)="editUser(user)"
@@ -92,4 +92,4 @@
 </div>
 }
 
-<app-edit-user [user]="userToEdit" [(users)]="users"></app-edit-user>
+<app-edit-user [user]="userToEdit" [subscriptions]="subscriptions" [(users)]="users"></app-edit-user>

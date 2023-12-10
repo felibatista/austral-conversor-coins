@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Foreing, User } from '../../lib/types';
-import { fromNumberToPlanName } from '../../lib/util';
-import { UserService } from '../../services/user.service';
+import { Currency, User } from '../../lib/types';
 import { CurrencyService } from '../../services/currency.service';
 import { EditCurrencyComponent } from '../edit-currency/edit-currency.component';
 
@@ -14,14 +12,14 @@ import { EditCurrencyComponent } from '../edit-currency/edit-currency.component'
   styleUrl: './table-currencies.component.css',
 })
 export class TableCurrenciesComponent implements OnInit {
-  @Input() currencies: Foreing[] = [];
+  @Input() currencies: Currency[] = [];
 
   page: number = 1;
   maxPages: number = 0;
 
   loaded: boolean = false;
 
-  currencyToEdit: Foreing = {
+  currencyToEdit: Currency = {
     id: 0,
     code: '',
     name: '',
@@ -47,7 +45,7 @@ export class TableCurrenciesComponent implements OnInit {
     }, 1000);
   }
 
-  editCurrency(currency: Foreing) {
+  editCurrency(currency: Currency) {
     this.currencyToEdit = currency;
   }
 

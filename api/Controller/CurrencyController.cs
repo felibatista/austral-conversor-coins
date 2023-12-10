@@ -113,8 +113,9 @@ public class CurrencyController : ControllerBase
                 error = "Currency id not found"
             });
         }
-        
-        if (_context.GetCurrencyCode(currencyForUpdateDto.Code) != null)
+
+        if (_context.GetCurrencyCode(currencyForUpdateDto.Code) != null
+            && currencyForUpdateDto.CurrencyId != _context.GetCurrencyCode(currencyForUpdateDto.Code).Id)
         {
             return Conflict(new
             {

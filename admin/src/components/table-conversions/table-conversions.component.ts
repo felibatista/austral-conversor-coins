@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Conversion, Foreing } from '../../lib/types';
+import { Conversion, Currency } from '../../lib/types';
 import { ConversionsService } from '../../services/conversions.service';
 import { CurrencyService } from '../../services/currency.service';
 import { formatDateExtra } from '../../lib/util';
@@ -15,7 +15,7 @@ import { formatDateExtra } from '../../lib/util';
 export class TableConversionsComponent implements OnInit {
   @Input() conversions: Conversion[] = [];
 
-  foreings: Foreing[] = [];
+  foreings: Currency[] = [];
   page: number = 1;
   maxPages: number = 0;
 

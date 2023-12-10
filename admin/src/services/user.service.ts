@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { URL_BACKEND } from '../lib/constants';
 import { CookieService } from 'ngx-cookie-service';
-import { User } from '../lib/types';
+import { User, UserForUpdate } from '../lib/types';
 
 @Injectable({
   providedIn: 'root',
@@ -97,7 +97,7 @@ export class UserService {
     return response;
   }
 
-  async updateUser(user: User): Promise<boolean> {
+  async updateUser(user: UserForUpdate): Promise<boolean> {
     if (!this.cookieService.get('token')) {
       return false;
     }
@@ -110,10 +110,10 @@ export class UserService {
         Authorization: 'Bearer ' + this.cookieService.get('token'),
       },
       body: JSON.stringify({
-        userToChangeID: user.id,
+        id: user.id,
+        userName: user.userName,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email,
       }),
     });
 
@@ -122,16 +122,12 @@ export class UserService {
     }
 
     //update subscription
-    const putSubscription = await fetch(URL_BACKEND + '/api/User/subscription/' + user.id, {
+    const putSubscription = await fetch(URL_BACKEND + '/api/User/subscription/' + user.id + "?subscriptionId=" + user.subscriptionId , {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + this.cookieService.get('token'),
       },
-      body: JSON.stringify({
-        userId: user.id,
-        subscriptionId: user.subscriptionId,
-      }),
     });
 
     if (putSubscription.status !== 200) {

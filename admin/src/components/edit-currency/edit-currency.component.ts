@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Foreing, User } from '../../lib/types';
+import { Currency, User } from '../../lib/types';
 import { fromNumberToPlanName, fromPlanNameToNumber } from '../../lib/util';
 import {
   FormControl,
@@ -27,7 +27,7 @@ import { CurrencyService } from '../../services/currency.service';
   styleUrl: './edit-currency.component.css',
 })
 export class EditCurrencyComponent {
-  @Input() currency: Foreing = {
+  @Input() currency: Currency = {
     id: 0,
     code: '',
     name: '',
@@ -35,8 +35,8 @@ export class EditCurrencyComponent {
     imageUrl: '',
   };
 
-  @Input() currencies: Foreing[] = [];
-  @Output() currenciesChange = new EventEmitter<Foreing[]>();
+  @Input() currencies: Currency[] = [];
+  @Output() currenciesChange = new EventEmitter<Currency[]>();
 
   code = new FormControl('');
   name = new FormControl('');

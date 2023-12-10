@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { User } from '../../lib/types';
+import { Subscription, User } from '../../lib/types';
 import { UserService } from '../../services/user.service';
 import { fromNumberToPlanName } from '../../lib/util';
 import { EditUserComponent } from '../edit-user/edit-user.component';
@@ -14,6 +14,7 @@ import { EditUserComponent } from '../edit-user/edit-user.component';
 })
 export class TableUsersComponent implements OnInit {
   @Input() users: User[] = [];
+  @Input() subscriptions: Subscription[] = [];
   @Input() input: string = '';
 
   page: number = 1;
@@ -27,7 +28,12 @@ export class TableUsersComponent implements OnInit {
     firstName: '',
     lastName: '',
     email: '',
-    subscriptionId: 0,
+    subscription: {
+      id: 0,
+      name: '',
+      price: 0,
+      limit: 0,
+    },
   };
 
   constructor(private userService: UserService) {}
