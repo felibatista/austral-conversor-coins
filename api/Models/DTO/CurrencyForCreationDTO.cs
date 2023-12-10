@@ -1,6 +1,6 @@
 namespace conversor_coin.Models.DTO;
 
-public class ForeingForCreationDTO
+public class CurrencyForCreationDTO
 {
     public String Name { get; set; }
     public String Code { get; set; }
