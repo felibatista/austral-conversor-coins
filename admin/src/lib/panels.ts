@@ -28,12 +28,4 @@ export const PANELS: Panel[] = [
     icon: 'swap.svg',
     link: '/admin/conversiones',
   },
-
-  {
-    id: 'sistema',
-    title: 'Sistema',
-    description: 'Administra el sistema de la aplicación. Observa el estado de la aplicación, y los errores que se han producido. ',
-    icon: 'system.svg',
-    link: '/admin/sistema',
-  },
 ];

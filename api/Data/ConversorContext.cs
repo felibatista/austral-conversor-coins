@@ -108,6 +108,14 @@ public class ConversorContext : DbContext
 
         /*for (int a = 2; a < 50; a++)
         {
+            modelBuilder.Entity<Auth>().HasData(
+                new Auth
+                {
+                    Id = a,
+                    Password = "admin",
+                    Role = "admin",
+                });
+            
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -116,14 +124,16 @@ public class ConversorContext : DbContext
                     FirstName = "Admin",
                     LastName = "Admin",
                     Email = "admin@admin.com"+a,
+                    AuthId = a,
+                    SubscriptionId = a 
                 });
-        }
+        }*/
 
 
 
 
 
-        for (int a = 2; a < 50; a++)
+        /*for (int a = 2; a < 50; a++)
         {
             modelBuilder.Entity<CurrencyConversion>().HasData(
                 new CurrencyConversion
@@ -132,29 +142,6 @@ public class ConversorContext : DbContext
                     Amount = 10,
                     Date = DateTime.Now
                 });
-        }
-
-
-        modelBuilder.Entity<Subscription>().HasData(
-            new Subscription
-            {
-                Id = 1,
-                Name = "Free",
-                Price = 0,
-                Limit = 10
-            }, new Subscription
-            {
-                Id = 2,
-                Name = "Trial",
-                Price = 10,
-                Limit = 100
-            },
-            new Subscription
-            {
-                Id = 3,
-                Name = "Premium",
-                Price = 20,
-                Limit = -1
-            });*/
+        }*/
     }
 }

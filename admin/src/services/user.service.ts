@@ -9,6 +9,32 @@ import { User, UserForUpdate } from '../lib/types';
 export class UserService {
   constructor(private cookieService: CookieService) {}
 
+  async getUserLogged(): Promise<User | null> {
+    if (!this.cookieService.get('token')) {
+      return null;
+    }
+
+    const token = this.cookieService.get('token').split('.');
+    const user = JSON.parse(atob(token[1]));
+    const id = user.userId;
+
+    const get = await fetch(URL_BACKEND + '/api/User/id/' + id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.cookieService.get('token'),
+      },
+    });
+
+    if (get.status !== 200) {
+      return null;
+    }
+
+    const response: User = await get.json();
+
+    return response;
+  }
+
   async getUsers(): Promise<User[] | null> {
     if (!this.cookieService.get('token')) {
       return null;
