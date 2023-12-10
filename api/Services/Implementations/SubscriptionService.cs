@@ -18,132 +18,47 @@ public class SubscriptionService : ISubscriptionService
         return _context.Subscriptions.ToList();
     }
 
-    public Subscription GetSubscription(int id)
+    public Subscription? GetSubscriptionId(int id)
     {
-        Subscription? subscription = _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == id);
-
-        if (subscription == null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.SB_01,
-                "Subscription not found",
-                APIException.Type.NOT_FOUND);
-        }
-
-        return subscription;
+        return _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == id);
     }
 
-    public void AddSubscription(SubscriptionForCreationDTO subscriptionForCreationDto)
+    public Subscription? GetSubscriptionName(string name)
     {
-        if (_context.Subscriptions.FirstOrDefault(
-                (subscription) => subscription.Name == subscriptionForCreationDto.Name) != null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.SB_02,
-                "Subscription name already exists",
-                APIException.Type.BAD_REQUEST);
-        }
+        return _context.Subscriptions.FirstOrDefault((subscription) => subscription.Name.ToLower() == name.ToLower());
+    }
 
+    public Subscription AddSubscription(SubscriptionForCreationDTO subscriptionForCreationDto)
+    {
         Subscription subscription = new()
         {
             Name = subscriptionForCreationDto.Name,
             Limit = subscriptionForCreationDto.Limit
         };
 
-        try
-        {
-            _context.Subscriptions.Add(subscription);
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_01,
-                "An error occurred while setting the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
+        var subscriptionCreated = _context.Subscriptions.Add(subscription);
+        _context.SaveChanges();
 
-
-        try
-        {
-            _context.SaveChanges();
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_02,
-                "An error occurred while saving the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
+        return subscriptionCreated.Entity;
     }
 
     public void UpdateSubscription(SubscriptionForUpdateDTO subscriptionForUpdateDto)
     {
-        if (_context.Subscriptions.FirstOrDefault(
-                (subscription) => subscription.Name == subscriptionForUpdateDto.Name) != null)
-        {
-            throw APIException.CreateException(
-                APIException.Code.SB_02,
-                "Subscription name already exists",
-                APIException.Type.BAD_REQUEST);
-        }
-
-        Subscription? subscription = GetSubscription(subscriptionForUpdateDto.Id);
+        var subscription = GetSubscriptionId(subscriptionForUpdateDto.Id)!;
 
         subscription.Name = subscriptionForUpdateDto.Name;
         subscription.Limit = subscriptionForUpdateDto.Limit;
         subscription.Price = subscriptionForUpdateDto.Price;
 
-        try
-        {
-            _context.Subscriptions.Update(subscription);
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_01,
-                "An error occurred while setting the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
-        
-        try
-        {
-            _context.SaveChanges();
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_02,
-                "An error occurred while saving the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
+        _context.Subscriptions.Update(subscription);
+        _context.SaveChanges();
     }
 
     public void DeleteSubscription(int subscriptionId)
     {
-        Subscription? subscription = GetSubscription(subscriptionId);
+        var subscription = GetSubscriptionId(subscriptionId)!;
 
-        try
-        {
-            _context.Subscriptions.Remove(subscription);
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_01,
-                "An error occurred while setting the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
-        
-        try
-        {
-            _context.SaveChanges();
-        }
-        catch (Exception e)
-        {
-            throw APIException.CreateException(
-                APIException.Code.DB_02,
-                "An error occurred while saving the data in the database",
-                APIException.Type.INTERNAL_SERVER_ERROR);
-        }
+        _context.Subscriptions.Remove(subscription);
+        _context.SaveChanges();
     }
 }

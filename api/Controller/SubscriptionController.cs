@@ -12,86 +12,145 @@ namespace conversor_coin.Controller;
 public class SubscriptionController : ControllerBase
 {
     private readonly ISubscriptionService _context;
-    private readonly APIException _apiException;
 
-    public SubscriptionController(ISubscriptionService context, APIException apiException)
+    public SubscriptionController(ISubscriptionService context)
     {
         _context = context;
-        _apiException = apiException;
     }
 
     [Route("all")]
-    [Authorize]
+    [Authorize(Policy = "Admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_context.GetSubscriptions());
+        var subscriptions = _context.GetSubscriptions();
+        
+        var formattedSubscriptions = subscriptions.ConvertAll(subscription => new SubscriptionForViewDTO
+        {
+            Id = subscription.Id,
+            Name = subscription.Name,
+            Limit = subscription.Limit,
+            Price = subscription.Price
+        });
+        
+        return Ok(formattedSubscriptions);
     }
 
     [HttpGet("{subscriptionId}")]
     public ActionResult<Subscription> GetSubscription(int subscriptionId)
     {
-        try
+        if (_context.GetSubscriptionId(subscriptionId) == null)
         {
-            Subscription? subscription = _context.GetSubscription(subscriptionId);
-            return subscription;
+            return NotFound(new
+            {
+                error = "Subscription id not found"
+            });
         }
-        catch (Exception e)
+        
+        var subscription = _context.GetSubscriptionId(subscriptionId);
+        var formattedSubscription = new SubscriptionForViewDTO
         {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
-
-            return _apiException.getResultFromError(type, e.Data);
-        }
+            Id = subscription.Id,
+            Name = subscription.Name,
+            Limit = subscription.Limit,
+            Price = subscription.Price
+        };
+        
+        return Ok(formattedSubscription);
     }
 
+    [Authorize(Policy = "Admin")]
     [HttpPost]
-    [Authorize]
     public ActionResult<Subscription> PostSubscription(SubscriptionForCreationDTO subscriptionForCreationDto)
     {
-        try
+        if (_context.GetSubscriptionName(subscriptionForCreationDto.Name) != null)
         {
-            _context.AddSubscription(subscriptionForCreationDto);
-            return Ok("Subscription created successfully");
+            return Conflict(new
+            {
+                error = "Subscription name already exists"
+            });
         }
-        catch (Exception e)
+        
+        if (subscriptionForCreationDto.Limit <= -1)
         {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
+            return Conflict(new
+            {
+                error = "Subscription limit must be greater than  -1"
+            });
+        }
+        
+        if (subscriptionForCreationDto.Price <= 0)
+        {
+            return Conflict(new
+            {
+                error = "Subscription price must be greater than 0"
+            });
+        }
 
-            return _apiException.getResultFromError(type, e.Data);
-        }
+        var subscription = _context.AddSubscription(subscriptionForCreationDto);
+        var formattedSubscription = new SubscriptionForViewDTO
+        {
+            Id = subscription.Id,
+            Name = subscription.Name,
+            Limit = subscription.Limit,
+            Price = subscription.Price
+        };
+        return Ok(formattedSubscription);
     }
 
     [HttpPut]
-    [Authorize]
+    [Authorize(Policy = "Admin")]
     public ActionResult<Subscription> PutSubscription(SubscriptionForUpdateDTO subscriptionForUpdateDto)
     {
-        try
+        if (_context.GetSubscriptionId(subscriptionForUpdateDto.Id) == null)
         {
-            _context.UpdateSubscription(subscriptionForUpdateDto);
-            return Ok("Subscription updated successfully");
+            return NotFound(new
+            {
+                error = "Subscription id not found"
+            });
         }
-        catch (Exception e)
-        {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-            return _apiException.getResultFromError(type, e.Data);
+        if (_context.GetSubscriptionName(subscriptionForUpdateDto.Name) != null)
+        {
+            return Conflict(new
+            {
+                error = "Subscription name already exists"
+            });
         }
+        
+        if (subscriptionForUpdateDto.Limit <= -1)
+        {
+            return Conflict(new
+            {
+                error = "Subscription limit must be greater than  -1"
+            });
+        }
+        
+        if (subscriptionForUpdateDto.Price <= 0)
+        {
+            return Conflict(new
+            {
+                error = "Subscription price must be greater than 0"
+            });
+        }
+
+        _context.UpdateSubscription(subscriptionForUpdateDto);
+        return Ok("Subscription updated successfully");
     }
 
     [HttpDelete("{subscriptionId}")]
-    [Authorize]
+    [Authorize(Policy = "Admin")]
     public ActionResult<Subscription> DeleteSubscription(int subscriptionId)
     {
-        try
+        if (_context.GetSubscriptionId(subscriptionId) == null)
         {
-            _context.DeleteSubscription(subscriptionId);
-            return Ok("Subscription deleted successfully");
+            return NotFound(new
+            {
+                error = "Subscription id not found"
+            });
         }
-        catch (Exception e)
-        {
-            Enum.TryParse(e.Data["type"].ToString(), out APIException.Type type);
 
-            return _apiException.getResultFromError(type, e.Data);
-        }
+        _context.DeleteSubscription(subscriptionId);
+        return Ok("Subscription deleted successfully");
     }
 }
