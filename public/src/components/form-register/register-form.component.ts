@@ -21,6 +21,7 @@ export class RegisterFormComponent {
   password = new FormControl('');
   repeatPassword = new FormControl('');
 
+  passwordPattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
   passwordMatch: boolean = true;
   emailExists: boolean = false;
 
@@ -31,7 +32,7 @@ export class RegisterFormComponent {
     this.lastName.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
     this.email.setValidators([Validators.required, Validators.email]);
     this.username.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
-    this.password.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
+    this.password.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(30), Validators.pattern(this.passwordPattern)]);
     this.repeatPassword.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
   }
 
@@ -60,11 +61,14 @@ export class RegisterFormComponent {
       return "El campo debe ser un correo electrónico válido";
     }
 
+    if (errors?.["pattern"]){
+      return "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número";
+    }
+
     return ""
   }
 
   async onSubmit(): Promise<void> {
-    
     this.email.markAllAsTouched();
     this.firstName.markAllAsTouched();
     this.lastName.markAllAsTouched();
@@ -84,14 +88,6 @@ export class RegisterFormComponent {
     
     this.loading = true;
 
-    const registerData = {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      email: this.email,
-      username: this.username,
-      password: this.password,
-    };
-
     //check email exist
     const email = await this.userService.existEmail(this.email.value!);
 
@@ -102,9 +98,8 @@ export class RegisterFormComponent {
       return;
     }
 
-    console.log(registerData);
+    const register = await this.loginService.register(this.username.value!, this.firstName.value!, this.lastName.value!, this.email.value!, this.password.value!);
+    
     this.loading = false;
-
-    //register user
   }
 }

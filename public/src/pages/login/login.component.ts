@@ -16,7 +16,7 @@ import { LoginService } from '../../services/login.service';
   standalone: true,
 })
 export class LoginComponent {
-  username = new FormControl('', Validators.required);
+  email = new FormControl('', Validators.required);
   password = new FormControl('', Validators.required);
 
   loading: boolean = false;
@@ -62,7 +62,7 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.username.errors != null || this.password.errors != null) {
+    if (this.email.errors != null || this.password.errors != null) {
       return;
     }
 
@@ -70,7 +70,7 @@ export class LoginComponent {
 
     setTimeout(() => {
       this.loginService
-        .authenticate(this.username.value!, this.password.value!)
+        .authenticate(this.email.value!, this.password.value!)
         .then((res) => {
           this.errorAuth = !res.success;
         })

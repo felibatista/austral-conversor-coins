@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 import { UserService } from '../../services/user.service';
 import { CurrencyService } from '../../services/currency.service';
-import { Conversion, Foreing, Plan, User } from '../../lib/types';
-import { PlanService } from '../../services/plan.service';
+import { Conversion, Currency, Subscription, User } from '../../lib/types';
 import { ConversionsService } from '../../services/conversions.service';
 import { ConversorComponent } from '../../components/conversor/conversor.component';
+import { SubscriptionService } from '../../services/plan.service';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +15,10 @@ import { ConversorComponent } from '../../components/conversor/conversor.compone
   imports: [ConversorComponent],
 })
 export class HomeComponent implements OnInit {
-  currencies: Foreing[] = [];
+  currencies: Currency[] = [];
   conversions: Conversion[] = [];
   user: User | null = null;
-  plan: Plan | null = null;
+  plan: Subscription | null = null;
 
   currencyCount: number = 0;
   loading: boolean = true;
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private userService: UserService,
     private currencyService: CurrencyService,
-    private planService: PlanService,
+    private subscriptionService: SubscriptionService,
     private conversionsService: ConversionsService
   ) {}
 
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
       this.conversions = conversionsGet;
     }
 
-    const planGet = await this.planService.findPlan(this.user.subscriptionId);
+    const planGet = await this.subscriptionService.findPlan(this.user.subscription.id);
 
     if (planGet) {
       this.plan = planGet;
