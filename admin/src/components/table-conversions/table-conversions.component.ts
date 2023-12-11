@@ -49,16 +49,6 @@ export class TableConversionsComponent implements OnInit {
     }, 1000);
   }
 
-  fromIdToName(id: number): string {
-    let name: string = '';
-    this.foreings.forEach((foreing) => {
-      if (foreing.id === id) {
-        name = foreing.code;
-      }
-    });
-    return name;
-  }
-
   formatDate(date: Date): string {
     return formatDateExtra(date);
   }

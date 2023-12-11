@@ -74,8 +74,7 @@ public class UserService : IUserService
     {
         var toChange = GetUserId(userId)!;
 
-        toChange.Subscription =
-            _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionId)!;
+        toChange.Subscription =  _context.Subscriptions.FirstOrDefault((subscription) => subscription.Id == subscriptionId)!;
 
         _context.Users.Update(toChange);
         _context.SaveChanges();

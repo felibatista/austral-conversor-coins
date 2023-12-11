@@ -113,10 +113,10 @@ public class ConversionController : ControllerBase
             });
         }
         
-        var planLimit = _subscriptionService.GetSubscriptionId(conversionForCreationDto.UserId)!.Limit;
+        var planLimit = _subscriptionService.GetSubscriptionId(user.SubscriptionId)!.Limit;
         var userConversions = _conversionContext.GetConversionsFromUser(conversionForCreationDto.UserId, 0).Count;
         
-        if (userConversions >= planLimit)
+        if (userConversions >= planLimit && planLimit != -1)
         {
             return BadRequest(new
             {

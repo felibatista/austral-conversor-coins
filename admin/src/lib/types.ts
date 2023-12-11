@@ -32,8 +32,16 @@ export interface Subscription {
 
 export type Conversion = {
   id: number;
-  fromForeingId: number;
-  toForeingId: number;
+  fromCurrency: Currency;
+  toCurrency: Currency;
+  date: Date;
+  amount: number;
+};
+
+export type ConversionForCreate = {
+  id: number;
+  fromCurrencyId: number;
+  toCurrencyId: number;
   date: Date;
   amount: number;
 };

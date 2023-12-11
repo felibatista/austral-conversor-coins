@@ -30,8 +30,8 @@
       @for (conversion of conversions; track $index) {
       <tr>
         <td>{{ conversion.id }}</td>
-        <td>{{ fromIdToName(conversion.fromForeingId) }}</td>
-        <td>{{ fromIdToName(conversion.toForeingId) }}</td>
+        <td>{{ conversion.fromCurrency.name }}</td>
+        <td>{{ conversion.toCurrency.name }}</td>
         <td>{{ conversion.amount }}</td>
         <td>{{ formatDate(conversion.date) }}</td>
       </tr>
