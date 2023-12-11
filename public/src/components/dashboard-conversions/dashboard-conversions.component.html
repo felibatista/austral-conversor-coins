@@ -1,0 +1,25 @@
+<div class="overflow-x-auto border-b border-white pb-8">
+  <table class="table table-zebra">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Divisa emisora</th>
+        <th>Divisa receptora</th>
+        <th>Cantidad</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+
+    <tbody class="font-semibold">
+      @for (conversion of userConversions; track $index) {
+      <tr>
+        <td>{{ conversion.id }}</td>
+        <td>{{ conversion.fromCurrency.name }}</td>
+        <td>{{ conversion.toCurrency.name }}</td>
+        <td>{{ conversion.amount }}</td>
+        <td>{{ formatDate(conversion.date) }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,27 @@
+<div class="card bg-base-100 shadow-xl h-full">
+  <div class="card-body flex text-start gap-0">
+    <h2 class="card-title">Conversiones de este mes</h2>
+    <p>Se sumarán todas tus conversiones de este mes.</p>
+
+    <div class="mt-6 flex flex-col">
+      @if (loading) {
+      <div class="skeleton w-[25px] h-[40px] py-2 my-2"></div>
+
+      <div class="skeleton w-[150px] h-[20px] py-2 my-2"></div>
+      }@else {
+      <p class="font-bold text-[30px]">
+        {{ getThisMonthConversionsCount() }}
+      </p>
+
+      <p class="text-[16px] text-[#F5F5F5]">
+        @if (getDifference() >= 0) {
+        <span class="text-green-400"> +{{ getDifference() }} </span>
+
+        que el mes pasado. }@else {
+        <span class="text-red-400"> -{{ getDifference() }} </span>
+        que el mes pasado. }
+      </p>
+      }
+    </div>
+  </div>
+</div>

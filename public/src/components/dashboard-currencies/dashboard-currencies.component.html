@@ -1,0 +1,19 @@
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body flex text-start gap-0">
+    <h2 class="card-title">Moneda más utilizada</h2>
+    <p>Podrás ver las monedas que más utilizas para hacer conversiones.</p>
+
+    <ul class="mt-6">
+      @for (item of [1,2,3]; track $index) { @if (loading) {
+      <li id="{{ item }}" class="skeleton w-[100px] h-[20px] py-2 my-2"></li>
+      }@else { @if (getPosition(item) == null || getTimesUsed(getPosition(item)) == 0) {
+        <li id="{{ item }}" class="text-[20px] {{item == 1 ? 'font-bold text-[30px]' : 'font-normal'}}">
+            {{ item }}° -</li>
+      }@else {
+      <li id="{{ item }}" class="text-[20px] {{item == 1 ? 'font-bold text-[30px]' : 'font-normal'}}">
+        {{ item }}° {{ getPosition(item).code }} 
+      </li>
+      } } }
+    </ul>
+  </div>
+</div>

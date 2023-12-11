@@ -1,0 +1,56 @@
+@if (loading) {
+<div class="flex gap-4 p-4 mt-8">
+  <h1 class="text-6xl font-bold">¡Bienvenido</h1>
+  <div class="skeleton w-[50%] h-[60px]"></div>
+</div>
+}@else {
+<div class="flex gap-4 p-4 mt-8 flex-col">
+  <h1 class="text-6xl font-bold">
+    ¡Bienvenido <span class="text-secondary">{{ user.firstName! }}</span
+    >!
+  </h1>
+  <p class="text-xl">
+    Mantén el control de tus conversiones y demás opciones aquí.
+  </p>
+</div>
+}
+<app-dashboard-grid-top
+  [userConversions]="userConversions"
+  [userSubscription]="userSubscription"
+  [loading]="loading"
+></app-dashboard-grid-top>
+<div class="grid md:grid-cols-2 gap-8 p-4 mb-4">
+  @if (!loading) {
+  <app-dashboard-currencies
+    [currencies]="currencies"
+    [loading]="loading"
+    [userConversions]="userConversions"
+  ></app-dashboard-currencies>
+  <app-dashboard-plan
+    [userSubscription]="userSubscription"
+  ></app-dashboard-plan>
+  }@else { @for (item of [0,1]; track $index) {
+  <div class="skeleton h-[250px] w-full"></div>
+  } }
+</div>
+
+<div class="p-4">
+  @if (!loading) {
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body flex flex-col card gap-0">
+      <div class="flex flex-col mb-6">
+        <h3 class="font-bold text-[20px]">Historial de conversiones</h3>
+        <p class="text-[16px]">
+            Aquí podrás ver tús últimas 10 conversiones.
+        </p>
+      </div>
+
+      <app-dashboard-conversions
+        [userConversions]="userConversions"
+      ></app-dashboard-conversions>
+    </div>
+  </div>
+  }@else {
+  <div class="skeleton w-full h-[600px]"></div>
+  }
+</div>

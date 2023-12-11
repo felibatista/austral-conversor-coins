@@ -1,0 +1,18 @@
+<div class="card bg-base-100 shadow-xl h-full">
+  <div class="card-body flex text-start gap-0">
+    <h2 class="card-title">{{ title }}</h2>
+    <p>{{ description }}</p>
+
+    @if (loading) {
+    <div class="skeleton w-[25px] h-[40px] py-2 my-2"></div>
+    }@else { @if (message) {
+    <span class="mt-4 text-[20px] text-green-400">
+      {{ message }}
+    </span>
+    }@else {
+    <span class="mt-4 text-[35px] font-bold">
+      {{ value }}
+    </span>
+    } }
+  </div>
+</div>

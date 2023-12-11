@@ -4,6 +4,7 @@ import { LoginComponent } from '../pages/login/login.component';
 import { RegisterComponent } from '../pages/register/register.component';
 import { loggedGuard } from '../guards/loggedGuard.guard';
 import { notLoggedGuard } from '../guards/notLoggedGuard.guard';
+import { DashboardComponent } from '../pages/dashboard/dashboard.component';
 
 /*{
   path: 'dashboard',
@@ -28,4 +29,12 @@ export const routes: Routes = [
     title: 'Registrarse | Conversor',
     canActivate: [notLoggedGuard],
   },
+  {
+    path: 'dashboard',
+    pathMatch: 'full',
+    component: DashboardComponent,
+    title: 'Dashboard | Conversor',
+    canActivate: [loggedGuard],
+  },
+
 ];

@@ -1,0 +1,16 @@
+<div class="card bg-base-100 shadow-xl h-full">
+  <div class="card-body flex text-start gap-0">
+    <h2 class="card-title">Subscripción actual</h2>
+    <p>Observa el estado de tu subscripción y su limite</p>
+
+    <h3 class="mt-4 text-[35px] font-bold">
+      {{ userSubscription.name }}
+    </h3>
+    <p>
+      Límite de conversiones: 
+      <span class="text-accent">
+        {{ userSubscription.limit == -1 ? 'Infinito' : userSubscription.limit }}
+      </span>
+    </p>
+  </div>
+</div>
