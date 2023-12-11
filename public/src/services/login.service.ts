@@ -60,7 +60,23 @@ export class LoginService {
       };
     }
 
-    const response = await post.json();
+    //login
+    const login = await fetch(URL_BACKEND + '/api/Authenticate/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (login.status !== 200) {
+      return {
+        message: 'Error',
+        success: false,
+      };
+    }
+
+    const response = await login.json();
 
     if (response.token) {
       const token = response.token.split('.');
@@ -82,13 +98,13 @@ export class LoginService {
     };
   }
 
-  async authenticate(username: string, password: string) {
+  async authenticate(email: string, password: string) {
     const post = await fetch(URL_BACKEND + '/api/Authenticate/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if (post.status !== 200) {

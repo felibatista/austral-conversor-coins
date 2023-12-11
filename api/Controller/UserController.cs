@@ -122,6 +122,19 @@ public class UserController : ControllerBase
         };
         return Ok(formattedUser);
     }
+    
+    [HttpGet("check/{email}")]
+    public ActionResult<bool> CheckUserEmail(string email)
+    {
+        var check = _userContext.GetUserEmail(email);
+        
+        if (check == null)
+        {
+            return Ok(false);
+        }
+        
+        return Ok(true);
+    }
 
     [HttpPut]
     [Authorize(Policy = "Admin")]

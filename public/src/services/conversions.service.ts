@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { URL_BACKEND } from '../lib/constants';
-import { Conversion, Foreing } from '../lib/types';
+import { Conversion } from '../lib/types';
 
 @Injectable({
   providedIn: 'root',
@@ -79,8 +79,8 @@ export class ConversionsService {
       },
       body: JSON.stringify({
         userId: userId,
-        fromForeingId: from,
-        toForeingId: to,
+        fromCurrencyId: from,
+        toCurrencyId: to,
         amount: amount,
       }),
     });

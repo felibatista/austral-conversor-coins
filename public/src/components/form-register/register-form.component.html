@@ -78,11 +78,12 @@
       <p class="mt-2 text-xs text-red-500">
         {{ parseErrors(email.errors) }}
       </p>
+    }
       @if (emailExists) {
       <p class="mt-2 text-xs text-red-500">
         El email ingresado ya se encuentra registrado
       </p>
-      }
+      
       }
     </div>
 
@@ -95,6 +96,7 @@
         [formControl]="password"
         id="password"
         name="password"
+        (input)="passwordMatch = true"
         placeholder="Contraseña"
         class="input input-bordered w-full"
       />
@@ -113,6 +115,7 @@
         type="password"
         [formControl]="repeatPassword"
         id="repeatPassword"
+        (input)="passwordMatch = true"
         name="repeatPassword"
         placeholder="Repetir ontraseña"
         class="input input-bordered w-full"

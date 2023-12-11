@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { URL_BACKEND } from '../lib/constants';
-import { CookieService } from 'ngx-cookie-service';
-import { Plan, User } from '../lib/types';
+import { Subscription } from '../lib/types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PlanService {
-  async findPlan(id: number): Promise<Plan | null> {
+export class SubscriptionService {
+  async findPlan(id: number): Promise<Subscription | null> {
     const get = await fetch(URL_BACKEND + '/api/Subscription/' + id, {
       method: 'GET',
       headers: {
@@ -19,7 +18,7 @@ export class PlanService {
       return null;
     }
 
-    const response: Plan = await get.json();
+    const response: Subscription = await get.json();
 
     return response;
   }

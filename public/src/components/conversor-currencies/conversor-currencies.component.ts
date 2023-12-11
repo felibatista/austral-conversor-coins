@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Foreing } from '../../lib/types';
+import { Currency } from '../../lib/types';
 
 @Component({
   selector: 'app-conversor-currencies',
@@ -10,15 +10,15 @@ import { Foreing } from '../../lib/types';
   styleUrl: './conversor-currencies.component.css'
 })
 export class ConversorCurrenciesComponent {
-  @Input() currencies: Foreing[] = [];
-  @Input() actual: Foreing | null = null;
+  @Input() currencies: Currency[] = [];
+  @Input() actual: Currency | null = null;
   @Input() type: string = '';
   @Input() result: number = 0;
   
   @Output() resultChange: EventEmitter<number> = new EventEmitter<number>();
-  @Output() actualChange: EventEmitter<Foreing> = new EventEmitter<Foreing>();
+  @Output() actualChange: EventEmitter<Currency> = new EventEmitter<Currency>();
   
-  updateCurrency(currency: Foreing): void {
+  updateCurrency(currency: Currency): void {
     this.actual = currency;
     this.actualChange.emit(currency);
     this.resultChange.emit(0);

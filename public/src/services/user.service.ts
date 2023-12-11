@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { URL_BACKEND } from '../lib/constants';
 import { CookieService } from 'ngx-cookie-service';
-import { User } from '../lib/types';
+import { User, UserForUpdate } from '../lib/types';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class UserService {
     const user = JSON.parse(atob(token[1]));
     const id = user.userId;
 
-    const get = await fetch(URL_BACKEND + '/api/User/' + id, {
+    const get = await fetch(URL_BACKEND + '/api/User/id/' + id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -35,24 +35,19 @@ export class UserService {
     return response;
   }
 
-  async getUser(id: number): Promise<User | null> {
-    if (!this.cookieService.get('token')) {
-      return null;
-    }
-
-    const get = await fetch(URL_BACKEND + '/api/User/' + id, {
+  async existEmail(email: string): Promise<boolean> {
+    const get = await fetch(URL_BACKEND + '/api/User/check/' + email, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.cookieService.get('token'),
       },
     });
 
     if (get.status !== 200) {
-      return null;
+      return false;
     }
 
-    const response: User = await get.json();
+    const response: boolean = await get.json();
 
     return response;
   }
@@ -101,25 +96,6 @@ export class UserService {
     return response;
   }
 
-  async existEmail(email: string): Promise<boolean> {
-    const get = await fetch(URL_BACKEND + '/api/User/emailExist/' + email, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (get.status !== 200) {
-      return false;
-    }
-
-    const response: boolean = await get.json();
-
-    console.log(email, response);
-
-    return response;
-  }
-
   async findUser(input: string): Promise<User[] | null> {
     if (!this.cookieService.get('token')) {
       return null;
@@ -164,7 +140,7 @@ export class UserService {
     return response;
   }
 
-  async updateUser(user: User): Promise<boolean> {
+  async updateUser(user: UserForUpdate): Promise<boolean> {
     if (!this.cookieService.get('token')) {
       return false;
     }
@@ -177,10 +153,10 @@ export class UserService {
         Authorization: 'Bearer ' + this.cookieService.get('token'),
       },
       body: JSON.stringify({
-        userToChangeID: user.id,
+        id: user.id,
+        userName: user.userName,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email,
       }),
     });
 
@@ -189,20 +165,13 @@ export class UserService {
     }
 
     //update subscription
-    const putSubscription = await fetch(
-      URL_BACKEND + '/api/User/subscription/' + user.id,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + this.cookieService.get('token'),
-        },
-        body: JSON.stringify({
-          userId: user.id,
-          subscriptionId: user.subscriptionId,
-        }),
-      }
-    );
+    const putSubscription = await fetch(URL_BACKEND + '/api/User/subscription/' + user.id + "?subscriptionId=" + user.subscriptionId , {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.cookieService.get('token'),
+      },
+    });
 
     if (putSubscription.status !== 200) {
       return false;

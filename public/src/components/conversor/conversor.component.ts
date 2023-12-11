@@ -18,7 +18,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Conversion, Foreing, Plan, User } from '../../lib/types';
+import { Conversion, Currency, Subscription, User } from '../../lib/types';
 import { getColorFromMax, getFillFromMax } from '../../lib/util';
 import { ConversorCurrenciesComponent } from '../conversor-currencies/conversor-currencies.component';
 import { ConversorIconComponent } from '../conversor-icon/conversor-icon.component';
@@ -38,13 +38,13 @@ import { ConversionsService } from '../../services/conversions.service';
   ],
 })
 export class ConversorComponent implements OnInit {
-  @Input() currencies: Foreing[] = [];
+  @Input() currencies: Currency[] = [];
   @Input() conversions: Conversion[] = [];
   @Input() user: User | null = null;
-  @Input() plan: Plan | null = null;
+  @Input() plan: Subscription | null = null;
 
-  from: Foreing | null = null;
-  to: Foreing | null = null;
+  from: Currency | null = null;
+  to: Currency | null = null;
   amount = new FormControl('', [Validators.required, Validators.min(0)]);
   result: number = 0;
 
@@ -133,12 +133,12 @@ export class ConversorComponent implements OnInit {
     }
   }
 
-  setFrom(foreing: Foreing): void {
+  setFrom(foreing: Currency): void {
     this.from = foreing;
     this.result = 0;
   }
 
-  setTo(foreing: Foreing): void {
+  setTo(foreing: Currency): void {
     this.to = foreing;
     this.result = 0;
   }
@@ -206,57 +206,16 @@ export class ConversorComponent implements OnInit {
     this.to = this.currencies[0];
     this.from = this.currencies[1];
 
-    /*this.from = {
-      id: 1,
-      code: 'ARS',
-      name: 'Pesos Argentinos',
-      value: 0.33,
-      imageUrl:
-        'https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/ar.svg',
-    };
-
-    this.to = {
-      id: 2,
-      code: 'USD',
-      name: 'Dolar Estadounidense',
-      value: 1,
-      imageUrl:
-        'https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@master/flags/4x3/us.svg',
-    };
-
-    /*this.foreingService.getForeings().then((data: Array<Foreing>) => {
-      if (data.length == 0) {
-        return;
+    this.currencies = this.currencies.sort((a, b) => {
+      if (a.code < b.code) {
+        return -1;
       }
 
-      this.from = data[0];
-      this.to = data[1];
+      if (a.code > b.code) {
+        return 1;
+      }
 
-      data = data.sort((a, b) => {
-        if (a.code < b.code) {
-          return -1;
-        }
-
-        if (a.code > b.code) {
-          return 1;
-        }
-
-        return 0;
-      });
-
-      data.forEach((foreing) => {
-        this.foreings.push(foreing);
-
-        if (this.from == null) {
-          this.from = foreing;
-        }
-
-        if (this.to == null) {
-          this.to = foreing;
-        }
-      });
+      return 0;
     });
-
-    */
   }
 }

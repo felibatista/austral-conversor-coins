@@ -1,4 +1,4 @@
-export type Foreing = {
+export type Currency = {
   id: number;
   code: string;
   name: string;
@@ -6,26 +6,42 @@ export type Foreing = {
   imageUrl: string;
 };
 
-export type User = {
-  id: number;
-  userName: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  subscriptionId: number;
-};
+export interface User {
+  id: number
+  userName: string
+  firstName: string
+  lastName: string
+  email: string
+  subscription: Subscription
+}
 
-export type Conversion = {
-  id: number;
-  fromForeingId: number;
-  toForeingId: number;
-  date: Date;
-  amount: number;
-};
+export interface UserForUpdate {
+  id: number
+  userName: string
+  firstName: string
+  lastName: string
+  subscriptionId: number
+}
 
-export interface Plan {
+export interface Subscription {
   id: number
   name: string
   limit: number
   price: number
 }
+
+export type Conversion = {
+  id: number;
+  fromCurrency: Currency;
+  toCurrency: Currency;
+  date: Date;
+  amount: number;
+};
+
+export type ConversionForCreate = {
+  id: number;
+  fromCurrencyId: number;
+  toCurrencyId: number;
+  date: Date;
+  amount: number;
+};
