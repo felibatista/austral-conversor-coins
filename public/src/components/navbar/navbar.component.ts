@@ -22,7 +22,7 @@ export class NavbarComponent {
   }
 
   constructor(private loginService: LoginService) {
-    if (window.location.pathname === '/login') {
+    if (window.location.pathname === '/login' || window.location.pathname === '/register') {
       this.isLoginPage = true;
     }
     
