@@ -30,10 +30,14 @@ export class StatusComponent implements OnInit {
         this.admin = status.admin;
       })
       .finally(() => {
-        console.log('Status loaded', this.api, this.database, this.public, this.admin)
+        console.log(
+          'Status loaded',
+          this.api,
+          this.database,
+          this.public,
+          this.admin
+        );
         this.loaded = true;
       });
-
-
   }
 }

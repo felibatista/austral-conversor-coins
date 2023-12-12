@@ -163,6 +163,11 @@ export class ConversorComponent implements OnInit {
       return;
     }
 
+    if (this.from.id == this.to.id) {
+      this.error = 'No se puede convertir entre la misma moneda';
+      return;
+    }
+
     this.loading = true;
 
     const conversionPost = await this.conversionsService.postConversion(

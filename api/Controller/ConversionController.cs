@@ -68,7 +68,7 @@ public class ConversionController : ControllerBase
         
         if (!_authService.IsSameUserRequestId(conversionForCreationDto.UserId))
         {
-            return Unauthorized(new { error = "You are not authorized to see this user's conversions" });
+            return Unauthorized(new { error = "You are not authorized to post conversion for another user" });
         }
         
         if (_userService.GetUserId(conversionForCreationDto.UserId) == null)

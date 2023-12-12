@@ -36,6 +36,7 @@ export type Conversion = {
   toCurrency: Currency;
   date: Date;
   amount: number;
+  userId: number;
 };
 
 export type ConversionForCreate = {

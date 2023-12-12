@@ -41,7 +41,7 @@
     </button>
     }@else {
 
-    <div class="grid grid-cols-4 gap-3 mt-6">
+    <form class="grid grid-cols-4 gap-3 mt-6" (submit)="convert()">
       <input
         type="number"
         [formControl]="amount"
@@ -49,26 +49,26 @@
         class="input input-bordered w-full col-span-3"
       />
       <button
-        (click)="convert()"
         [disabled]="!canConvert()"
+        type="submit"
         class="btn btn-secondary col-span-1"
       >
         Convertir @if (loading) {
         <span class="loading loading-spinner loading-sm"></span>
         }
       </button>
-    </div>
+    </form>
 
     @if (amount.errors != null && amount.touched) {
     <p class="text-red-500 mt-2 text-sm">{{ parseErrors(amount.errors) }}</p>
     } @if (amount.errors == null && error) {
     <p class="text-red-500 mt-2 text-sm">{{ error }}</p>
     } @if (conversionSuccess) {
-    <p
-      class="animate-bounce text-green-400 texl-lg mx-auto mt-4 transition-all"
-    >
-      ¡Conversión terminada!
-    </p>
+      <div class="toast toast-end">
+        <div class="alert alert-info bg-accent font-semibold">
+          <span>¡Conversión realizada correctamente!</span>
+        </div>
+      </div>
     }
     <div
       class="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4 items-start transition-all"
@@ -78,9 +78,10 @@
         <span class="text-accent font-semibold">{{ from?.code }}</span> a
         <span class="text-accent font-semibold">{{ to?.code }}</span
         >:
-        <span class="bg-accent px-3 py-1 bg-opacity-70 animate-bounce">{{
+        <br>
+        <span class="bg-accent px-3 py-1 bg-opacity-70 animate-bounce text-xl">{{
           result.toFixed(2)
-        }}</span>
+        }} {{to?.code}}</span>
       </p>
 
       <div class="flex md:justify-end justify-normal">

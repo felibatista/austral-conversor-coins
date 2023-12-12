@@ -19,6 +19,7 @@
               name="username"
               placeholder="Correo electrónico"
               class="input input-bordered w-full"
+              (input)="errorAuth = false"
             />
             @if (email.errors && email.touched) {
               <p class="mt-2 text-xs text-red-500">
@@ -38,6 +39,7 @@
               name="password"
               placeholder="Contraseña"
               class="input input-bordered w-full"
+              (input)="errorAuth = false"
             />
             @if (password.errors && password.touched) {
               <p class="mt-2 text-xs text-red-500">

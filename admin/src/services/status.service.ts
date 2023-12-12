@@ -8,11 +8,13 @@ export class StatusService {
   constructor() {}
 
   async getStatus() {
-    let _api = await fetch(URL_BACKEND).then((res) => {
+    let _api = await fetch(URL_BACKEND).then(() => {
       return true;
     });
-    let _database = true; //TODO: Check database connection
-    let _public = await fetch('https://public.localhost:3002')
+    let _database = await fetch(URL_BACKEND).then(() => {
+      return true;
+    });
+    let _public = await fetch('http://localhost:4300')
       .then((res) => res.ok)
       .catch((err) => {
         console.log(err);

@@ -55,7 +55,7 @@ public class AuthenticateController : ControllerBase
         {
             return NotFound(new
             {
-                error = "Username or password incorrect"
+                error = "Email or password incorrect"
             });
         }
 

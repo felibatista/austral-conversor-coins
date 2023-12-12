@@ -34,6 +34,7 @@ export class EditCurrencyComponent {
     value: 0,
     imageUrl: '',
   };
+  @Output() currencyChange = new EventEmitter<Currency>();
 
   @Input() currencies: Currency[] = [];
   @Output() currenciesChange = new EventEmitter<Currency[]>();
@@ -156,6 +157,8 @@ export class EditCurrencyComponent {
       value: 0,
       imageUrl: '',
     };
+    
+    this.currencyChange.emit(this.currency);
 
     this.success = false;
     this.sureDelete = false;

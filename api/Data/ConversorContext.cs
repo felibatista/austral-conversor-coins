@@ -89,7 +89,7 @@ public class ConversorContext : DbContext
             new Auth
             {
                 Id = 1,
-                Password = "admin",
+                Password = "R(c96$h^Ar6Z",
                 Role = "admin",
             });
 
@@ -104,44 +104,5 @@ public class ConversorContext : DbContext
                 AuthId = 1,
                 SubscriptionId = 1
             });
-
-
-        /*for (int a = 2; a < 50; a++)
-        {
-            modelBuilder.Entity<Auth>().HasData(
-                new Auth
-                {
-                    Id = a,
-                    Password = "admin",
-                    Role = "admin",
-                });
-            
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = a,
-                    UserName = "Admin"+a,
-                    FirstName = "Admin",
-                    LastName = "Admin",
-                    Email = "admin@admin.com"+a,
-                    AuthId = a,
-                    SubscriptionId = a 
-                });
-        }*/
-
-
-
-
-
-        /*for (int a = 2; a < 50; a++)
-        {
-            modelBuilder.Entity<CurrencyConversion>().HasData(
-                new CurrencyConversion
-                {
-                    Id = a,
-                    Amount = 10,
-                    Date = DateTime.Now
-                });
-        }*/
     }
 }

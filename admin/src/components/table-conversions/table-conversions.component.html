@@ -19,6 +19,7 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>ID Usuario</th>
         <th>Divisa emisora</th>
         <th>Divisa receptora</th>
         <th>Cantidad</th>
@@ -30,6 +31,7 @@
       @for (conversion of conversions; track $index) {
       <tr>
         <td>{{ conversion.id }}</td>
+        <td>{{ conversion.userId }}</td>
         <td>{{ conversion.fromCurrency.name }}</td>
         <td>{{ conversion.toCurrency.name }}</td>
         <td>{{ conversion.amount }}</td>
