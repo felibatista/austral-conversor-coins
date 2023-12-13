@@ -56,7 +56,7 @@
   <div class="modal-box">
     <h3 class="font-bold text-lg">Editar divisa</h3>
     <p>ID: {{ currency.id }}</p>
-    <form class="mt-4 flex flex-col gap-2" (submit)="save()">
+    <form class="mt-4 flex flex-col gap-2">
       <label class="form-control w-full">
         <div class="label">
           <span class="label-text">Nombre</span>
@@ -125,7 +125,7 @@
       </label>
       <div class="grid grid-cols-2 gap-4 justify-between mt-8">
         <button
-          type="submit"
+        (click)="save()"
           class="rounded-lg h-[3rem] font-semibold text-[14px] bg-white text-black opacity-90 hover:opacity-100"
         >
           Guardar
